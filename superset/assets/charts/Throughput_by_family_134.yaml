@@ -1,0 +1,37 @@
+slice_name: Throughput by family
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 55__table
+  viz_type: echarts_timeseries_bar
+  x_axis: bucket
+  time_grain_sqla: P1D
+  groupby:
+  - family
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txns)
+    label: txns
+    hasCustomLabel: true
+  row_limit: 10000
+  time_range: No filter
+query_context: '{"datasource": {"id": 55, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"},
+  "applied_time_extras": {}, "annotation_layers": [], "url_params": {}, "custom_params":
+  {}, "custom_form_data": {}, "row_limit": 10000, "orderby": [[{"expressionType":
+  "SQL", "sqlExpression": "SUM(txns)", "label": "txns", "hasCustomLabel": true}, false]],
+  "columns": [{"timeGrain": "P1D", "columnType": "BASE_AXIS", "sqlExpression": "bucket",
+  "label": "bucket", "expressionType": "SQL"}, "family"], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(txns)", "label": "txns", "hasCustomLabel": true}],
+  "series_columns": ["family"]}], "form_data": {"datasource": "55__table", "viz_type":
+  "echarts_timeseries_bar", "x_axis": "bucket", "time_grain_sqla": "P1D", "groupby":
+  ["family"], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}], "row_limit": 10000, "time_range": "No
+  filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 4f7a7c64-3756-4eb2-82b3-0a0eca1fa894
+version: 1.0.0
+dataset_uuid: 6b6b2e5c-3a1f-4852-a004-ed9b4fcb7276
+tags: []

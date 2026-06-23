@@ -197,6 +197,43 @@ DATASETS = {
         FROM txn_events WHERE status='duplicate'
         GROUP BY 1,2 HAVING count(*)>1 ORDER BY 3 DESC"""),
 
+    # ---- Q12 Document-type / transaction-type command center (Sprint 6) ------
+    "q12_doctype_grid": dict(sql="""
+        SELECT coalesce(c.business_family,'Other') AS family,
+               coalesce(c.label, r.doc_type) AS doc_label, r.doc_type,
+               sum(r.txn_count) AS txns, sum(r.failed_count) AS failed,
+               sum(r.rejected_count) AS rejected, sum(r.duplicate_count) AS dupes,
+               sum(r.value_sum) AS value_usd,
+               round(100.0*(1-sum(r.failed_count+r.rejected_count)::numeric/nullif(sum(r.txn_count),0)),1) AS ok_pct
+        FROM txn_rollup_hourly r LEFT JOIN doc_type_catalog c USING (doc_type)
+        GROUP BY 1,2,3"""),
+
+    "q12_family": dict(sql="""
+        SELECT coalesce(c.business_family,'Other') AS family,
+               count(DISTINCT r.doc_type) AS types, sum(r.txn_count) AS txns,
+               sum(r.failed_count) AS failed, sum(r.rejected_count) AS rejected,
+               sum(r.duplicate_count) AS dupes, sum(r.value_sum) AS value_usd
+        FROM txn_rollup_hourly r LEFT JOIN doc_type_catalog c USING (doc_type)
+        GROUP BY 1"""),
+
+    "q12_type_protocol": dict(sql="""
+        SELECT coalesce(c.label, r.doc_type) AS doc_label, r.doc_type, r.protocol,
+               sum(r.txn_count) AS txns
+        FROM txn_rollup_hourly r LEFT JOIN doc_type_catalog c USING (doc_type)
+        GROUP BY 1,2,3"""),
+
+    "q12_type_partner": dict(sql="""
+        SELECT coalesce(c.label, r.doc_type) AS doc_label, r.doc_type, r.partner,
+               sum(r.txn_count) AS txns
+        FROM txn_rollup_hourly r LEFT JOIN doc_type_catalog c USING (doc_type)
+        GROUP BY 1,2,3"""),
+
+    "q12_family_trend": dict(sql="""
+        SELECT r.bucket, coalesce(c.business_family,'Other') AS family,
+               sum(r.txn_count) AS txns
+        FROM txn_rollup_hourly r LEFT JOIN doc_type_catalog c USING (doc_type)
+        GROUP BY 1,2""", dttm="bucket"),
+
     "q11_resolution_kb": dict(sql="""
         SELECT e.event_time, e.business_ref, e.partner, e.reason_category, e.error_code,
                coalesce(dp.likely_cause, dg.likely_cause)         AS likely_cause,
@@ -230,6 +267,7 @@ T_SLA     = "Partner SLA & Activity"
 T_USAGE   = "Usage"
 T_RESP    = "Response-SLA"
 T_DIAG    = "Diagnostics"
+T_TYPES   = "Transaction Types"
 
 CHARTS = [
     # ===== Q1 — Arrival & Channel Health =====
@@ -387,10 +425,29 @@ CHARTS = [
     dict(slice="Resolution KB (per exception)", tab=T_DIAG, dataset="q11_resolution_kb", kind="raw",
          cols=["business_ref","partner","reason_category","error_code","likely_cause","suggested_action","runbook_url"],
          order=[("event_time", False)], row_limit=200, w=12, h=48),
+
+    # ===== Q12 — Transaction Types (Sprint 6, Cleo core: by message type / family) =====
+    dict(slice="Document types", tab=T_TYPES, dataset="q12_doctype_grid",
+         kind="bignum", metric=("types","COUNT(*)"), subheader="distinct doc types", w=3, h=38),
+    dict(slice="Document value (period)", tab=T_TYPES, dataset="q12_doctype_grid",
+         kind="bignum", metric=("value","SUM(value_usd)"), subheader="$ across all types", w=3, h=38),
+    dict(slice="Volume by family", tab=T_TYPES, dataset="q12_family",
+         kind="bar", dim="family", metric=("txns","SUM(txns)"), w=3, h=44),
+    dict(slice="Exceptions by family", tab=T_TYPES, dataset="q12_family",
+         kind="bar", dim="family", metric=("exceptions","SUM(failed)+SUM(rejected)"), w=3, h=44),
+    dict(slice="Document-type grid", tab=T_TYPES, dataset="q12_doctype_grid", kind="raw",
+         cols=["doc_label","family","txns","ok_pct","failed","rejected","dupes","value_usd"],
+         order=[("txns", False)], row_limit=50, w=8, h=50),
+    dict(slice="EDI vs API by type", tab=T_TYPES, dataset="q12_type_protocol",
+         kind="bar", dim="doc_label", metric=("txns","SUM(txns)"), series="protocol", w=4, h=50),
+    dict(slice="Top partners (filter by type)", tab=T_TYPES, dataset="q12_type_partner",
+         kind="bar", dim="partner", metric=("txns","SUM(txns)"), row_limit=20, w=6, h=46),
+    dict(slice="Throughput by family", tab=T_TYPES, dataset="q12_family_trend",
+         kind="timebar", metric=("txns","SUM(txns)"), series="family", w=6, h=46),
 ]
 
 DASHBOARD_TITLE = "Integration Visibility Cockpit"
-TAB_ORDER = [T_ARRIVAL, T_EXC, T_FLOW, T_FILES, T_LOOKUP, T_ACKS, T_SLA, T_USAGE, T_RESP, T_DIAG]
+TAB_ORDER = [T_ARRIVAL, T_EXC, T_FLOW, T_TYPES, T_FILES, T_LOOKUP, T_ACKS, T_SLA, T_USAGE, T_RESP, T_DIAG]
 
 # Native dashboard filters (column-scoped). Applied across all compatible charts.
 NATIVE_FILTERS = [

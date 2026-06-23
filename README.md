@@ -23,10 +23,16 @@ runs entirely on seed data.
 | 3 | Q4/Q8/Q5 files·lookup·replay·acks | ✅ built + render-verified |
 | 4 | Q6/Q7/Q9 partner SLA·activity·usage | ✅ built + render-verified |
 | 5 | Q10/Q11 response-SLA (at-risk)·diagnostics·resolution KB + at-risk alert | ✅ built + render-verified |
+| 6 | Q12 document-type / transaction-type command center (Cleo core) | ✅ built + render-verified |
 
 **Dashboard:** `https://79309cb5.us1a.app.preset.io/superset/dashboard/integration-cockpit/`
-— **10 tabs, 52 charts** (all render-verified), 7 native filters, cross-filtering, 60s
+— **11 tabs, 60 charts** (all render-verified), 7 native filters, cross-filtering, 60s
 auto-refresh. **6 alerts** (paused).
+
+**Roadmap:** [`docs/cockpit-roadmap-cleo.md`](docs/cockpit-roadmap-cleo.md) — Cleo-informed
+question list (Q12–Q21) + sprint pack. Sprint 6 (Q12) shipped; Sprints 7–11 (money,
+predictive anomalies, exception cases, partner 360, chargeback, prescriptive, carrier,
+personas) are planned next.
 
 ## Layout
 

@@ -1,0 +1,86 @@
+table_name: q12_type_partner
+main_dttm_col: null
+currency_code_column: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: 120
+catalog: neondb
+schema: public
+sql: "\n        SELECT coalesce(c.label, r.doc_type) AS doc_label, r.doc_type, r.partner,\n\
+  \               sum(r.txn_count) AS txns\n        FROM txn_rollup_hourly r LEFT\
+  \ JOIN doc_type_catalog c USING (doc_type)\n        GROUP BY 1,2,3"
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: 60cb74d6-27ae-4e59-94dc-0ad5bec9bf9e
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: txns
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: DECIMAL
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: doc_label
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: doc_type
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: partner
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 14f8230d-88d6-4c7c-b670-0d2f21d9f39f
