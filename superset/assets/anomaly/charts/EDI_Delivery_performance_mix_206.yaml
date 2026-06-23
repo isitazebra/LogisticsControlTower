@@ -1,0 +1,41 @@
+slice_name: "EDI \xB7 Delivery performance mix"
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 81__table
+  viz_type: pie
+  groupby:
+  - delivery_performance
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: n
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  innerRadius: 45
+  donut: true
+  label_type: key_percent
+  show_labels: true
+  labels_outside: true
+  number_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 81, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "COUNT(*)",
+  "label": "n", "hasCustomLabel": true}, false]], "columns": ["delivery_performance"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "n",
+  "hasCustomLabel": true}]}], "form_data": {"datasource": "81__table", "viz_type":
+  "pie", "groupby": ["delivery_performance"], "metric": {"expressionType": "SQL",
+  "sqlExpression": "COUNT(*)", "label": "n", "hasCustomLabel": true}, "row_limit":
+  100, "time_range": "No filter", "show_legend": true, "innerRadius": 45, "donut":
+  true, "label_type": "key_percent", "show_labels": true, "labels_outside": true,
+  "number_format": "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 46353bf4-9bbc-4c14-8009-d4698913ddbb
+version: 1.0.0
+dataset_uuid: cc4c2ed9-fdcc-4186-92f4-f39611683eb3
+tags: []

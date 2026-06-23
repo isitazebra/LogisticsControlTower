@@ -1,0 +1,43 @@
+slice_name: "EDI \xB7 Status aging worklist"
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 80__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - shipment_id
+  - partner_name
+  - current_status
+  - actual_hours_in_status
+  - expected_hours_in_status
+  - aging_ratio
+  - aging_severity
+  - aging_insight
+  order_by_cols:
+  - '["aging_ratio", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    aging_ratio:
+      showCellBars: true
+query_context: '{"datasource": {"id": 80, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["aging_ratio", false]], "columns": ["shipment_id",
+  "partner_name", "current_status", "actual_hours_in_status", "expected_hours_in_status",
+  "aging_ratio", "aging_severity", "aging_insight"], "metrics": []}], "form_data":
+  {"datasource": "80__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["shipment_id", "partner_name", "current_status", "actual_hours_in_status", "expected_hours_in_status",
+  "aging_ratio", "aging_severity", "aging_insight"], "order_by_cols": ["[\"aging_ratio\",
+  false]"], "row_limit": 200, "server_page_length": 25, "time_range": "No filter",
+  "column_config": {"aging_ratio": {"showCellBars": true}}}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: e6ff3b1e-fe58-4d18-ade7-6773203c1ac7
+version: 1.0.0
+dataset_uuid: 21c5b6dc-7f91-4629-bbed-6b652678945b
+tags: []

@@ -1,0 +1,30 @@
+slice_name: "EDI \xB7 SLA compliance %"
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 66__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: MAX(sla_compliance_pct)
+    label: sla
+    hasCustomLabel: true
+  subheader: '% SLA met'
+  time_range: No filter
+  y_axis_format: .1f
+query_context: '{"datasource": {"id": 66, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "MAX(sla_compliance_pct)", "label": "sla", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "66__table", "viz_type": "big_number_total",
+  "metric": {"expressionType": "SQL", "sqlExpression": "MAX(sla_compliance_pct)",
+  "label": "sla", "hasCustomLabel": true}, "subheader": "% SLA met", "time_range":
+  "No filter", "y_axis_format": ".1f"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 5b2d99ec-a7bc-4857-aac8-340451b2c064
+version: 1.0.0
+dataset_uuid: 15601a36-717e-4ebc-85cf-61c145ccdea1
+tags: []

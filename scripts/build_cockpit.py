@@ -136,6 +136,26 @@ def build(kind, ds_id, c):
                         "orderby": [[met, False]], "row_limit": c.get("row_limit", 1000)})
         return "pivot_table_v2", params, qc(ds_id, params, q)
 
+    if kind == "ts":
+        # generalised time series (line|bar) with a configurable temporal x column,
+        # so views with metric_date / shipment_date / transaction_date all work
+        # (the legacy `timebar` hardcodes the rollup's `bucket`).
+        met = m(*c["metric"]); series = c.get("series"); xcol_name = c.get("x", "bucket")
+        grain = c.get("grain", "P1D")
+        viz = "echarts_timeseries_line" if c.get("chart", "line") == "line" else "echarts_timeseries_bar"
+        xcol = {"timeGrain": grain, "columnType": "BASE_AXIS", "sqlExpression": xcol_name,
+                "label": xcol_name, "expressionType": "SQL"}
+        rl = c.get("row_limit", 10000)
+        params = {"datasource": ds, "viz_type": viz, "x_axis": xcol_name,
+                  "time_grain_sqla": grain, "groupby": ([series] if series else []),
+                  "metrics": [met], "row_limit": rl, "time_range": NO_TIME,
+                  "y_axis_format": c.get("number_format", "SMART_NUMBER")}
+        q = base_query({"columns": [xcol] + ([series] if series else []), "metrics": [met],
+                        "orderby": [[met, False]], "row_limit": rl,
+                        "extras": {"having": "", "where": "", "time_grain_sqla": grain},
+                        "series_columns": ([series] if series else [])})
+        return viz, params, qc(ds_id, params, q)
+
     if kind == "bar":
         met = m(*c["metric"]); dim = c["dim"]; series = c.get("series")
         cols = [dim] + ([series] if series else [])
