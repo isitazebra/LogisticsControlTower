@@ -1,0 +1,35 @@
+slice_name: Partner vs platform
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 47__table
+  viz_type: pie
+  groupby:
+  - attribution
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(occurrences)
+    label: occurrences
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  label_type: key_value
+query_context: '{"datasource": {"id": 47, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(occurrences)",
+  "label": "occurrences", "hasCustomLabel": true}, false]], "columns": ["attribution"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(occurrences)", "label":
+  "occurrences", "hasCustomLabel": true}]}], "form_data": {"datasource": "47__table",
+  "viz_type": "pie", "groupby": ["attribution"], "metric": {"expressionType": "SQL",
+  "sqlExpression": "SUM(occurrences)", "label": "occurrences", "hasCustomLabel": true},
+  "row_limit": 100, "time_range": "No filter", "show_legend": true, "label_type":
+  "key_value"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: c7d0fb1f-470e-4bb6-a5c9-64ac73edf270
+version: 1.0.0
+dataset_uuid: 540e23b1-cba0-4fb7-98d0-e2656dd319df
+tags: []

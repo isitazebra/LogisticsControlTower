@@ -1,0 +1,34 @@
+slice_name: Dead / degraded connections
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 29__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - channel
+  - endpoint
+  - partner
+  - environment
+  - status
+  - last_ok_at
+  order_by_cols: []
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 29, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [], "columns": ["channel", "endpoint", "partner",
+  "environment", "status", "last_ok_at"], "metrics": []}], "form_data": {"datasource":
+  "29__table", "viz_type": "table", "query_mode": "raw", "all_columns": ["channel",
+  "endpoint", "partner", "environment", "status", "last_ok_at"], "order_by_cols":
+  [], "row_limit": 100, "server_page_length": 25, "time_range": "No filter"}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: b11fe9b1-3b9e-4f3b-a04d-f73262263725
+version: 1.0.0
+dataset_uuid: c4fa8e0d-ae1a-40ef-baca-1795fb15d216
+tags: []

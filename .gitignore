@@ -1,0 +1,18 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.secret
+secrets/
+
+# Python envs
+.venv/
+.venv311/
+__pycache__/
+*.pyc
+
+# preset-cli local state
+.preset-cli/
+
+# OS
+.DS_Store

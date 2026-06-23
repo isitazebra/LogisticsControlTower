@@ -1,0 +1,31 @@
+slice_name: Rejected acks
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 41__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM((fa_state='rejected')::int)
+    label: rejected
+    hasCustomLabel: true
+  subheader: negative ack
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 41, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM((fa_state=''rejected'')::int)", "label": "rejected",
+  "hasCustomLabel": true}]}], "form_data": {"datasource": "41__table", "viz_type":
+  "big_number_total", "metric": {"expressionType": "SQL", "sqlExpression": "SUM((fa_state=''rejected'')::int)",
+  "label": "rejected", "hasCustomLabel": true}, "subheader": "negative ack", "time_range":
+  "No filter", "y_axis_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 176713dd-a3e6-4a6a-96ed-9f1dc0e7ac45
+version: 1.0.0
+dataset_uuid: 052f2f74-31a3-4992-ab4d-23a78b62f416
+tags: []

@@ -1,0 +1,33 @@
+slice_name: Rejected at receipt (pre-parse)
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 37__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - received_at
+  - file_name
+  - partner
+  - channel
+  - reason_category
+  order_by_cols: []
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 37, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [], "columns": ["received_at", "file_name", "partner",
+  "channel", "reason_category"], "metrics": []}], "form_data": {"datasource": "37__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["received_at", "file_name",
+  "partner", "channel", "reason_category"], "order_by_cols": [], "row_limit": 100,
+  "server_page_length": 25, "time_range": "No filter"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: e0999d72-b754-45e5-8fd2-6643e7931fa9
+version: 1.0.0
+dataset_uuid: b753a324-fb5c-4305-8d75-80615e2b2646
+tags: []

@@ -1,0 +1,38 @@
+slice_name: Failure signatures
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 46__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - reason_category
+  - error_code
+  - stage
+  - partner
+  - occurrences
+  - onset
+  - refs
+  - value_exposed
+  order_by_cols:
+  - '["occurrences", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 46, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["occurrences", false]], "columns": ["reason_category",
+  "error_code", "stage", "partner", "occurrences", "onset", "refs", "value_exposed"],
+  "metrics": []}], "form_data": {"datasource": "46__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["reason_category", "error_code", "stage", "partner", "occurrences",
+  "onset", "refs", "value_exposed"], "order_by_cols": ["[\"occurrences\", false]"],
+  "row_limit": 100, "server_page_length": 25, "time_range": "No filter"}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: f88fd6d5-fd7b-4864-b1e4-1dda55ead969
+version: 1.0.0
+dataset_uuid: d043eea7-63ca-47c1-982e-374316afdd63
+tags: []

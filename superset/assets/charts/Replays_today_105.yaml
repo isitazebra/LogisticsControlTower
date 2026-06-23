@@ -1,0 +1,30 @@
+slice_name: Replays today
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 40__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: replays
+    hasCustomLabel: true
+  subheader: messages replayed
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 40, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "COUNT(*)", "label": "replays", "hasCustomLabel": true}]}],
+  "form_data": {"datasource": "40__table", "viz_type": "big_number_total", "metric":
+  {"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "replays", "hasCustomLabel":
+  true}, "subheader": "messages replayed", "time_range": "No filter", "y_axis_format":
+  "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: f24c7b46-bf83-412b-8721-3eb874c9944f
+version: 1.0.0
+dataset_uuid: 071efe2c-915e-4f5d-bfd8-ff58893c06f7
+tags: []

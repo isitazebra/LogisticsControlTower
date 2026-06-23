@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Q1 · Arrival &amp; Stuck Monitor — Fabric Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0A2540; --navy-2:#10314f; --navy-3:#1b4068;
+    --ink:#13212e; --muted:#5e6b76; --faint:#8b96a0;
+    --surface:#f4f3ee; --card:#ffffff; --line:#e6e3da; --line-2:#d7d3c8;
+    --teal:#0e7c6b; --teal-soft:#e3f1ee;
+    --amber:#b9791a; --amber-soft:#faf0dd;
+    --crimson:#bf2a3c; --crimson-soft:#fbe9eb; --crimson-line:#f1c4ca;
+    --orange:#e8702a;
+    --radius:11px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif; background:var(--surface); color:var(--ink); font-size:14px; -webkit-font-smoothing:antialiased}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  button{font-family:inherit; cursor:pointer}
+  :focus-visible{outline:2px solid var(--navy-3); outline-offset:2px}
+  .wrap{max-width:1180px; margin:0 auto; padding:18px 22px 60px}
+
+  .head{display:flex; align-items:center; gap:13px; margin-bottom:16px; flex-wrap:wrap}
+  .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--teal),#15a98f);position:relative;flex:none}
+  .mark::after{content:"";position:absolute;inset:7px;border:2px solid rgba(255,255,255,.9);border-radius:50%;border-right-color:transparent;transform:rotate(20deg)}
+  .htitle b{font-size:17px;font-weight:600}
+  .htitle .s{font-size:12px;color:var(--muted);margin-top:1px}
+  .htitle .q{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.4px;background:var(--navy);color:#fff;padding:2px 8px;border-radius:5px;margin-right:8px;vertical-align:1px}
+  .head .right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .lastsweep{font-size:12px;color:var(--muted);text-align:right}
+  .lastsweep b{font-family:"IBM Plex Mono",monospace;color:var(--ink)}
+  .btn{border:1px solid var(--line-2);background:#fff;color:var(--ink);padding:9px 15px;border-radius:9px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:7px;transition:background .1s,transform .06s}
+  .btn:hover{background:var(--surface)} .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)} .btn.primary:hover{background:var(--navy-2)}
+
+  /* sweep integrity band */
+  .sweep{border-radius:var(--radius);padding:15px 18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .sweep.ok{background:var(--teal-soft);border:1px solid #bfe0d6}
+  .sweep.bad{background:var(--amber-soft);border:1px solid #ecd6ab}
+  .sweep .ico{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none;font-weight:700}
+  .sweep.ok .ico{background:var(--teal);color:#fff} .sweep.bad .ico{background:var(--amber);color:#fff}
+  .sweep .body{min-width:200px}
+  .sweep .stitle{font-weight:600;font-size:15px}
+  .sweep.ok .stitle{color:var(--teal)} .sweep.bad .stitle{color:var(--amber)}
+  .sweep .sdesc{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .sweep .meters{margin-left:auto;display:flex;gap:22px}
+  .sweep .meter{text-align:center}
+  .sweep .meter .mv{font-size:20px;font-weight:600;font-family:"IBM Plex Mono",monospace}
+  .sweep .meter .ml{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-top:2px}
+
+  .sech{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:22px 2px 11px;display:flex;align-items:center;gap:9px}
+  .sech .r{margin-left:auto;font-size:11px;color:var(--faint);text-transform:none;letter-spacing:0}
+
+  /* channel health */
+  .channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+  .ch{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);border-radius:10px;padding:13px 15px;text-align:left;transition:box-shadow .12s}
+  .ch:hover{box-shadow:0 3px 13px rgba(10,37,64,.08)}
+  .ch.down{border-top-color:var(--crimson)} .ch.degraded{border-top-color:var(--amber)} .ch.stale{border-top-color:var(--amber)}
+  .ch .cname{font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:7px}
+  .ch .cstat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-left:auto;padding:2px 7px;border-radius:5px}
+  .cstat.up{background:var(--teal-soft);color:var(--teal)} .cstat.down{background:var(--crimson-soft);color:var(--crimson)} .cstat.degraded,.cstat.stale{background:var(--amber-soft);color:var(--amber)}
+  .ch .cendpoints{font-size:12px;color:var(--muted);margin-top:9px;font-family:"IBM Plex Mono",monospace}
+  .ch .cnote{font-size:11.5px;color:var(--faint);margin-top:3px}
+  .ch .cfoot{display:flex;gap:13px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px}
+  .ch .cf{display:flex;align-items:center;gap:5px;color:var(--muted)}
+  .ch .cf b{font-family:"IBM Plex Mono",monospace}
+  .ch .cf.alert b{color:var(--crimson)} .ch .cf.warn b{color:var(--amber)}
+  .sw{width:8px;height:8px;border-radius:50%}
+  .sw.up{background:var(--teal)} .sw.down{background:var(--crimson)} .sw.degraded,.sw.stale{background:var(--amber)}
+
+  /* signal lists */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .item{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line-2);border-radius:9px;padding:11px 14px;text-align:left;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;transition:box-shadow .12s,opacity .3s,transform .3s}
+  .item:hover{box-shadow:0 3px 12px rgba(10,37,64,.07)}
+  .item.red{border-left-color:var(--crimson);background:linear-gradient(90deg,var(--crimson-soft),#fff 18%)}
+  .item.amber{border-left-color:var(--amber);background:linear-gradient(90deg,var(--amber-soft),#fff 18%)}
+  .item.gone{opacity:0;transform:translateX(12px)}
+  .item .iref{font-weight:600;font-size:13.5px}
+  .item .idesc{font-size:12px;color:var(--muted);margin-top:2px}
+  .item .ichan{font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--navy-2);background:#eef3f7;border:1px solid #dce6ee;padding:2px 7px;border-radius:5px;white-space:nowrap;align-self:start;margin-top:2px}
+  .panelbox{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:6px}
+  .panelhead{font-size:13px;font-weight:600;padding:10px 12px 8px;display:flex;align-items:center;gap:8px}
+  .panelhead .n{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--surface);border:1px solid var(--line);padding:1px 8px;border-radius:20px;color:var(--muted)}
+  .panelhead .ic{font-size:15px}
+  .ic.red{color:var(--crimson)} .ic.amber{color:var(--amber)}
+  .empty{padding:18px;text-align:center;color:var(--faint);font-size:12.5px}
+
+  /* cert strip */
+  .certs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .cert{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+  .cert .ring{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:"IBM Plex Mono",monospace;flex:none}
+  .cert.red .ring{background:var(--crimson-soft);color:var(--crimson);border:2px solid var(--crimson-line)}
+  .cert.amber .ring{background:var(--amber-soft);color:var(--amber);border:2px solid #ecd6ab}
+  .cert .cref{font-weight:600;font-size:13px}
+  .cert .cd{font-size:11.5px;color:var(--muted);margin-top:1px}
+
+  .toast-wrap{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:50;display:flex;flex-direction:column;gap:8px;align-items:center}
+  .toast{background:var(--navy);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;display:flex;gap:9px;box-shadow:0 8px 26px rgba(10,37,64,.32);animation:rise .25s}
+  .toast .tic{color:#5fe3c4}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="mark"></div>
+    <div class="htitle"><b><span class="q">Q1</span>Arrival &amp; Stuck monitor</b><div class="s">AIT Worldwide · active channel sweep · catches what never errored</div></div>
+    <div class="right">
+      <div class="lastsweep">last full sweep<br><b id="lastsweep">47s ago</b></div>
+      <button class="btn primary" id="resweep">↻ Re-run sweep</button>
+    </div>
+  </div>
+
+  <!-- sweep integrity: the watcher's watcher -->
+  <div class="sweep bad" id="sweepband">
+    <div class="ico" id="sweepico">!</div>
+    <div class="body">
+      <div class="stitle" id="sweeptitle">1 channel monitor went silent</div>
+      <div class="sdesc" id="sweepdesc">The VAN mailbox liveness monitor hasn't reported in 18m — a blind spot, not a clear channel. Re-run the sweep to confirm coverage.</div>
+    </div>
+    <div class="meters">
+      <div class="meter"><div class="mv" id="m-chan">5</div><div class="ml">channels</div></div>
+      <div class="meter"><div class="mv" id="m-ran">22 / 23</div><div class="ml">monitors ran</div></div>
+      <div class="meter"><div class="mv" id="m-items">9</div><div class="ml">caught</div></div>
+    </div>
+  </div>
+
+  <!-- channel health -->
+  <div class="sech">Channel health <span class="r">each channel probed on a timer · click to drill</span></div>
+  <div class="channels" id="channels"></div>
+
+  <!-- the caught items -->
+  <div class="sech">What the sweep caught — never raised an error on its own <span class="r">absence &amp; stalling</span></div>
+  <div class="grid2">
+    <div class="panelbox">
+      <div class="panelhead"><span class="ic red">⊘</span> Missing expected feeds <span class="n" id="n-miss">2</span></div>
+      <div class="list" id="l-miss"></div>
+    </div>
+    <div class="panelbox">
+      <div class="panelhead"><span class="ic red">⚡</span> Dead / degraded connections <span class="n" id="n-conn">3</span></div>
+      <div class="list" id="l-conn"></div>
+    </div>
+    <div class="panelbox">
+      <div class="panelhead"><span class="ic amber">◰</span> Landed but not picked up <span class="n" id="n-pick">2</span></div>
+      <div class="list" id="l-pick"></div>
+    </div>
+    <div class="panelbox">
+      <div class="panelhead"><span class="ic amber">⏳</span> Stuck / aging in pipeline <span class="n" id="n-stuck">2</span></div>
+      <div class="list" id="l-stuck"></div>
+    </div>
+  </div>
+
+  <!-- cert / credential expiry -->
+  <div class="sech">Credential &amp; certificate expiry <span class="r">fix before the channel goes dark</span></div>
+  <div class="certs" id="certs"></div>
+
+</div>
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+let CHANNELS = [
+  {id:"sftp", name:"SFTP / FTPS", up:33, total:34, status:"down", note:"1 endpoint auth-failing", certs:1, missing:2, stuck:1},
+  {id:"as2",  name:"AS2 / EDIINT", up:18, total:18, status:"up", note:"all MDNs returning", certs:1, missing:0, stuck:0},
+  {id:"van",  name:"VAN mailbox", up:9, total:9, status:"stale", note:"monitor heartbeat stale", certs:0, missing:0, stuck:0},
+  {id:"api",  name:"API / webhook", up:11, total:12, status:"degraded", note:"1 endpoint intermittent 401", certs:1, missing:0, stuck:0},
+  {id:"mft",  name:"MFT / Email", up:6, total:6, status:"up", note:"healthy", certs:0, missing:0, stuck:1}
+];
+
+let SIG = {
+  miss:[
+    {id:"m1", ref:"Werner — 204 hourly batch", chan:"SFTP", sev:"red", desc:"Expected top-of-hour load-tender batch. No file this cycle · 35m past window"},
+    {id:"m2", ref:"Kroger — 856 daily inventory", chan:"SFTP", sev:"red", desc:"Expected 02:00 inbound. Not received · 2h 11m past window"}
+  ],
+  conn:[
+    {id:"c1", ref:"Crocs-EDI — SFTP", chan:"SFTP", sev:"red", desc:"Login failing, auth rejected · down 22m · key likely rotated"},
+    {id:"c2", ref:"RXO-track — API webhook", chan:"API", sev:"amber", desc:"Intermittent 401s · token likely expiring"},
+    {id:"vanmon", ref:"VAN mailbox monitor", chan:"VAN", sev:"amber", desc:"Liveness sweep silent 18m · channel state unknown, not confirmed clear"}
+  ],
+  pick:[
+    {id:"p1", ref:"/in/maersk/ — 3 files", chan:"SFTP", sev:"amber", desc:"Listed 14m ago, no fetch started · ListSFTP filter mismatch?"},
+    {id:"p2", ref:"Target — AS2 inbound", chan:"AS2", sev:"amber", desc:"Receipt logged, no flow started · routing rule gap"}
+  ],
+  stuck:[
+    {id:"s1", ref:"Load 99214 — at transform", chan:"QUEUE", sev:"amber", desc:"Queued 41m · back-pressure on downstream connection"},
+    {id:"s2", ref:"Maersk B/L batch — retry ×3", chan:"QUEUE", sev:"amber", desc:"Parked in retry loop · not failed, not progressing"}
+  ]
+};
+
+let CERTS = [
+  {ref:"RXO-track — API token", days:3, sev:"red"},
+  {ref:"Crocs — SFTP key", days:6, sev:"red"},
+  {ref:"Maersk — AS2 cert", days:11, sev:"amber"}
+];
+
+let sweepClean = false;
+const $ = s=>document.querySelector(s);
+
+function renderChannels(){
+  $("#channels").innerHTML = CHANNELS.map(c=>{
+    const lbl = c.status==="up"?"up":c.status==="down"?"down":c.status==="stale"?"stale":"degraded";
+    return `<button class="ch ${c.status}" data-ch="${c.id}">
+      <div class="cname"><span class="sw ${c.status}"></span>${c.name}<span class="cstat ${c.status}">${lbl}</span></div>
+      <div class="cendpoints">${c.up} / ${c.total} endpoints up</div>
+      <div class="cnote">${c.note}</div>
+      <div class="cfoot">
+        ${c.missing?`<span class="cf alert"><b>${c.missing}</b> missing</span>`:''}
+        ${c.stuck?`<span class="cf warn"><b>${c.stuck}</b> stuck</span>`:''}
+        ${c.certs?`<span class="cf warn"><b>${c.certs}</b> cert</span>`:''}
+        ${(!c.missing&&!c.stuck&&!c.certs)?`<span class="cf"><b>clear</b></span>`:''}
+      </div>
+    </button>`;
+  }).join("");
+}
+
+function listHTML(arr){
+  if(!arr.length) return `<div class="empty">clear</div>`;
+  return arr.map(x=>`<button class="item ${x.sev}" data-item="${x.id}">
+    <div><div class="iref">${x.ref}</div><div class="idesc">${x.desc}</div></div>
+    <span class="ichan">${x.chan}</span>
+  </button>`).join("");
+}
+
+function renderSignals(){
+  $("#l-miss").innerHTML=listHTML(SIG.miss); $("#n-miss").textContent=SIG.miss.length;
+  $("#l-conn").innerHTML=listHTML(SIG.conn); $("#n-conn").textContent=SIG.conn.length;
+  $("#l-pick").innerHTML=listHTML(SIG.pick); $("#n-pick").textContent=SIG.pick.length;
+  $("#l-stuck").innerHTML=listHTML(SIG.stuck); $("#n-stuck").textContent=SIG.stuck.length;
+  const total = SIG.miss.length+SIG.conn.length+SIG.pick.length+SIG.stuck.length;
+  $("#m-items").textContent=total;
+}
+
+function renderCerts(){
+  $("#certs").innerHTML = CERTS.map(c=>`<div class="cert ${c.sev}">
+    <div class="ring">${c.days}d</div>
+    <div><div class="cref">${c.ref}</div><div class="cd">expires in ${c.days} days · rotate now</div></div>
+  </div>`).join("");
+}
+
+function renderSweep(){
+  const band=$("#sweepband"), ico=$("#sweepico");
+  if(sweepClean){
+    band.className="sweep ok"; ico.textContent="✓";
+    $("#sweeptitle").textContent="All channel monitors reported";
+    $("#sweeptitle").style.color=""; 
+    $("#sweepdesc").textContent="Every channel was probed on this sweep — what you see below is a complete picture, not a partial one.";
+    $("#m-ran").textContent="23 / 23";
+  } else {
+    band.className="sweep bad"; ico.textContent="!";
+    $("#sweeptitle").textContent="1 channel monitor went silent";
+    $("#sweepdesc").textContent="The VAN mailbox liveness monitor hasn't reported in 18m — a blind spot, not a clear channel. Re-run the sweep to confirm coverage.";
+    $("#m-ran").textContent="22 / 23";
+  }
+}
+
+function reSweep(){
+  sweepClean=true;
+  CHANNELS = CHANNELS.map(c=> c.id==="van"?{...c,status:"up",note:"mailbox polling normally"}:c);
+  SIG.conn = SIG.conn.filter(x=>x.id!=="vanmon");
+  $("#lastsweep").textContent="just now";
+  renderSweep(); renderChannels(); renderSignals();
+  toast("Sweep re-run across 5 channels · all 23 monitors reporting");
+}
+
+function toast(m){ const t=document.createElement("div"); t.className="toast"; t.innerHTML=`<span class="tic">✓</span> ${m}`;
+  $("#toasts").appendChild(t); setTimeout(()=>{t.style.opacity="0";t.style.transform="translateY(8px)";setTimeout(()=>t.remove(),250);},2600); }
+
+document.addEventListener("click",e=>{
+  if(e.target.closest("#resweep")){ reSweep(); return; }
+  const ch=e.target.closest("[data-ch]");
+  if(ch){ const c=CHANNELS.find(x=>x.id===ch.dataset.ch); toast(`${c.name} · ${c.up}/${c.total} up · ${c.note}`); return; }
+  const it=e.target.closest("[data-item]");
+  if(it){ const el=it; el.classList.add("gone"); setTimeout(()=>{ 
+      for(const k in SIG){ SIG[k]=SIG[k].filter(x=>x.id!==el.dataset.item); }
+      renderSignals();
+    },300); toast("Acknowledged · assigned to on-call"); return; }
+});
+
+renderSweep(); renderChannels(); renderSignals(); renderCerts();
+</script>
+</body>
+</html>

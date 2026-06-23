@@ -1,0 +1,35 @@
+slice_name: Channel health
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 28__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - channel
+  - endpoint
+  - partner
+  - environment
+  - status
+  - last_ok_at
+  - cert_expires_at
+  order_by_cols: []
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 28, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [], "columns": ["channel", "endpoint", "partner",
+  "environment", "status", "last_ok_at", "cert_expires_at"], "metrics": []}], "form_data":
+  {"datasource": "28__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["channel", "endpoint", "partner", "environment", "status", "last_ok_at", "cert_expires_at"],
+  "order_by_cols": [], "row_limit": 100, "server_page_length": 25, "time_range": "No
+  filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: aed5d24b-797e-4df5-be6b-f8d9e3e4780e
+version: 1.0.0
+dataset_uuid: f93b284c-e6fa-4b9d-b755-6393531a3c68
+tags: []

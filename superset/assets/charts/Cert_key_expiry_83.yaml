@@ -1,0 +1,35 @@
+slice_name: Cert / key expiry
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 30__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - endpoint
+  - partner
+  - channel
+  - environment
+  - cert_expires_at
+  - days_left
+  order_by_cols:
+  - '["days_left", true]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 30, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["days_left", true]], "columns": ["endpoint",
+  "partner", "channel", "environment", "cert_expires_at", "days_left"], "metrics":
+  []}], "form_data": {"datasource": "30__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["endpoint", "partner", "channel", "environment", "cert_expires_at",
+  "days_left"], "order_by_cols": ["[\"days_left\", true]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 418dff48-e89f-4160-99eb-5fc3978749d9
+version: 1.0.0
+dataset_uuid: 4fd9167b-29e0-43c4-80e5-16506b41ef74
+tags: []

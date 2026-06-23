@@ -1,0 +1,35 @@
+slice_name: EDI vs API split
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 22__table
+  viz_type: pie
+  groupby:
+  - protocol
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(txn_count)
+    label: txns
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  label_type: key_value
+query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["protocol"], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)", "label": "txns", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "22__table", "viz_type": "pie", "groupby":
+  ["protocol"], "metric": {"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, "row_limit": 100, "time_range": "No filter",
+  "show_legend": true, "label_type": "key_value"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 8e72617d-1ab4-42fd-9b51-b51a51a8da02
+version: 1.0.0
+dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
+tags: []

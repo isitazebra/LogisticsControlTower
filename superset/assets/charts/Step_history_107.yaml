@@ -1,0 +1,36 @@
+slice_name: Step history
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 39__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - event_time
+  - business_ref
+  - interchange_id
+  - stage
+  - status
+  - reason_category
+  order_by_cols:
+  - '["event_time", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 39, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["event_time", false]], "columns": ["event_time",
+  "business_ref", "interchange_id", "stage", "status", "reason_category"], "metrics":
+  []}], "form_data": {"datasource": "39__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["event_time", "business_ref", "interchange_id", "stage",
+  "status", "reason_category"], "order_by_cols": ["[\"event_time\", false]"], "row_limit":
+  200, "server_page_length": 25, "time_range": "No filter"}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: ddc85806-becd-4528-b622-d974897f2e07
+version: 1.0.0
+dataset_uuid: b81e06da-7aea-40d4-9d37-44655b821949
+tags: []

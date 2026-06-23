@@ -1,0 +1,38 @@
+slice_name: Incoming vs outgoing files (24h)
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 35__table
+  viz_type: echarts_timeseries_bar
+  x_axis: direction
+  groupby:
+  - status
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(files)
+    label: files
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 35, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(files)",
+  "label": "files", "hasCustomLabel": true}, false]], "columns": ["direction", "status"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(files)", "label": "files",
+  "hasCustomLabel": true}], "series_columns": ["status"]}], "form_data": {"datasource":
+  "35__table", "viz_type": "echarts_timeseries_bar", "x_axis": "direction", "groupby":
+  ["status"], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(files)",
+  "label": "files", "hasCustomLabel": true}], "row_limit": 100, "time_range": "No
+  filter", "x_axis_sort_asc": false, "x_axis_sort_series": "name", "order_desc": true},
+  "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 507a6f8f-7e81-4f50-bdf5-5598b18de934
+version: 1.0.0
+dataset_uuid: 970a7a3e-eb00-431b-bc72-869a95108043
+tags: []

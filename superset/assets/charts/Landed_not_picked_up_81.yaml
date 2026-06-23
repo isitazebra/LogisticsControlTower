@@ -1,0 +1,35 @@
+slice_name: Landed, not picked up
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 27__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - channel
+  - doc_type
+  - environment
+  - age_min
+  order_by_cols:
+  - '["age_min", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 27, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["age_min", false]], "columns": ["business_ref",
+  "partner", "channel", "doc_type", "environment", "age_min"], "metrics": []}], "form_data":
+  {"datasource": "27__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["business_ref", "partner", "channel", "doc_type", "environment", "age_min"], "order_by_cols":
+  ["[\"age_min\", false]"], "row_limit": 100, "server_page_length": 25, "time_range":
+  "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 6ae7aef3-9246-4b38-a03a-b9c828cefc42
+version: 1.0.0
+dataset_uuid: 7c36bed8-009a-4e95-a57d-954bf36256c8
+tags: []

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fabric Operating Cockpit — Integration Business Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0A2540; --navy-2:#10314f; --navy-3:#1b4068;
+    --ink:#13212e; --muted:#5e6b76; --faint:#8b96a0;
+    --surface:#f4f3ee; --card:#ffffff; --line:#e6e3da; --line-2:#d7d3c8;
+    --teal:#0e7c6b; --teal-soft:#e3f1ee;
+    --amber:#b9791a; --amber-soft:#faf0dd;
+    --crimson:#bf2a3c; --crimson-soft:#fbe9eb; --crimson-line:#f1c4ca;
+    --orange:#e8702a; --orange-soft:#fdeee3;
+    --radius:11px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif; background:var(--surface); color:var(--ink); font-size:14px; -webkit-font-smoothing:antialiased}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  button{font-family:inherit; cursor:pointer}
+  :focus-visible{outline:2px solid var(--navy-3); outline-offset:2px}
+
+  .wrap{max-width:1240px; margin:0 auto; padding:18px 22px 60px}
+
+  /* header */
+  .head{display:flex; align-items:center; gap:14px; margin-bottom:18px; flex-wrap:wrap}
+  .mark{width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,var(--teal),#15a98f); position:relative; flex:none}
+  .mark::after{content:""; position:absolute; inset:7px; border:2px solid rgba(255,255,255,.9); border-radius:50%; border-right-color:transparent; transform:rotate(20deg)}
+  .htitle b{font-size:17px; font-weight:600; letter-spacing:.2px}
+  .htitle .s{font-size:12px; color:var(--muted); margin-top:1px}
+  .runrate{margin-left:auto; text-align:right}
+  .runrate .rv{font-size:18px; font-weight:600; font-family:"IBM Plex Mono",monospace}
+  .runrate .rl{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
+  .range{display:flex; gap:0; border:1px solid var(--line-2); border-radius:9px; overflow:hidden; background:var(--card)}
+  .range button{border:none; background:none; padding:7px 13px; font-size:12.5px; color:var(--muted)}
+  .range button.on{background:var(--navy); color:#fff; font-weight:500}
+
+  /* heartbeat row */
+  .beat{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:14px; margin-bottom:14px}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px}
+  .pl{font-size:11.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); display:flex; align-items:center; gap:7px}
+  .big{font-size:34px; font-weight:600; letter-spacing:-1px; line-height:1; margin-top:9px; font-family:"IBM Plex Mono",monospace}
+  .delta{font-size:13px; font-weight:600; margin-left:10px}
+  .delta.up{color:var(--teal)} .delta.down{color:var(--crimson)}
+  .sub{font-size:12px; color:var(--faint); margin-top:7px}
+  .spark{display:flex; align-items:flex-end; gap:3px; height:34px; margin-top:12px}
+  .spark i{flex:1; background:var(--teal); border-radius:2px 2px 0 0; opacity:.85; min-height:3px}
+  .spark i.base{background:var(--line-2)}
+  .engine{display:flex; flex-direction:column; gap:9px; margin-top:11px}
+  .erow{display:flex; align-items:center; justify-content:space-between; font-size:12.5px}
+  .erow .ev{font-family:"IBM Plex Mono",monospace; font-weight:600}
+  .ok{color:var(--teal)} .warn{color:var(--amber)} .bad{color:var(--crimson)}
+  .statline{display:inline-flex; align-items:center; gap:6px; font-weight:600}
+  .dot{width:8px; height:8px; border-radius:50%}
+  .dot.g{background:var(--teal); box-shadow:0 0 0 0 rgba(14,124,107,.5); animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,124,107,.45)}70%{box-shadow:0 0 0 7px rgba(14,124,107,0)}100%{box-shadow:0 0 0 0 rgba(14,124,107,0)}}
+
+  /* money band */
+  .money{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px}
+  .mtile{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px}
+  .mtile .mv{font-size:24px; font-weight:600; font-family:"IBM Plex Mono",monospace; margin-top:6px; letter-spacing:-.5px}
+  .mtile.stuck{background:var(--crimson-soft); border-color:var(--crimson-line)}
+  .mtile.stuck .mv,.mtile.stuck .pl{color:var(--crimson)}
+  .mtile.exposed{background:var(--amber-soft); border-color:#ecd6ab}
+  .mtile.exposed .mv,.mtile.exposed .pl{color:var(--amber)}
+  .mtile.cleared .mv{color:var(--teal)}
+
+  .sech{font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:22px 2px 11px; display:flex; align-items:center; gap:9px}
+  .sech .tagx{font-size:10px; letter-spacing:.3px; background:var(--navy); color:#fff; padding:2px 8px; border-radius:5px; text-transform:none; font-weight:500}
+  .sech .r{margin-left:auto; font-size:11px; color:var(--faint); text-transform:none; letter-spacing:0}
+
+  /* continuity / early warning */
+  .signals{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px}
+  .sig{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--orange); border-radius:9px; padding:13px 15px; text-align:left; transition:box-shadow .12s}
+  .sig:hover{box-shadow:0 3px 13px rgba(10,37,64,.08)}
+  .sig.rev{border-left-color:var(--orange)}
+  .sig.data{border-left-color:var(--crimson)}
+  .sig .stype{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; font-weight:600}
+  .sig.rev .stype{color:var(--orange)} .sig.data .stype{color:var(--crimson)}
+  .sig .stitle{font-size:14px; font-weight:600; margin-top:5px}
+  .sig .sbody{font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.5}
+  .sig .smeta{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:11px; color:var(--faint)}
+  .sig .smeta .pill{background:var(--surface); border:1px solid var(--line); padding:2px 7px; border-radius:5px; color:var(--muted)}
+  .sig .invest{margin-left:auto; color:var(--navy-3); font-weight:600}
+
+  /* LOB matrix */
+  .matrix{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  table{width:100%; border-collapse:collapse}
+  thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); font-weight:600}
+  thead th.num{text-align:right}
+  tbody td{padding:12px 14px; border-bottom:1px solid var(--line); font-size:13px; vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr{cursor:pointer; transition:background .1s}
+  tbody tr:hover{background:var(--surface)}
+  .lobname{font-weight:600; display:flex; align-items:center; gap:9px}
+  .lsys{font-size:11px; color:var(--faint); font-family:"IBM Plex Mono",monospace; font-weight:400}
+  td.num{text-align:right; font-family:"IBM Plex Mono",monospace}
+  .tput{display:inline-flex; align-items:center; gap:6px; justify-content:flex-end}
+  .tput .d{font-weight:600; font-size:12px}
+  .tput .d.up{color:var(--teal)} .tput .d.down{color:var(--crimson)} .tput .d.flat{color:var(--muted)}
+  .minibar{display:flex; align-items:flex-end; gap:1.5px; height:16px}
+  .minibar i{width:3px; background:var(--line-2); border-radius:1px; min-height:2px}
+  .minibar i.on{background:var(--teal)}
+  .minibar i.dn{background:var(--crimson)}
+  .slabadge{font-family:"IBM Plex Mono",monospace; font-weight:600}
+  .atrisk{font-family:"IBM Plex Mono",monospace; font-weight:600}
+  .atrisk.r{color:var(--crimson)} .atrisk.a{color:var(--amber)} .atrisk.z{color:var(--faint)}
+  .owner{display:inline-flex; align-items:center; gap:7px; font-size:12.5px}
+  .ava{width:22px; height:22px; border-radius:50%; background:var(--navy-2); color:#fff; font-size:10px; font-weight:600; display:flex; align-items:center; justify-content:center}
+  .stat{font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.3px; padding:3px 8px; border-radius:5px}
+  .stat.red{background:var(--crimson-soft); color:var(--crimson)}
+  .stat.amber{background:var(--amber-soft); color:var(--amber)}
+  .stat.green{background:var(--teal-soft); color:var(--teal)}
+
+  /* action lane */
+  .lane{display:flex; flex-direction:column; gap:8px}
+  .act{display:grid; grid-template-columns:auto 1fr auto auto; gap:14px; align-items:center; background:var(--card); border:1px solid var(--line); border-left:4px solid var(--crimson); border-radius:9px; padding:12px 15px}
+  .act.amber{border-left-color:var(--amber)}
+  .act .aref{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:13.5px}
+  .act .aimp{font-size:12px; color:var(--muted); margin-top:2px}
+  .act .aval{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:15px; text-align:right}
+  .act.red .aval{color:var(--crimson)} .act.amber .aval{color:var(--amber)}
+  .act .asla{font-size:11px; color:var(--faint); text-align:right; margin-top:2px}
+  .act .aown{display:flex; align-items:center; gap:7px; font-size:12px; white-space:nowrap}
+
+  /* proof bar */
+  .proof{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:14px}
+  .pf{background:var(--navy); color:#cfe; color:#cfe6df; border-radius:var(--radius); padding:14px 16px}
+  .pf .pfl{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:#8fb5ad}
+  .pf .pfv{font-size:24px; font-weight:600; font-family:"IBM Plex Mono",monospace; color:#fff; margin-top:5px}
+  .pf .pfs{font-size:11px; color:#7fa39c; margin-top:4px}
+  .proofnote{font-size:11.5px; color:var(--faint); margin-top:9px; text-align:right}
+
+  .toast-wrap{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:50; display:flex; flex-direction:column; gap:8px; align-items:center}
+  .toast{background:var(--navy); color:#fff; padding:11px 18px; border-radius:9px; font-size:13px; display:flex; gap:9px; box-shadow:0 8px 26px rgba(10,37,64,.32); animation:rise .25s}
+  .toast .tic{color:#5fe3c4}
+  @keyframes rise{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:translateY(0)}}
+
+  @media (max-width:920px){.beat,.money,.proof{grid-template-columns:1fr 1fr} .matrix{overflow-x:auto} table{min-width:760px}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="mark"></div>
+    <div class="htitle"><b>Fabric Operating Cockpit</b><div class="s">AIT Worldwide · integration business control · all lines of business</div></div>
+    <div class="runrate"><div class="rv" id="runrate">$3.04B</div><div class="rl">annualized run-rate through platform</div></div>
+    <div class="range" id="range">
+      <button data-r="today" class="on">Today</button>
+      <button data-r="7d">7 days</button>
+      <button data-r="30d">30 days</button>
+    </div>
+  </div>
+
+  <!-- heartbeat -->
+  <div class="beat">
+    <div class="panel">
+      <div class="pl">Value processed <span id="rangelbl">today</span></div>
+      <div><span class="big" id="hv-val">$8.4M</span><span class="delta up" id="hv-delta">+6%</span></div>
+      <div class="sub" id="hv-sub">vs $7.9M baseline · business flowing above plan</div>
+      <div class="spark" id="hv-spark"></div>
+    </div>
+    <div class="panel">
+      <div class="pl">Throughput</div>
+      <div><span class="big" id="tx-val">38.2K</span><span class="delta up" id="tx-delta">+5%</span></div>
+      <div class="sub">transactions · EDI + API + non-EDI unified</div>
+      <div class="engine" style="margin-top:14px">
+        <div class="erow"><span>Auto-processed</span><span class="ev ok">99.4%</span></div>
+        <div class="erow"><span>Touched by ops</span><span class="ev">0.6%</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="pl">Platform engine</div>
+      <div style="margin-top:9px"><span class="statline ok"><span class="dot g"></span>Healthy</span></div>
+      <div class="engine">
+        <div class="erow"><span>p95 processing</span><span class="ev ok">1.8s</span></div>
+        <div class="erow"><span>Queue backlog</span><span class="ev ok">240</span></div>
+        <div class="erow"><span>Connections up</span><span class="ev warn">347 / 351</span></div>
+        <div class="erow"><span>Capacity headroom</span><span class="ev ok">68%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- money band -->
+  <div class="money">
+    <div class="mtile"><div class="pl">In flight</div><div class="mv" id="m-flight">$46.2M</div><div class="sub">value mid-pipeline now</div></div>
+    <div class="mtile stuck"><div class="pl">Stuck — broken</div><div class="mv" id="m-stuck">$0.39M</div><div class="sub">5 flows · needs action</div></div>
+    <div class="mtile exposed"><div class="pl">Exposed — at risk</div><div class="mv" id="m-exposed">$1.10M</div><div class="sub">SLA / penalty risk</div></div>
+    <div class="mtile cleared"><div class="pl">Cleared <span id="rangelbl2">today</span></div><div class="mv" id="m-cleared">$7.6M</div><div class="sub">settled end-to-end</div></div>
+  </div>
+
+  <!-- continuity / early warning -->
+  <div class="sech">Continuity — what's degrading before it breaks <span class="tagx">baseline intelligence</span><span class="r">revenue leak &amp; silent-failure detection · not just errors</span></div>
+  <div class="signals" id="signals"></div>
+
+  <!-- LOB operating matrix -->
+  <div class="sech">Lines of business — operating health <span class="r">value · throughput vs baseline · SLA · exposure · owner</span></div>
+  <div class="matrix">
+    <table>
+      <thead><tr>
+        <th>Line of business</th>
+        <th class="num">Value</th>
+        <th class="num">Throughput vs baseline</th>
+        <th class="num">SLA</th>
+        <th class="num">At risk</th>
+        <th>On-call</th>
+        <th>Status</th>
+      </tr></thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+
+  <!-- action lane -->
+  <div class="sech">Needs an owner — exposure ranked by dollars <span class="r">every exposed dollar has an owner &amp; an SLA-to-resolve</span></div>
+  <div class="lane" id="lane"></div>
+
+  <!-- proof -->
+  <div class="sech">Proof — evidence you can show customers &amp; auditors</div>
+  <div class="proof">
+    <div class="pf"><div class="pfl">SLA attainment · 30d</div><div class="pfv" id="pf-sla">98.4%</div><div class="pfs">across all partners</div></div>
+    <div class="pf"><div class="pfl">On-time milestones</div><div class="pfv" id="pf-ot">96.7%</div><div class="pfs">tender → delivery → invoice</div></div>
+    <div class="pf"><div class="pfl">Compliance posture</div><div class="pfv ok" style="color:#5fe3c4">Green</div><div class="pfs">customs · ISF · FSMA</div></div>
+    <div class="pf"><div class="pfl">Platform uptime</div><div class="pfv" id="pf-up">99.98%</div><div class="pfs">trailing 90 days</div></div>
+  </div>
+  <div class="proofnote">Exportable as a partner scorecard or board pack · last generated 12s ago</div>
+
+</div>
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+const RANGE = {
+  today:{label:"today", val:"$8.4M", base:"$7.9M", delta:6, tx:"38.2K", txd:5, flight:"$46.2M", stuck:"$0.39M", exposed:"$1.10M", cleared:"$7.6M", sla:"98.4%", ot:"96.7%", up:"99.98%", runrate:"$3.04B",
+    spark:[42,55,61,48,70,66,74,80,72,88,84,92]},
+  "7d":{label:"this week", val:"$57.1M", base:"$55.3M", delta:3, tx:"262K", txd:4, flight:"$46.2M", stuck:"$0.39M", exposed:"$1.10M", cleared:"$54.0M", sla:"98.1%", ot:"96.2%", up:"99.97%", runrate:"$3.02B",
+    spark:[60,58,64,70,66,72,68,74,71,78,76,80]},
+  "30d":{label:"this month", val:"$251M", base:"$243M", delta:3, tx:"1.14M", txd:3, flight:"$46.2M", stuck:"$0.39M", exposed:"$1.10M", cleared:"$238M", sla:"98.3%", ot:"96.5%", up:"99.98%", runrate:"$3.01B",
+    spark:[55,62,58,66,70,64,72,69,75,73,79,82]}
+};
+
+const SIGNALS = [
+  {type:"rev", label:"Revenue signal", title:"Kroger inbound POs −22% vs 4-wk baseline", body:"Order volume from a top-10 customer has dropped sharply since 04:00. No errors fired — likely an upstream outage on their side, not ours. Worth a call before it's a missed-revenue conversation.", lob:"Air · Ground", age:"started 3h ago"},
+  {type:"data", label:"Data signal", title:"Maersk B/L transform failing since 06:00", body:"Every ocean B/L from this partner is failing the same IFTMIN map. 4 flows stuck, $210K exposed. A spec change on their side broke the GID mapping — one fix clears the batch.", lob:"Ocean", age:"4 stuck"},
+  {type:"rev", label:"Carrier signal", title:"Tender acceptance fell to 61% on TX lanes", body:"Down from an 84% baseline. Carriers are declining tenders in this region — capacity is tightening. Re-tender logic is absorbing it for now, but margin per load is slipping.", lob:"Ground", age:"trending 6h"},
+  {type:"data", label:"Process signal", title:"Air customs clearance time +38%", body:"Clearance is taking materially longer than baseline this week. Not failing — but if it keeps climbing it starts breaching delivery SLAs downstream.", lob:"Customs", age:"this week"}
+];
+
+const LOBS = [
+  {name:"Air forwarding", sys:"CargoWise", dayVal:2.1, tput:+4, trend:[1,1,1,0,1,1,1,1], sla:"98.6%", risk:138000, riskc:"a", owner:"Kiran Rao", oi:"KR", stat:"amber"},
+  {name:"Ocean forwarding", sys:"CargoWise", dayVal:1.8, tput:-2, trend:[1,1,0,1,1,0,1,1], sla:"97.1%", risk:307000, riskc:"r", owner:"Maya Singh", oi:"MS", stat:"red"},
+  {name:"Ground / transborder", sys:"PowerBroker", dayVal:1.4, tput:-9, trend:[1,1,1,0,0,1,0,0], sla:"95.8%", risk:12400, riskc:"a", owner:"Jordan Diaz", oi:"JD", stat:"amber"},
+  {name:"Customs brokerage", sys:"PowerBroker", dayVal:0, tput:0, trend:[1,1,1,1,1,1,1,1], sla:"96.2%", risk:0, riskc:"z", owner:"Lena Park", oi:"LP", stat:"red"},
+  {name:"Warehouse / dist.", sys:"Extensiv", dayVal:1.2, tput:+7, trend:[1,1,1,1,1,1,1,1], sla:"99.1%", risk:31500, riskc:"r", owner:"Theo Howe", oi:"TH", stat:"red"},
+  {name:"Home delivery", sys:"Bringg", dayVal:0.6, tput:+1, trend:[1,1,1,1,1,1,1,1], sla:"98.9%", risk:3200, riskc:"a", owner:"Rae Vue", oi:"RV", stat:"amber"},
+  {name:"PO management", sys:"AIT PO", dayVal:0.3, tput:+12, trend:[1,1,1,1,1,1,1,1], sla:"97.6%", risk:46000, riskc:"a", owner:"Sai Iyer", oi:"SI", stat:"amber"}
+];
+
+const LANE = [
+  {ref:"B/L SEAU772041", sev:"red", imp:"Ocean · Maersk · transform failed — blocks 4 B/Ls", val:"$210K", sla:"resolve SLA breached", owner:"MS"},
+  {ref:"HAWB 12482907", sev:"red", imp:"Air · DHL · ABI entry rejected, missing HTS", val:"$84K", sla:"42m to resolve SLA", owner:"KR"},
+  {ref:"PO 55120", sev:"amber", imp:"PO mgmt · Flextronics · 855 not received", val:"$46K", sla:"on watch · 70% window", owner:"SI"},
+  {ref:"ASN 88102", sev:"red", imp:"Warehouse · Target · 945 failed, AS2 cert", val:"$31K", sla:"18m to resolve SLA", owner:"TH"}
+];
+
+const $ = s=>document.querySelector(s);
+const factor = {today:1, "7d":7, "30d":30};
+let curRange = "today";
+
+function fmtM(n){ return n>=1 ? "$"+n.toFixed(1)+"M" : (n>0? "$"+Math.round(n*1000)+"K" : "—"); }
+function fmtK(n){ return n>=1000 ? "$"+(n/1000).toFixed(n%1000?1:0)+"K" : (n? "$"+n : "—"); }
+
+function renderRange(){
+  const d = RANGE[curRange];
+  $("#hv-val").textContent=d.val;
+  const del=$("#hv-delta"); del.textContent=(d.delta>=0?"+":"")+d.delta+"%"; del.className="delta "+(d.delta>=0?"up":"down");
+  $("#hv-sub").textContent=`vs ${d.base} baseline · business flowing ${d.delta>=0?"above":"below"} plan`;
+  $("#tx-val").textContent=d.tx;
+  const txd=$("#tx-delta"); txd.textContent=(d.txd>=0?"+":"")+d.txd+"%"; txd.className="delta "+(d.txd>=0?"up":"down");
+  $("#m-flight").textContent=d.flight; $("#m-stuck").textContent=d.stuck; $("#m-exposed").textContent=d.exposed; $("#m-cleared").textContent=d.cleared;
+  $("#pf-sla").textContent=d.sla; $("#pf-ot").textContent=d.ot; $("#pf-up").textContent=d.up; $("#runrate").textContent=d.runrate;
+  document.querySelectorAll("#rangelbl,#rangelbl2").forEach(e=>e.textContent=d.label);
+  const sp=$("#hv-spark"); sp.innerHTML="";
+  const mx=Math.max(...d.spark);
+  d.spark.forEach((v,i)=>{ const b=document.createElement("i"); b.style.height=(v/mx*100)+"%"; if(i<2)b.className="base"; sp.appendChild(b); });
+  renderMatrix();
+}
+
+function renderSignals(){
+  $("#signals").innerHTML = SIGNALS.map((s,i)=>`
+    <button class="sig ${s.type}" data-sig="${i}">
+      <div class="stype">${s.label}</div>
+      <div class="stitle">${s.title}</div>
+      <div class="sbody">${s.body}</div>
+      <div class="smeta"><span class="pill">${s.lob}</span><span>${s.age}</span><span class="invest">Investigate →</span></div>
+    </button>`).join("");
+}
+
+function renderMatrix(){
+  const f = factor[curRange];
+  $("#matrix-body").innerHTML = LOBS.map((l,i)=>{
+    const val = l.dayVal? fmtM(l.dayVal*f) : "pass-through";
+    const dCls = l.tput>1?"up":l.tput<-1?"down":"flat";
+    const dTxt = l.tput===0?"—":(l.tput>0?"+":"")+l.tput+"%";
+    const bars = l.trend.map(t=>`<i class="${t?(l.tput<-1?'dn':'on'):''}"></i>`).join("");
+    const riskTxt = l.risk? fmtK(l.risk) : (l.riskc==="z"?"broker queue":"—");
+    return `<tr data-lob="${i}">
+      <td><div class="lobname">${l.name}</div><div class="lsys">${l.sys}</div></td>
+      <td class="num">${val}</td>
+      <td class="num"><span class="tput"><span class="minibar">${bars}</span><span class="d ${dCls}">${dTxt}</span></span></td>
+      <td class="num"><span class="slabadge">${l.sla}</span></td>
+      <td class="num"><span class="atrisk ${l.riskc}">${riskTxt}</span></td>
+      <td><span class="owner"><span class="ava">${l.oi}</span>${l.owner}</span></td>
+      <td><span class="stat ${l.stat}">${l.stat==="red"?"action":l.stat==="amber"?"watch":"healthy"}</span></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderLane(){
+  $("#lane").innerHTML = LANE.map(a=>`
+    <div class="act ${a.sev}">
+      <div></div>
+      <div><div class="aref">${a.ref}</div><div class="aimp">${a.imp}</div></div>
+      <div><div class="aval">${a.val}</div><div class="asla">${a.sla}</div></div>
+      <div class="aown"><span class="ava">${a.owner}</span></div>
+    </div>`).join("");
+}
+
+function toast(m){ const t=document.createElement("div"); t.className="toast"; t.innerHTML=`<span class="tic">✓</span> ${m}`;
+  $("#toasts").appendChild(t); setTimeout(()=>{t.style.opacity="0";t.style.transform="translateY(8px)";setTimeout(()=>t.remove(),250);},2600); }
+
+document.addEventListener("click",e=>{
+  const r=e.target.closest("[data-r]");
+  if(r){ curRange=r.dataset.r; document.querySelectorAll("#range button").forEach(b=>b.classList.toggle("on",b===r)); renderRange(); return; }
+  const sig=e.target.closest("[data-sig]");
+  if(sig){ const s=SIGNALS[+sig.dataset.sig]; toast(`Investigating: ${s.title.split(" −")[0].split(" failing")[0]} — assigned`); return; }
+  const lob=e.target.closest("[data-lob]");
+  if(lob){ const l=LOBS[+lob.dataset.lob]; toast(`${l.name} — ${l.owner} on call · ${l.risk?fmtK(l.risk)+" exposed":"no exposure"}`); return; }
+});
+
+renderRange(); renderSignals(); renderLane();
+</script>
+</body>
+</html>

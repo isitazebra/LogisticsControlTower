@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fabric Control Tower — Integration Visibility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0A2540; --navy-2:#10314f; --navy-3:#1b4068;
+    --ink:#13212e; --muted:#5e6b76; --faint:#8b96a0;
+    --surface:#f5f4ef; --card:#ffffff; --line:#e6e3da; --line-2:#d7d3c8;
+    --teal:#0e7c6b; --teal-soft:#e3f1ee;
+    --amber:#b9791a; --amber-soft:#faf0dd;
+    --crimson:#bf2a3c; --crimson-soft:#fbe9eb; --crimson-line:#f1c4ca;
+    --orange:#e8702a;
+    --rail-w:236px;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    background:var(--surface); color:var(--ink);
+    font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  button{font-family:inherit; cursor:pointer}
+  :focus-visible{outline:2px solid var(--navy-3); outline-offset:2px; border-radius:4px}
+
+  .app{display:grid; grid-template-columns:var(--rail-w) 1fr; min-height:100vh}
+
+  /* ---------- command rail ---------- */
+  .rail{
+    background:var(--navy); color:#cdd8e2; display:flex; flex-direction:column;
+    position:sticky; top:0; height:100vh;
+  }
+  .brand{padding:18px 18px 14px; border-bottom:1px solid rgba(255,255,255,.08)}
+  .brand .logo{display:flex; align-items:center; gap:9px}
+  .brand .mark{width:24px; height:24px; border-radius:6px; background:linear-gradient(135deg,var(--teal),#15a98f); position:relative; flex:none}
+  .brand .mark::after{content:""; position:absolute; inset:6px; border:2px solid rgba(255,255,255,.85); border-radius:50%; border-right-color:transparent; transform:rotate(20deg)}
+  .brand .name{color:#fff; font-weight:600; font-size:14.5px; letter-spacing:.2px}
+  .brand .sub{color:#7b8 a0; color:#7f8ea0; font-size:11px; margin-top:2px; letter-spacing:.3px; text-transform:uppercase}
+
+  .nav{padding:12px 10px; overflow-y:auto; flex:1}
+  .nav-label{font-size:10.5px; letter-spacing:.8px; text-transform:uppercase; color:#6b7c8f; padding:10px 10px 6px}
+  .nav-item{
+    display:flex; align-items:center; gap:9px; width:100%; text-align:left;
+    background:none; border:none; color:#c2ceda; padding:8px 10px; border-radius:7px;
+    font-size:13.5px; margin-bottom:1px;
+  }
+  .nav-item:hover{background:rgba(255,255,255,.06); color:#fff}
+  .nav-item.active{background:var(--navy-3); color:#fff; font-weight:500}
+  .nav-item .ic{width:16px; text-align:center; opacity:.85; flex:none}
+  .nav-item .count{margin-left:auto; font-size:11px; min-width:18px; text-align:center; padding:1px 6px; border-radius:20px; background:rgba(255,255,255,.1)}
+  .nav-item .count.red{background:var(--crimson); color:#fff}
+  .nav-item .count.amber{background:var(--amber); color:#fff}
+  .nav-item.locked{color:#5d6e80}
+  .nav-item.locked:hover{background:none; cursor:default}
+  .nav-item .soon{margin-left:auto; font-size:9.5px; letter-spacing:.5px; text-transform:uppercase; color:#5d6e80; border:1px solid rgba(255,255,255,.12); padding:1px 5px; border-radius:4px}
+  .rail-foot{padding:12px 16px; border-top:1px solid rgba(255,255,255,.08); display:flex; align-items:center; gap:9px; font-size:12px; color:#9fb0bf}
+  .avatar{width:26px; height:26px; border-radius:50%; background:var(--orange); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex:none}
+
+  /* ---------- main ---------- */
+  .main{display:flex; flex-direction:column; min-width:0}
+  .topbar{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:13px 26px; display:flex; align-items:center; gap:18px; position:sticky; top:0; z-index:5;
+  }
+  .crumb{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); min-width:0}
+  .crumb b{color:var(--ink); font-weight:600; font-size:15px}
+  .crumb .chev{color:var(--faint)}
+  .search{margin-left:auto; position:relative}
+  .search input{
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; width:230px; padding:7px 10px 7px 30px;
+    border:1px solid var(--line-2); border-radius:8px; background:var(--surface); color:var(--ink);
+  }
+  .search input:focus{outline:none; border-color:var(--navy-3); background:#fff}
+  .search .si{position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--faint); font-size:13px}
+  .live{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted); white-space:nowrap}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 0 rgba(14,124,107,.5); animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,124,107,.45)}70%{box-shadow:0 0 0 7px rgba(14,124,107,0)}100%{box-shadow:0 0 0 0 rgba(14,124,107,0)}}
+
+  .content{padding:24px 26px 60px; max-width:1180px}
+
+  /* ---------- KPI row ---------- */
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px}
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px 16px; position:relative; overflow:hidden}
+  .kpi .klabel{font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px}
+  .kpi .kval{font-size:30px; font-weight:600; margin-top:6px; letter-spacing:-.5px; line-height:1}
+  .kpi .ksub{font-size:11.5px; color:var(--faint); margin-top:5px}
+  .kpi.broken{background:var(--crimson-soft); border-color:var(--crimson-line)}
+  .kpi.broken .kval,.kpi.broken .klabel{color:var(--crimson)}
+  .kpi.risk{background:var(--amber-soft); border-color:#ecd6ab}
+  .kpi.risk .kval,.kpi.risk .klabel{color:var(--amber)}
+  .kpi.money .kval{color:var(--ink)}
+  .kpi .spark{position:absolute; right:12px; bottom:10px; font-size:22px; opacity:.18}
+
+  .section-h{display:flex; align-items:center; justify-content:space-between; margin:6px 0 12px}
+  .section-h h2{font-size:14px; font-weight:600; margin:0; letter-spacing:.2px}
+  .section-h .hint{font-size:11.5px; color:var(--faint)}
+
+  /* ---------- LOB grid ---------- */
+  .lob-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:26px}
+  .lob{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--teal); border-radius:8px; padding:13px 14px; text-align:left; transition:transform .08s, box-shadow .12s}
+  .lob:hover{box-shadow:0 4px 14px rgba(10,37,64,.08); transform:translateY(-1px)}
+  .lob.red{border-left-color:var(--crimson)}
+  .lob.amber{border-left-color:var(--amber)}
+  .lob .lname{font-weight:600; font-size:13.5px; display:flex; align-items:center; gap:7px}
+  .lob .lsys{font-size:11px; color:var(--faint); margin-top:1px; font-family:"IBM Plex Mono",monospace}
+  .lob .lstat{display:flex; gap:12px; margin-top:11px; font-size:12px; color:var(--muted); align-items:center}
+  .lob .pill{display:inline-flex; align-items:center; gap:4px; font-weight:600}
+  .lob .pill.r{color:var(--crimson)} .lob .pill.a{color:var(--amber)} .lob .pill.g{color:var(--teal)}
+  .sw{width:8px; height:8px; border-radius:50%; display:inline-block}
+  .sw.r{background:var(--crimson)} .sw.a{background:var(--amber)} .sw.g{background:var(--teal)}
+
+  /* ---------- exception queue ---------- */
+  .queue{display:flex; flex-direction:column; gap:8px}
+  .exc{
+    background:var(--card); border:1px solid var(--line); border-left:4px solid var(--line-2);
+    border-radius:8px; padding:13px 15px; text-align:left; display:grid;
+    grid-template-columns:1fr auto; gap:6px 14px; align-items:center; transition:box-shadow .12s, opacity .3s, transform .3s;
+  }
+  .exc:hover{box-shadow:0 3px 12px rgba(10,37,64,.07)}
+  .exc.red{border-left-color:var(--crimson); background:linear-gradient(90deg,var(--crimson-soft),#fff 16%)}
+  .exc.amber{border-left-color:var(--amber); background:linear-gradient(90deg,var(--amber-soft),#fff 16%)}
+  .exc.resolving{opacity:0; transform:translateX(14px)}
+  .exc-top{display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+  .exc-ref{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:13.5px}
+  .tag{font-size:10.5px; letter-spacing:.3px; text-transform:uppercase; padding:2px 7px; border-radius:5px; background:var(--surface); color:var(--muted); border:1px solid var(--line)}
+  .tag.lob{background:#eef3f7; color:var(--navy-2); border-color:#dce6ee}
+  .exc-reason{font-size:12.5px; color:var(--muted); margin-top:3px}
+  .exc-reason b{color:var(--ink); font-weight:600}
+  .exc-right{text-align:right; white-space:nowrap}
+  .exc-val{font-weight:600; font-size:15px}
+  .exc.red .exc-val{color:var(--crimson)}
+  .exc.amber .exc-val{color:var(--amber)}
+  .exc-age{font-size:11px; color:var(--faint); margin-top:2px}
+  .exc-cta{font-size:11.5px; color:var(--navy-3); margin-top:8px; display:flex; align-items:center; gap:5px; font-weight:500}
+
+  /* ---------- detail ---------- */
+  .back{display:inline-flex; align-items:center; gap:6px; background:none; border:none; color:var(--muted); font-size:13px; padding:4px 0; margin-bottom:14px}
+  .back:hover{color:var(--ink)}
+  .detail-head{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:16px}
+  .detail-head.red{border-top:3px solid var(--crimson)}
+  .detail-head.amber{border-top:3px solid var(--amber)}
+  .dh-top{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .dh-ref{font-family:"IBM Plex Mono",monospace; font-size:20px; font-weight:600}
+  .dh-state{font-size:11px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; padding:3px 9px; border-radius:6px}
+  .dh-state.red{background:var(--crimson); color:#fff}
+  .dh-state.amber{background:var(--amber); color:#fff}
+  .dh-meta{display:flex; gap:26px; margin-top:14px; flex-wrap:wrap}
+  .dh-meta .m{font-size:12px}
+  .dh-meta .m .ml{color:var(--faint); display:block; margin-bottom:2px; font-size:11px; text-transform:uppercase; letter-spacing:.4px}
+  .dh-meta .m .mv{font-weight:600; font-family:"IBM Plex Mono",monospace; font-size:13px}
+
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:16px}
+  .panel h3{font-size:12px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin:0 0 14px; display:flex; align-items:center; gap:8px}
+  .panel h3 .badge{margin-left:auto; font-size:10px; letter-spacing:.4px; background:var(--teal-soft); color:var(--teal); padding:2px 8px; border-radius:5px; text-transform:none; font-weight:600}
+
+  /* lineage stepper */
+  .lineage{display:flex; align-items:flex-start; overflow-x:auto; padding-bottom:4px}
+  .step{display:flex; flex-direction:column; align-items:center; text-align:center; min-width:96px; position:relative; flex:1}
+  .step .node{width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; border:2px solid var(--line-2); background:#fff; color:var(--faint); z-index:2}
+  .step.done .node{background:var(--teal); border-color:var(--teal); color:#fff}
+  .step.failed .node{background:var(--crimson); border-color:var(--crimson); color:#fff; animation:throb 1.6s infinite}
+  .step.waiting .node{background:var(--amber); border-color:var(--amber); color:#fff}
+  @keyframes throb{0%,100%{box-shadow:0 0 0 0 rgba(191,42,60,.4)}50%{box-shadow:0 0 0 6px rgba(191,42,60,0)}}
+  .step .slabel{font-size:11px; margin-top:7px; color:var(--muted); line-height:1.3; max-width:92px}
+  .step.failed .slabel{color:var(--crimson); font-weight:600}
+  .step.waiting .slabel{color:var(--amber); font-weight:600}
+  .step .conn{position:absolute; top:14px; left:50%; width:100%; height:2px; background:var(--line-2); z-index:1}
+  .step.done .conn{background:var(--teal)}
+  .step:last-child .conn{display:none}
+
+  .rootcause{font-size:14px; line-height:1.65; color:var(--ink)}
+  .rootcause .hl{background:var(--crimson-soft); padding:0 4px; border-radius:3px; font-weight:500}
+  .plan{list-style:none; margin:14px 0 0; padding:0; counter-reset:s}
+  .plan li{counter-increment:s; display:flex; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
+  .plan li::before{content:counter(s); flex:none; width:22px; height:22px; border-radius:50%; background:var(--navy); color:#fff; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center}
+  .plan li .pt{font-size:13.5px}
+  .plan li .pt .conf{display:inline-block; margin-left:8px; font-size:11px; color:var(--teal); font-weight:600; background:var(--teal-soft); padding:1px 7px; border-radius:5px}
+
+  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:4px}
+  .btn{border:1px solid var(--line-2); background:#fff; color:var(--ink); padding:9px 15px; border-radius:8px; font-size:13px; font-weight:500; display:inline-flex; align-items:center; gap:7px; transition:background .1s, transform .06s}
+  .btn:hover{background:var(--surface)} .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--navy); color:#fff; border-color:var(--navy)}
+  .btn.primary:hover{background:var(--navy-2)}
+
+  /* toast */
+  .toast-wrap{position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:50; display:flex; flex-direction:column; gap:8px; align-items:center}
+  .toast{background:var(--navy); color:#fff; padding:11px 18px; border-radius:9px; font-size:13px; display:flex; align-items:center; gap:9px; box-shadow:0 8px 26px rgba(10,37,64,.32); animation:rise .25s ease-out}
+  .toast .tic{color:#5fe3c4}
+  @keyframes rise{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:translateY(0)}}
+
+  .empty{background:var(--card); border:1px dashed var(--line-2); border-radius:var(--radius); padding:34px; text-align:center; color:var(--muted)}
+  .empty .eic{font-size:30px; color:var(--teal); margin-bottom:8px}
+
+  @media (max-width:880px){
+    .app{grid-template-columns:1fr} .rail{display:none}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- ===== command rail ===== -->
+  <aside class="rail">
+    <div class="brand">
+      <div class="logo"><div class="mark"></div><span class="name">Fabric Control Tower</span></div>
+      <div class="sub">AIT Worldwide · Integration ops</div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-label">Operate</div>
+      <button class="nav-item active" data-view="tower"><span class="ic">▣</span> Control tower</button>
+      <button class="nav-item" data-view="exceptions"><span class="ic">⚠</span> Exceptions <span class="count red" id="nav-exc">0</span></button>
+      <button class="nav-item locked"><span class="ic">◷</span> Onboarding <span class="soon">soon</span></button>
+      <button class="nav-item locked"><span class="ic">◈</span> Scorecards <span class="soon">soon</span></button>
+
+      <div class="nav-label">Lines of business</div>
+      <button class="nav-item active-lob" data-lob="all"><span class="ic">●</span> All lines</button>
+      <div id="lob-nav"></div>
+    </nav>
+    <div class="rail-foot">
+      <div class="avatar">NR</div>
+      <div>Ops console<br><span style="color:#6b7c8f;font-size:11px">prod · us-east</span></div>
+    </div>
+  </aside>
+
+  <!-- ===== main ===== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb" id="crumb"><b>Control tower</b><span class="chev">·</span><span>All lines of business</span></div>
+      <div class="search">
+        <span class="si">⌕</span>
+        <input id="search" placeholder="Search ref — HAWB, B/L, Load…" autocomplete="off" />
+      </div>
+      <div class="live"><span class="dot"></span> Live · 12s ago</div>
+    </header>
+    <main class="content" id="content"></main>
+  </div>
+</div>
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+const LOBS = [
+  {id:"air",   name:"Air forwarding",     sys:"CargoWise",  healthy:412},
+  {id:"ocean", name:"Ocean forwarding",   sys:"CargoWise",  healthy:278},
+  {id:"ground",name:"Ground / transborder",sys:"PowerBroker",healthy:331},
+  {id:"customs",name:"Customs brokerage", sys:"PowerBroker",healthy:156},
+  {id:"wh",    name:"Warehouse / dist.",  sys:"Extensiv",   healthy:204},
+  {id:"home",  name:"Home delivery",      sys:"Bringg",     healthy:188},
+  {id:"po",    name:"PO management",       sys:"AIT PO",     healthy:73},
+];
+const lobName = id => (LOBS.find(l=>l.id===id)||{}).name || id;
+
+function lineage(stages, idx, status){
+  return stages.map((s,i)=>({
+    name:s,
+    state: i<idx ? "done" : (i===idx ? (status==="red"?"failed":"waiting") : "pending")
+  }));
+}
+const AIR  =["Booking","Validate","Transform","Customs filing","Flight milestone","Delivery","Invoice ack"];
+const OCEAN=["Booking","Validate","Transform","Customs","Sailing milestone","Delivery","Invoice ack"];
+const GRND =["Tender","Validate","Tender response","Dispatch","In-transit","POD","Settle"];
+const CUST =["Entry","Validate","ABI filing","Customs response","Release","Duty"];
+const WH   =["ASN in","Validate","Putaway","Pick / pack","Ship confirm"];
+const HOME =["Order","Validate","Appointment","Route","In-transit","Delivery"];
+const PO   =["PO in","Validate","Supplier confirm","Booking","Ship","Receipt"];
+
+let FLOWS = [
+  {id:1, ref:"B/L SEAU772041", lob:"ocean", partner:"Maersk", status:"red", value:210000, age:"1h 12m overdue", system:"CargoWise",
+   reason:'stopped at <b>transform</b> — IFTMIN map failed (segment GID)', stages:lineage(OCEAN,2,"red"),
+   cause:'The ocean B/L could not be transformed for CargoWise. The <span class="hl">IFTMIN GID segment is missing its package-type qualifier</span>, so the mapping rule for container line items had nothing to bind to. Maersk changed their GID structure on their last spec update — every B/L from this partner since 06:00 is failing the same way.',
+   plan:[['Apply updated GID qualifier mapping for Maersk',' 96% match'],['Re-validate against CargoWise IFTMIN ruleset',''],['Reprocess the 4 queued Maersk B/Ls from transform','']],
+   primary:"Apply fix & reprocess"},
+  {id:2, ref:"HAWB 12482907", lob:"air", partner:"DHL", status:"red", value:84000, age:"2h 04m overdue", system:"PowerBroker",
+   reason:'stopped at <b>customs filing</b> — ABI entry rejected, missing HTS', stages:lineage(AIR,3,"red"),
+   cause:'CBP rejected the customs entry because <span class="hl">line 3 (server power supplies) has no HTS classification code</span>. The inbound HAWB from DHL did not carry an HTS value for that line, so the ABI filing built an incomplete entry.',
+   plan:[['Apply HTS 8504.40.9510 from product master',' 92% conf.'],['Re-validate entry against ABI ruleset',''],['Reprocess customs filing from failed step','']],
+   primary:"Apply HTS & reprocess"},
+  {id:3, ref:"ASN 88102", lob:"wh", partner:"Target", status:"red", value:31500, age:"33m overdue", system:"Extensiv",
+   reason:'stopped at <b>ship confirm</b> — 945 delivery failed (AS2 handshake)', stages:lineage(WH,4,"red"),
+   cause:'The 945 ship-confirm could not be delivered to Target. The <span class="hl">AS2 endpoint returned a TLS handshake error</span> — Target rotated their AS2 certificate this morning and the new public cert has not been imported.',
+   plan:[['Import Target AS2 certificate (expires 2027-06)',''],['Re-test AS2 connectivity',''],['Redeliver the 945',  '']],
+   primary:"Import cert & redeliver"},
+  {id:4, ref:"Load 99214", lob:"ground", partner:"Werner", status:"red", value:12400, age:"41m", system:"PowerBroker",
+   reason:'stopped at <b>tender response</b> — 990 declined by carrier', stages:lineage(GRND,2,"red"),
+   cause:'Werner returned a <span class="hl">990 decline — no capacity</span> on this lane for the pickup window. The load is unassigned and the shipper SLA clock is running.',
+   plan:[['Re-tender to next-best carrier on this lane',' suggested: Knight'],['Notify shipper of carrier change',''],['Track 990 acceptance','']],
+   primary:"Re-tender to Knight"},
+  {id:5, ref:"Entry 7741-9", lob:"customs", partner:"CBP / ACE", status:"red", value:0, age:"3h 18m", system:"PowerBroker",
+   reason:'stopped at <b>customs response</b> — ACE rejected, ISF late', stages:lineage(CUST,3,"red"),
+   cause:'ACE rejected the entry because the <span class="hl">ISF was filed after the 24-hour vessel-loading deadline</span>. This is a compliance exception, not a data error — it needs a broker, not a reprocess.',
+   plan:[['Route to licensed customs broker queue',''],['Prepare ISF late-filing explanation',''],['Flag partner for ISF timing review','']],
+   primary:"Route to broker"},
+  {id:6, ref:"BKG OO-22815", lob:"ocean", partner:"Hapag-Lloyd", status:"amber", value:97000, age:"SLA 62% elapsed", system:"CargoWise",
+   reason:'waiting at <b>sailing milestone</b> — vessel departure event delayed', stages:lineage(OCEAN,4,"amber"),
+   cause:'The booking is confirmed but the <span class="hl">vessel-departure milestone has not arrived from Hapag-Lloyd</span>. At current pace it will breach the customer visibility SLA in roughly 2 hours.',
+   plan:[['Poll Hapag-Lloyd API for latest vessel event',''],['Notify account team of at-risk milestone',''],['Escalate if no event in 90 min','']],
+   primary:"Poll carrier now"},
+  {id:7, ref:"PO 55120", lob:"po", partner:"Flextronics", status:"amber", value:46000, age:"SLA 70% elapsed", system:"AIT PO",
+   reason:'waiting at <b>supplier confirm</b> — 855 not received', stages:lineage(PO,2,"amber"),
+   cause:'The PO was sent but <span class="hl">Flextronics has not returned an 855 acknowledgement</span>. 70% of the confirmation window has elapsed — without it, the downstream booking cannot start.',
+   plan:[['Resend PO with confirmation request',''],['Open supplier follow-up task',''],['Hold booking until 855 lands','']],
+   primary:"Resend & follow up"},
+  {id:8, ref:"HAWB 12490341", lob:"air", partner:"Lufthansa", status:"amber", value:54000, age:"SLA 80% elapsed", system:"CargoWise",
+   reason:'waiting at <b>flight milestone</b> — no FSU arrival confirmation', stages:lineage(AIR,4,"amber"),
+   cause:'FWB was accepted but <span class="hl">no FSU status update has come back from Lufthansa</span> confirming uplift. The milestone SLA is 80% elapsed.',
+   plan:[['Query Lufthansa for latest FSU status',''],['Alert origin station',''],['Escalate to carrier ops if silent','']],
+   primary:"Query carrier"},
+  {id:9, ref:"Order 4471", lob:"home", partner:"Final-mile co.", status:"amber", value:3200, age:"214 stale 6h", system:"Bringg", 
+   reason:'waiting at <b>in-transit</b> — 214 status stale for 6h', stages:lineage(HOME,4,"amber"),
+   cause:'The white-glove delivery is in transit but the <span class="hl">last 214 status update was 6 hours ago</span>. The consumer-facing ETA is going stale and may trigger a support call.',
+   plan:[['Request fresh status from final-mile carrier',''],['Refresh consumer ETA notification',''],['Flag if no update in 2h','']],
+   primary:"Request status"},
+];
+
+let RESOLVED = 0;
+const state = {view:"tower", lob:"all", detail:null};
+const fmt = n => n>=1000 ? "$"+(n/1000).toFixed(n%1000?1:0)+"K" : (n? "$"+n : "—");
+const $ = s => document.querySelector(s);
+
+function activeFlows(){ return FLOWS.filter(f=> state.lob==="all" || f.lob===state.lob); }
+function counts(list){ return {red:list.filter(f=>f.status==="red").length, amber:list.filter(f=>f.status==="amber").length}; }
+
+function renderNav(){
+  const ln = $("#lob-nav"); ln.innerHTML="";
+  LOBS.forEach(l=>{
+    const c = counts(FLOWS.filter(f=>f.lob===l.id));
+    const b = document.createElement("button");
+    b.className="nav-item"+(state.lob===l.id?" active":"");
+    b.dataset.lob=l.id;
+    let badge = c.red? `<span class="count red">${c.red}</span>` : (c.amber? `<span class="count amber">${c.amber}</span>`:"");
+    b.innerHTML = `<span class="ic">${c.red?'●':c.amber?'●':'○'}</span> ${l.name} ${badge}`;
+    b.querySelector('.ic').style.color = c.red?'var(--crimson)':c.amber?'var(--amber)':'#5fae9d';
+    ln.appendChild(b);
+  });
+  document.querySelectorAll('[data-lob]').forEach(el=> el.classList.toggle('active', el.dataset.lob===state.lob));
+  document.querySelectorAll('[data-view]').forEach(el=> el.classList.toggle('active', el.dataset.view===state.view && state.view!=="detail"));
+  const allc = counts(FLOWS);
+  $("#nav-exc").textContent = allc.red+allc.amber;
+  $("#nav-exc").style.display = (allc.red+allc.amber)?"":"none";
+}
+
+function setCrumb(){
+  const c=$("#crumb");
+  const lobtxt = state.lob==="all" ? "All lines of business" : lobName(state.lob);
+  if(state.view==="detail"){
+    const f=FLOWS.find(x=>x.id===state.detail);
+    c.innerHTML=`<b>Exceptions</b><span class="chev">·</span><span>${f?f.ref:''}</span>`;
+  } else {
+    const title = state.view==="tower" ? "Control tower" : "Exceptions";
+    c.innerHTML=`<b>${title}</b><span class="chev">·</span><span>${lobtxt}</span>`;
+  }
+}
+
+function excCard(f){
+  return `<button class="exc ${f.status}" data-open="${f.id}">
+    <div>
+      <div class="exc-top">
+        <span class="exc-ref">${f.ref}</span>
+        <span class="tag lob">${lobName(f.lob)}</span>
+        <span class="tag">${f.partner}</span>
+      </div>
+      <div class="exc-reason">${f.reason}</div>
+      <div class="exc-cta">Open lineage &amp; root cause →</div>
+    </div>
+    <div class="exc-right">
+      <div class="exc-val">${f.value?fmt(f.value):'—'}</div>
+      <div class="exc-age">${f.age}</div>
+    </div>
+  </button>`;
+}
+
+function renderTower(){
+  const list = activeFlows();
+  const c = counts(list);
+  const money = list.filter(f=>f.status==="red").reduce((s,f)=>s+f.value,0);
+  const healthyBase = (state.lob==="all"? LOBS.reduce((s,l)=>s+l.healthy,0) : (LOBS.find(l=>l.id===state.lob).healthy)) + RESOLVED;
+
+  let lobCards = LOBS.filter(l=> state.lob==="all"||l.id===state.lob).map(l=>{
+    const lc = counts(FLOWS.filter(f=>f.lob===l.id));
+    const cls = lc.red?"red":lc.amber?"amber":"";
+    return `<button class="lob ${cls}" data-lob="${l.id}">
+      <div class="lname"><span class="sw ${lc.red?'r':lc.amber?'a':'g'}"></span>${l.name}</div>
+      <div class="lsys">${l.sys}</div>
+      <div class="lstat">
+        ${lc.red?`<span class="pill r">${lc.red} broken</span>`:''}
+        ${lc.amber?`<span class="pill a">${lc.amber} at risk</span>`:''}
+        <span class="pill g">${l.healthy} ok</span>
+      </div>
+    </button>`;
+  }).join("");
+
+  const topExc = list.slice().sort((a,b)=> (a.status==="red"?0:1)-(b.status==="red"?0:1) || b.value-a.value);
+
+  $("#content").innerHTML = `
+    <div class="kpis">
+      <div class="kpi broken"><div class="klabel">Broken now</div><div class="kval">${c.red}</div><div class="ksub">need action to clear</div><span class="spark">⚠</span></div>
+      <div class="kpi risk"><div class="klabel">At risk</div><div class="kval">${c.amber}</div><div class="ksub">will breach SLA if ignored</div><span class="spark">◷</span></div>
+      <div class="kpi money"><div class="klabel">Value exposed</div><div class="kval">${fmt(money)}</div><div class="ksub">in broken flows</div><span class="spark">◈</span></div>
+      <div class="kpi"><div class="klabel">Healthy</div><div class="kval">${healthyBase.toLocaleString()}</div><div class="ksub">flowing within SLA</div><span class="spark">✓</span></div>
+    </div>
+    <div class="section-h"><h2>Line of business health</h2><span class="hint">click a card to focus</span></div>
+    <div class="lob-grid">${lobCards}</div>
+    <div class="section-h"><h2>What needs attention</h2><span class="hint">ranked by value · highest first</span></div>
+    <div class="queue">${topExc.length?topExc.map(excCard).join(""):emptyState()}</div>
+  `;
+}
+
+function renderExceptions(){
+  const list = activeFlows().slice().sort((a,b)=> (a.status==="red"?0:1)-(b.status==="red"?0:1) || b.value-a.value);
+  const c = counts(list);
+  $("#content").innerHTML = `
+    <div class="section-h"><h2>Exception queue ${state.lob!=="all"?"· "+lobName(state.lob):""}</h2>
+      <span class="hint">${c.red} broken · ${c.amber} at risk</span></div>
+    <div class="queue">${list.length?list.map(excCard).join(""):emptyState()}</div>`;
+}
+
+function emptyState(){
+  return `<div class="empty"><div class="eic">✓</div><div style="font-weight:600;color:var(--ink)">Nothing broken here</div>
+    <div style="margin-top:4px">Every flow in scope is moving within SLA.</div></div>`;
+}
+
+function renderDetail(){
+  const f = FLOWS.find(x=>x.id===state.detail);
+  if(!f){ state.view="exceptions"; render(); return; }
+  const steps = f.stages.map(s=>{
+    const ic = s.state==="done"?"✓":s.state==="failed"?"✕":s.state==="waiting"?"◷":"";
+    return `<div class="step ${s.state}"><div class="conn"></div><div class="node">${ic}</div><div class="slabel">${s.name}</div></div>`;
+  }).join("");
+  const plan = f.plan.map(p=>`<li><span class="pt">${p[0]}${p[1]?`<span class="conf">${p[1]}</span>`:''}</span></li>`).join("");
+  $("#content").innerHTML = `
+    <button class="back" data-back>← Back to exceptions</button>
+    <div class="detail-head ${f.status}">
+      <div class="dh-top">
+        <span class="dh-ref">${f.ref}</span>
+        <span class="dh-state ${f.status}">${f.status==="red"?"Broken":"At risk"}</span>
+      </div>
+      <div class="dh-meta">
+        <div class="m"><span class="ml">Line of business</span><span class="mv">${lobName(f.lob)}</span></div>
+        <div class="m"><span class="ml">Partner</span><span class="mv">${f.partner}</span></div>
+        <div class="m"><span class="ml">Target system</span><span class="mv">${f.system}</span></div>
+        <div class="m"><span class="ml">Value exposed</span><span class="mv">${f.value?fmt(f.value):'—'}</span></div>
+        <div class="m"><span class="ml">Status age</span><span class="mv">${f.age}</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Pipeline lineage <span class="badge">where it stopped</span></h3>
+      <div class="lineage">${steps}</div>
+    </div>
+    <div class="panel">
+      <h3>Root cause <span class="badge">AI · plain language</span></h3>
+      <div class="rootcause">${f.cause}</div>
+    </div>
+    <div class="panel">
+      <h3>Recommended action plan</h3>
+      <ol class="plan">${plan}</ol>
+      <div class="actions" style="margin-top:18px">
+        <button class="btn primary" data-resolve="${f.id}">⤳ ${f.primary}</button>
+        <button class="btn" data-reassign="${f.id}">Reassign</button>
+        <button class="btn" data-raw="${f.id}">View raw payload</button>
+      </div>
+    </div>`;
+}
+
+function render(){ setCrumb(); renderNav();
+  if(state.view==="tower") renderTower();
+  else if(state.view==="exceptions") renderExceptions();
+  else renderDetail();
+}
+
+function toast(msg){
+  const t=document.createElement("div"); t.className="toast";
+  t.innerHTML=`<span class="tic">✓</span> ${msg}`;
+  $("#toasts").appendChild(t);
+  setTimeout(()=>{ t.style.opacity="0"; t.style.transform="translateY(8px)"; setTimeout(()=>t.remove(),250); }, 2600);
+}
+
+function resolveFlow(id){
+  const f=FLOWS.find(x=>x.id===id); if(!f) return;
+  FLOWS = FLOWS.filter(x=>x.id!==id); RESOLVED++;
+  toast(`${f.ref} — ${f.primary.toLowerCase()} · cleared`);
+  state.view="exceptions"; if(activeFlows().length===0 && state.lob!=="all"){} 
+  state.detail=null; render();
+}
+
+// ---- events ----
+document.addEventListener("click", e=>{
+  const view=e.target.closest("[data-view]");
+  if(view){ state.view=view.dataset.view; state.detail=null; render(); return; }
+  const lob=e.target.closest("[data-lob]");
+  if(lob){ state.lob=lob.dataset.lob; if(state.view==="detail")state.view="tower"; state.detail=null; render(); return; }
+  const open=e.target.closest("[data-open]");
+  if(open){ state.detail=+open.dataset.open; state.view="detail"; render(); window.scrollTo(0,0); return; }
+  if(e.target.closest("[data-back]")){ state.view="exceptions"; state.detail=null; render(); return; }
+  const res=e.target.closest("[data-resolve]");
+  if(res){ resolveFlow(+res.dataset.resolve); return; }
+  const ra=e.target.closest("[data-reassign]");
+  if(ra){ toast("Reassigned to ops queue"); return; }
+  const raw=e.target.closest("[data-raw]");
+  if(raw){ toast("Raw payload — available in full build"); return; }
+});
+
+$("#search").addEventListener("input", e=>{
+  const q=e.target.value.trim().toLowerCase();
+  if(!q){ render(); return; }
+  const hits = FLOWS.filter(f=> f.ref.toLowerCase().includes(q));
+  state.view="exceptions";
+  setCrumb(); renderNav();
+  $("#content").innerHTML = `<div class="section-h"><h2>Search · "${e.target.value}"</h2><span class="hint">${hits.length} match${hits.length!==1?'es':''}</span></div>
+    <div class="queue">${hits.length?hits.map(excCard).join(""):`<div class="empty"><div class="eic">⌕</div><div style="font-weight:600;color:var(--ink)">No flow matches that reference</div></div>`}</div>`;
+});
+
+render();
+</script>
+</body>
+</html>
