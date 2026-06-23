@@ -115,6 +115,27 @@ def build(kind, ds_id, c):
         q = base_query({"columns": gb, "metrics": [met], "orderby": [[met, False]], "row_limit": 100})
         return "pie", params, qc(ds_id, params, q)
 
+    if kind == "donut":
+        met = m(*c["metric"]); gb = [c["groupby"]]
+        params = {"datasource": ds, "viz_type": "pie", "groupby": gb, "metric": met,
+                  "row_limit": 100, "time_range": NO_TIME, "show_legend": True,
+                  "innerRadius": 45, "donut": True, "label_type": "key_percent",
+                  "show_labels": True, "labels_outside": True, "number_format": "SMART_NUMBER"}
+        q = base_query({"columns": gb, "metrics": [met], "orderby": [[met, False]], "row_limit": 100})
+        return "pie", params, qc(ds_id, params, q)
+
+    if kind == "pivot":
+        met = m(*c["metric"]); rows = c["rows"]; cols_ = c["columns"]
+        params = {"datasource": ds, "viz_type": "pivot_table_v2",
+                  "groupbyRows": rows, "groupbyColumns": cols_, "metrics": [met],
+                  "aggregateFunction": "Sum", "rowTotals": True, "colTotals": True,
+                  "row_limit": c.get("row_limit", 1000), "time_range": NO_TIME,
+                  "valueFormat": c.get("number_format", "SMART_NUMBER"),
+                  "metricsLayout": "COLUMNS"}
+        q = base_query({"columns": rows + cols_, "metrics": [met],
+                        "orderby": [[met, False]], "row_limit": c.get("row_limit", 1000)})
+        return "pivot_table_v2", params, qc(ds_id, params, q)
+
     if kind == "bar":
         met = m(*c["metric"]); dim = c["dim"]; series = c.get("series")
         cols = [dim] + ([series] if series else [])

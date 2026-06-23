@@ -261,6 +261,48 @@ DATASETS = {
         LEFT JOIN diagnostic_rules dg ON dg.partner IS NULL
           AND dg.reason_category=e.reason_category AND dg.error_code=e.error_code
         WHERE e.status IN ('failed','rejected') AND e.reason_category IS NOT NULL""", dttm="event_time"),
+
+    # ---- Sprint R: per-LOB Cockpit (reference-dashboard baseline) ------------
+    # All expose `lob` so the LOB native filter scopes them to one line of
+    # business, reproducing the reference Brokerage/MT/B2B per-LOB template.
+    "q_lob_last": dict(sql="""
+        SELECT lob, max(last_event_at) AS last_received, count(*) AS live_refs
+        FROM txn_current GROUP BY lob"""),
+
+    "q_lob_details": dict(sql="""
+        SELECT lob, business_ref, partner, doc_type, channel, protocol,
+               current_stage, current_status, last_event_at, value_usd,
+               replayed, replay_count
+        FROM txn_current""", dttm="last_event_at"),
+
+    "q_lob_incoming": dict(sql="""
+        SELECT lob, business_ref, partner, doc_type, event_time, stage, status, payload
+        FROM txn_events
+        WHERE direction='in' AND payload IS NOT NULL""", dttm="event_time"),
+
+    "q_lob_outgoing": dict(sql="""
+        SELECT lob, business_ref, partner, doc_type, event_time, stage, status, payload
+        FROM txn_events
+        WHERE direction='out' AND doc_type NOT IN ('997','CONTRL')
+          AND payload IS NOT NULL""", dttm="event_time"),
+
+    "q_lob_ack": dict(sql="""
+        SELECT lob, business_ref, partner, doc_type, control_number, event_time,
+               status AS ack_status, payload AS ack_payload
+        FROM txn_events
+        WHERE doc_type IN ('997','CONTRL') AND payload IS NOT NULL""", dttm="event_time"),
+
+    "q_lob_exceptions": dict(sql="""
+        SELECT lob, event_time, business_ref, partner, doc_type, stage, status,
+               coalesce(reason_category,'unknown') AS reason_category,
+               coalesce(error_code,'') AS error_code, replay_count, payload AS comments,
+               round(extract(epoch FROM (now()-event_time))/60) AS age_min
+        FROM txn_events WHERE status IN ('failed','rejected')""", dttm="event_time"),
+
+    # daily partner x day matrix for the Traffic-Report pivot crosstab
+    "q_traffic_pivot": dict(sql="""
+        SELECT lob, partner, date_trunc('day',bucket)::date AS day, txn_count
+        FROM txn_rollup_hourly"""),
 }
 
 # ---------------------------------------------------------------------------
@@ -286,6 +328,11 @@ T_DIAG    = "Diagnostics"
 T_TYPES   = "Transaction Types"
 T_ALLTXN  = "All Transactions"
 T_OVERVIEW = "Overview"
+# Sprint R — per-LOB Cockpit (reference-dashboard template)
+T_LOB_OV   = "LOB · Overview"
+T_LOB_DET  = "LOB · Details"
+T_LOB_TRAF = "LOB · Traffic"
+T_LOB_EXC  = "LOB · Exceptions"
 
 # ---- column-format helpers for Table V2 (column_config) --------------------
 CUR  = {"d3NumberFormat": "$,.0f"}                       # currency
@@ -344,7 +391,7 @@ CHARTS = [
 
     # ===== Q2 — Flow (EDI & API summary), all from the rollup =====
     dict(slice="Total transactions", tab=T_FLOW, dataset="vw_rollup",
-         kind="bignum", metric=("total","SUM(txn_count)"), subheader="all protocols", trend=True, w=3, h=38),
+         kind="bignum", metric=("total","SUM(txn_count)"), subheader="all protocols", w=3, h=38),
     dict(slice="EDI transactions", tab=T_FLOW, dataset="vw_rollup",
          kind="bignum", metric=("edi","SUM(txn_count) FILTER (WHERE protocol='edi')"),
          subheader="EDI", w=3, h=38),
@@ -501,7 +548,7 @@ CHARTS = [
 
     # ===== Overview (curated landing) =====
     dict(slice="Overview: Transactions", tab=T_OVERVIEW, dataset="vw_rollup",
-         kind="bignum", metric=("total","SUM(txn_count)"), subheader="total volume", trend=True, w=3, h=40),
+         kind="bignum", metric=("total","SUM(txn_count)"), subheader="total volume", w=3, h=40),
     dict(slice="Overview: Auto-processed %", tab=T_OVERVIEW, dataset="vw_rollup",
          kind="bignum",
          metric=("auto","100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))"),
@@ -531,11 +578,71 @@ CHARTS = [
     dict(slice="Overview: Missing feed worklist", tab=T_OVERVIEW, dataset="q1_missing_feeds",
          kind="raw", cols=["partner","doc_type","channel","mins_overdue","last_seen_at"],
          order=[("mins_overdue", False)], col_fmt={"mins_overdue": BARS}, w=6, h=42),
+
+    # ===== Sprint R — LOB Cockpit · Overview (reference template) =====
+    dict(slice="LOB: Total messages received", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="bignum", metric=("total","SUM(txn_count)"), subheader="all messages", w=3, h=40),
+    dict(slice="LOB: Success", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="bignum", metric=("success","SUM(txn_count - failed_count - rejected_count)"),
+         subheader="processed / validated", w=3, h=40),
+    dict(slice="LOB: Failure", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="bignum", metric=("failure","SUM(failed_count + rejected_count)"),
+         subheader="failed + rejected", w=3, h=40),
+    dict(slice="LOB: Last message received", tab=T_LOB_OV, dataset="q_lob_last",
+         kind="raw", cols=["lob","last_received","live_refs"], order=[("last_received", False)],
+         col_fmt={"live_refs": NUMB}, w=3, h=40),
+    dict(slice="LOB: Message by partner", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="bar", dim="partner", metric=("txns","SUM(txn_count)"), row_limit=15, w=6, h=50),
+    dict(slice="LOB: Message by status", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="donut", groupby="status", metric=("txns","SUM(txn_count)"), w=6, h=50),
+    dict(slice="LOB: Processing trend", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="timebar", metric=("txns","SUM(txn_count)"), w=6, h=46),
+    dict(slice="LOB: Message by type", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="donut", groupby="doc_type", metric=("txns","SUM(txn_count)"), w=6, h=46),
+    dict(slice="LOB: Count by message type", tab=T_LOB_OV, dataset="vw_rollup",
+         kind="bar", dim="doc_type", metric=("txns","SUM(txn_count)"), series="status",
+         row_limit=30, w=12, h=48),
+
+    # ===== Sprint R — LOB Cockpit · Details (master-detail payload drill) =====
+    dict(slice="LOB: Details", tab=T_LOB_DET, dataset="q_lob_details", kind="raw",
+         cols=["business_ref","partner","doc_type","channel","current_stage",
+               "current_status","last_event_at","value_usd","replay_count"],
+         order=[("last_event_at", False)], row_limit=200,
+         col_fmt={"value_usd": CUR}, w=12, h=52),
+    dict(slice="LOB: Incoming data", tab=T_LOB_DET, dataset="q_lob_incoming", kind="raw",
+         cols=["event_time","business_ref","doc_type","status","payload"],
+         order=[("event_time", False)], row_limit=50, w=6, h=48),
+    dict(slice="LOB: Outgoing data", tab=T_LOB_DET, dataset="q_lob_outgoing", kind="raw",
+         cols=["event_time","business_ref","doc_type","status","payload"],
+         order=[("event_time", False)], row_limit=50, w=6, h=48),
+    dict(slice="LOB: Ack data", tab=T_LOB_DET, dataset="q_lob_ack", kind="raw",
+         cols=["event_time","business_ref","doc_type","control_number","ack_status","ack_payload"],
+         order=[("event_time", False)], row_limit=50, w=12, h=44),
+
+    # ===== Sprint R — LOB Cockpit · Traffic (trend + pivot crosstab) =====
+    dict(slice="LOB: Traffic trend", tab=T_LOB_TRAF, dataset="vw_rollup",
+         kind="timebar", metric=("txns","SUM(txn_count)"), series="doc_type", w=12, h=48),
+    dict(slice="LOB: Traffic report (partner x day)", tab=T_LOB_TRAF, dataset="q_traffic_pivot",
+         kind="pivot", rows=["partner"], columns=["day"], metric=("txns","SUM(txn_count)"), w=12, h=56),
+
+    # ===== Sprint R — LOB Cockpit · Exceptions (triage queue) =====
+    dict(slice="LOB: Open exceptions", tab=T_LOB_EXC, dataset="q_lob_exceptions",
+         kind="bignum", metric=("open","COUNT(*)"), subheader="failed + rejected", w=3, h=38),
+    dict(slice="LOB: Resubmitted", tab=T_LOB_EXC, dataset="q_lob_exceptions",
+         kind="bignum", metric=("resub","SUM((replay_count>0)::int)"), subheader="replayed at least once", w=3, h=38),
+    dict(slice="LOB: Exception by reason", tab=T_LOB_EXC, dataset="q_lob_exceptions",
+         kind="bar", dim="reason_category", metric=("occ","COUNT(*)"), row_limit=15, w=6, h=38),
+    dict(slice="LOB: Exception queue", tab=T_LOB_EXC, dataset="q_lob_exceptions", kind="raw",
+         cols=["event_time","business_ref","partner","doc_type","stage","status",
+               "reason_category","error_code","replay_count","age_min","comments"],
+         order=[("event_time", False)], row_limit=200,
+         col_fmt={"age_min": BARS, "replay_count": BARS}, w=12, h=54),
 ]
 
 # Top-level sections -> sub-tabs (nested tabs). Reordered by ops workflow.
 SECTIONS = [
     ("Overview",        [T_OVERVIEW]),
+    ("LOB Cockpit",     [T_LOB_OV, T_LOB_DET, T_LOB_TRAF, T_LOB_EXC]),
     ("Operations",      [T_ARRIVAL, T_EXC, T_DIAG]),
     ("Flow",            [T_FLOW, T_TYPES]),
     ("Transactions",    [T_ALLTXN, T_LOOKUP, T_FILES]),

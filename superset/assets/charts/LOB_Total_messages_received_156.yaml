@@ -1,4 +1,4 @@
-slice_name: Total transactions
+slice_name: 'LOB: Total messages received'
 description: null
 certified_by: null
 certification_details: null
@@ -11,7 +11,7 @@ params:
     sqlExpression: SUM(txn_count)
     label: total
     hasCustomLabel: true
-  subheader: all protocols
+  subheader: all messages
   time_range: No filter
   y_axis_format: SMART_NUMBER
 query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
@@ -21,10 +21,10 @@ query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "que
   "SQL", "sqlExpression": "SUM(txn_count)", "label": "total", "hasCustomLabel": true}]}],
   "form_data": {"datasource": "22__table", "viz_type": "big_number_total", "metric":
   {"expressionType": "SQL", "sqlExpression": "SUM(txn_count)", "label": "total", "hasCustomLabel":
-  true}, "subheader": "all protocols", "time_range": "No filter", "y_axis_format":
+  true}, "subheader": "all messages", "time_range": "No filter", "y_axis_format":
   "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
 cache_timeout: null
-uuid: f7ca83c7-8ad8-4767-80b0-b442c5f762e4
+uuid: f7f4a855-3644-4bba-8d79-4cbbbc42aa3c
 version: 1.0.0
 dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
 tags: []

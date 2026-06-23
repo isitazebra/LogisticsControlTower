@@ -1,0 +1,43 @@
+slice_name: 'LOB: Details'
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 60__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - doc_type
+  - channel
+  - current_stage
+  - current_status
+  - last_event_at
+  - value_usd
+  - replay_count
+  order_by_cols:
+  - '["last_event_at", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    value_usd:
+      d3NumberFormat: $,.0f
+query_context: '{"datasource": {"id": 60, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["last_event_at", false]], "columns": ["business_ref",
+  "partner", "doc_type", "channel", "current_stage", "current_status", "last_event_at",
+  "value_usd", "replay_count"], "metrics": []}], "form_data": {"datasource": "60__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["business_ref", "partner",
+  "doc_type", "channel", "current_stage", "current_status", "last_event_at", "value_usd",
+  "replay_count"], "order_by_cols": ["[\"last_event_at\", false]"], "row_limit": 200,
+  "server_page_length": 25, "time_range": "No filter", "column_config": {"value_usd":
+  {"d3NumberFormat": "$,.0f"}}}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 6c0e82e9-c488-4d64-a2ec-0b60bbff1f04
+version: 1.0.0
+dataset_uuid: 976e3902-10e2-42ce-ba09-a9876cd62898
+tags: []

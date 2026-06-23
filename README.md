@@ -25,11 +25,20 @@ runs entirely on seed data.
 | 5 | Q10/Q11 response-SLA (at-risk)·diagnostics·resolution KB + at-risk alert | ✅ built + render-verified |
 | 6 | Q12 document-type / transaction-type command center (Cleo core) | ✅ built + render-verified |
 | UX | Nested-tab IA · **All Transactions explorer** · drill-downs · visual pass | ✅ built + render-verified |
+| R | **LOB Cockpit** (reference-dashboard baseline): per-LOB Overview·Details·Traffic·Exceptions + payload drill | ✅ built + render-verified |
 
 **Dashboard:** `https://79309cb5.us1a.app.preset.io/superset/dashboard/integration-cockpit/`
-— **5 nested sections** (Overview · Operations · Flow · Transactions · SLA & Partners),
-**81 charts**, 8 native filters (incl. **Business-ref search**), cross-filtering,
-drill-to-detail, 60s auto-refresh. **6 alerts** (paused).
+— **6 nested sections** (Overview · **LOB Cockpit** · Operations · Flow · Transactions ·
+SLA & Partners), **100 charts**, 8 native filters (incl. **LOB** scoping + **Business-ref
+search**), cross-filtering, drill-to-detail, 60s auto-refresh. **6 alerts** (paused).
+
+The **LOB Cockpit** section reproduces the reference per-LOB template
+(`docs/reference-dashboards/`): the canonical 4-KPI Overview (Total received · Success ·
+Failure · Last received) with status/type donuts, a partner bar, processing trend, and a
+**doc-type × status stacked bar**; a **Details** master-detail (Incoming / Outgoing / Ack
+payload panels driven by clicking a transaction); a **Traffic** tab (daily trend stacked
+by doc type + **partner × day pivot crosstab**); and an **Exceptions** triage queue. Scope
+it to one line of business with the LOB filter to get a Brokerage / MT / B2B-style view.
 
 Visual pass: currency/percent/number formats + data bars + conditional color on key
 tables, **big-number trendlines**, **treemap** (family→type), **gauge** (SLA %),
@@ -49,6 +58,9 @@ sql/
   01_seed.sql            ~300k bulk rows + every acceptance-criteria edge case
   02_rollup_refresh.sql  incremental rollup function + files-missing-txns reconciliation view
   03_refresh_ops.sql     refresh_demo_ops() — re-crisp time-sensitive Q1/Q10 edge cases
+  04_phase35_seed.sql    targeted Phase 3-5 demo states (acks, SLA pairs, dup/fail clusters)
+  05_doc_type_catalog.sql doc_type -> business_family/label/SLA map (Q12 / Transaction Types)
+  06_payloads.sql        per-event message body for the LOB Details payload drill (Sprint R)
 scripts/
   db.py                  tiny psql substitute (runs .sql / queries against Neon)
   preset_client.py       authenticated Superset client (reused by all build scripts)

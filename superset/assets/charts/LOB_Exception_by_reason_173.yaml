@@ -1,0 +1,37 @@
+slice_name: 'LOB: Exception by reason'
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 64__table
+  viz_type: echarts_timeseries_bar
+  x_axis: reason_category
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: occ
+    hasCustomLabel: true
+  row_limit: 15
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 64, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 15, "orderby": [[{"expressionType": "SQL", "sqlExpression": "COUNT(*)",
+  "label": "occ", "hasCustomLabel": true}, false]], "columns": ["reason_category"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "occ",
+  "hasCustomLabel": true}], "series_columns": []}], "form_data": {"datasource": "64__table",
+  "viz_type": "echarts_timeseries_bar", "x_axis": "reason_category", "groupby": [],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "occ",
+  "hasCustomLabel": true}], "row_limit": 15, "time_range": "No filter", "x_axis_sort_asc":
+  false, "x_axis_sort_series": "name", "order_desc": true}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: 4df77d64-a516-4822-8ee1-5c0c544afe76
+version: 1.0.0
+dataset_uuid: 2e5442f8-0c5b-4262-8b9f-2dd4a2469110
+tags: []
