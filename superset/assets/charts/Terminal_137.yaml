@@ -1,0 +1,31 @@
+slice_name: Terminal
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 56__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(terminal::int)
+    label: terminal
+    hasCustomLabel: true
+  subheader: completed/failed-final
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 56, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(terminal::int)", "label": "terminal", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "56__table", "viz_type": "big_number_total",
+  "metric": {"expressionType": "SQL", "sqlExpression": "SUM(terminal::int)", "label":
+  "terminal", "hasCustomLabel": true}, "subheader": "completed/failed-final", "time_range":
+  "No filter", "y_axis_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: b0eff8e9-b4f5-4f0f-a891-d437ac88cd7d
+version: 1.0.0
+dataset_uuid: 436376d5-88f0-49c7-916f-5db49127bc49
+tags: []

@@ -19,6 +19,14 @@ params:
   row_limit: 100
   server_page_length: 25
   time_range: No filter
+  column_config:
+    days_left:
+      showCellBars: true
+  conditional_formatting:
+  - column: days_left
+    operator: <
+    targetValue: 7
+    colorScheme: '#e04355'
 query_context: '{"datasource": {"id": 30, "type": "table"}, "force": false, "queries":
   [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
   "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
@@ -27,7 +35,9 @@ query_context: '{"datasource": {"id": 30, "type": "table"}, "force": false, "que
   []}], "form_data": {"datasource": "30__table", "viz_type": "table", "query_mode":
   "raw", "all_columns": ["endpoint", "partner", "channel", "environment", "cert_expires_at",
   "days_left"], "order_by_cols": ["[\"days_left\", true]"], "row_limit": 100, "server_page_length":
-  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+  25, "time_range": "No filter", "column_config": {"days_left": {"showCellBars": true}},
+  "conditional_formatting": [{"column": "days_left", "operator": "<", "targetValue":
+  7, "colorScheme": "#e04355"}]}, "result_format": "json", "result_type": "full"}'
 cache_timeout: null
 uuid: 418dff48-e89f-4160-99eb-5fc3978749d9
 version: 1.0.0

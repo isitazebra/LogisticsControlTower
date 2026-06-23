@@ -47,9 +47,14 @@ def build(kind, ds_id, c):
         filt = [{"col": f[0], "op": f[1], "val": f[2]} for f in c.get("filters", [])]
         order = [[o[0], o[1]] for o in c.get("order", [])]
         rl = c.get("row_limit", 100)
+        tr = c.get("time_range", NO_TIME)
         params = {"datasource": ds, "viz_type": "table", "query_mode": "raw",
                   "all_columns": cols, "order_by_cols": [json.dumps([o[0], o[1]]) for o in c.get("order", [])],
-                  "row_limit": rl, "server_page_length": 25, "time_range": NO_TIME}
+                  "row_limit": rl, "server_page_length": 25, "time_range": tr}
+        if c.get("col_fmt"):
+            params["column_config"] = c["col_fmt"]
+        if c.get("heat"):
+            params["conditional_formatting"] = c["heat"]
         q = base_query({"columns": cols, "metrics": [], "filters": filt,
                         "orderby": order, "row_limit": rl})
         return "table", params, qc(ds_id, params, q)
@@ -61,16 +66,46 @@ def build(kind, ds_id, c):
         params = {"datasource": ds, "viz_type": "table", "query_mode": "aggregate",
                   "groupby": gb, "metrics": mets, "row_limit": rl,
                   "server_page_length": 25, "order_desc": True, "time_range": NO_TIME}
+        if c.get("col_fmt"):
+            params["column_config"] = c["col_fmt"]
+        if c.get("heat"):
+            params["conditional_formatting"] = c["heat"]
         q = base_query({"columns": gb, "metrics": mets, "orderby": order, "row_limit": rl})
         return "table", params, qc(ds_id, params, q)
 
     if kind == "bignum":
         met = m(*c["metric"])
+        if c.get("trend"):  # big number WITH sparkline (needs a temporal column)
+            tcol = c.get("trend_col", "bucket")
+            params = {"datasource": ds, "viz_type": "big_number", "metric": met,
+                      "subheader": c.get("subheader", ""), "time_range": NO_TIME,
+                      "granularity_sqla": tcol, "time_grain_sqla": "P1D", "compare_lag": "",
+                      "y_axis_format": c.get("number_format", "SMART_NUMBER")}
+            q = base_query({"columns": [], "metrics": [met], "is_timeseries": True,
+                            "granularity": tcol, "row_limit": 10000,
+                            "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"}})
+            return "big_number", params, qc(ds_id, params, q)
         params = {"datasource": ds, "viz_type": "big_number_total", "metric": met,
                   "subheader": c.get("subheader", ""), "time_range": NO_TIME,
                   "y_axis_format": c.get("number_format", "SMART_NUMBER")}
         q = base_query({"columns": [], "metrics": [met], "row_limit": 1})
         return "big_number_total", params, qc(ds_id, params, q)
+
+    if kind == "treemap":
+        met = m(*c["metric"]); gb = c["groupby"]  # list of dims (outer..inner)
+        params = {"datasource": ds, "viz_type": "treemap_v2", "metrics": [met],
+                  "groupby": gb, "row_limit": c.get("row_limit", 100), "time_range": NO_TIME}
+        q = base_query({"columns": gb, "metrics": [met], "orderby": [[met, False]],
+                        "row_limit": c.get("row_limit", 100)})
+        return "treemap_v2", params, qc(ds_id, params, q)
+
+    if kind == "gauge":
+        met = m(*c["metric"])
+        params = {"datasource": ds, "viz_type": "gauge_chart", "metric": met,
+                  "row_limit": 1, "time_range": NO_TIME,
+                  "min_val": c.get("min_val", 0), "max_val": c.get("max_val", 100)}
+        q = base_query({"columns": [], "metrics": [met], "row_limit": 1})
+        return "gauge_chart", params, qc(ds_id, params, q)
 
     if kind == "pie":
         met = m(*c["metric"]); gb = [c["groupby"]]

@@ -24,15 +24,22 @@ runs entirely on seed data.
 | 4 | Q6/Q7/Q9 partner SLA·activity·usage | ✅ built + render-verified |
 | 5 | Q10/Q11 response-SLA (at-risk)·diagnostics·resolution KB + at-risk alert | ✅ built + render-verified |
 | 6 | Q12 document-type / transaction-type command center (Cleo core) | ✅ built + render-verified |
+| UX | Nested-tab IA · **All Transactions explorer** · drill-downs · visual pass | ✅ built + render-verified |
 
 **Dashboard:** `https://79309cb5.us1a.app.preset.io/superset/dashboard/integration-cockpit/`
-— **11 tabs, 60 charts** (all render-verified), 7 native filters, cross-filtering, 60s
-auto-refresh. **6 alerts** (paused).
+— **5 nested sections** (Overview · Operations · Flow · Transactions · SLA & Partners),
+**81 charts**, 8 native filters (incl. **Business-ref search**), cross-filtering,
+drill-to-detail, 60s auto-refresh. **6 alerts** (paused).
+
+Visual pass: currency/percent/number formats + data bars + conditional color on key
+tables, **big-number trendlines**, **treemap** (family→type), **gauge** (SLA %),
+consistent status colors. The **All Transactions** tab is the every-transaction grid +
+per-event drill target.
 
 **Roadmap:** [`docs/cockpit-roadmap-cleo.md`](docs/cockpit-roadmap-cleo.md) — Cleo-informed
-question list (Q12–Q21) + sprint pack. Sprint 6 (Q12) shipped; Sprints 7–11 (money,
-predictive anomalies, exception cases, partner 360, chargeback, prescriptive, carrier,
-personas) are planned next.
+question list. Active next: Sprint 7 (Q13 choreography), Sprint 8 (Q15 predictive
+anomaly), Sprint 9 (Q16 cases + Q17 partner 360), Sprint 10 (Q19 prescriptive).
+Deferred: Q14/Q18/Q20/Q21.
 
 ## Layout
 

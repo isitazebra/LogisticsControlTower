@@ -2,10 +2,10 @@ slice_name: Failed (period)
 description: null
 certified_by: null
 certification_details: null
-viz_type: big_number_total
+viz_type: big_number
 params:
   datasource: 22__table
-  viz_type: big_number_total
+  viz_type: big_number
   metric:
     expressionType: SQL
     sqlExpression: SUM(failed_count)
@@ -13,17 +13,21 @@ params:
     hasCustomLabel: true
   subheader: hard failures
   time_range: No filter
+  granularity_sqla: bucket
+  time_grain_sqla: P1D
+  compare_lag: ''
   y_axis_format: SMART_NUMBER
 query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
-  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
-  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
-  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  [{"filters": [], "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"},
+  "applied_time_extras": {}, "annotation_layers": [], "url_params": {}, "custom_params":
+  {}, "custom_form_data": {}, "row_limit": 10000, "orderby": [], "columns": [], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "SUM(failed_count)", "label": "failed",
+  "hasCustomLabel": true}], "is_timeseries": true, "granularity": "bucket"}], "form_data":
+  {"datasource": "22__table", "viz_type": "big_number", "metric": {"expressionType":
   "SQL", "sqlExpression": "SUM(failed_count)", "label": "failed", "hasCustomLabel":
-  true}]}], "form_data": {"datasource": "22__table", "viz_type": "big_number_total",
-  "metric": {"expressionType": "SQL", "sqlExpression": "SUM(failed_count)", "label":
-  "failed", "hasCustomLabel": true}, "subheader": "hard failures", "time_range": "No
-  filter", "y_axis_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
-  "full"}'
+  true}, "subheader": "hard failures", "time_range": "No filter", "granularity_sqla":
+  "bucket", "time_grain_sqla": "P1D", "compare_lag": "", "y_axis_format": "SMART_NUMBER"},
+  "result_format": "json", "result_type": "full"}'
 cache_timeout: null
 uuid: 044ef1a3-b752-47d8-88a9-8eedd6bab8ea
 version: 1.0.0

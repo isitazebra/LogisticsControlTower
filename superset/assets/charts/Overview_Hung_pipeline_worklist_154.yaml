@@ -1,0 +1,33 @@
+slice_name: 'Overview: Hung pipeline worklist'
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 24__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - pipeline
+  - environment
+  - queue_depth
+  - consume_rate
+  - last_consumed_at
+  order_by_cols: []
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 24, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [], "columns": ["pipeline", "environment", "queue_depth",
+  "consume_rate", "last_consumed_at"], "metrics": []}], "form_data": {"datasource":
+  "24__table", "viz_type": "table", "query_mode": "raw", "all_columns": ["pipeline",
+  "environment", "queue_depth", "consume_rate", "last_consumed_at"], "order_by_cols":
+  [], "row_limit": 100, "server_page_length": 25, "time_range": "No filter"}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: f69204a9-6add-4539-b300-b9998127db28
+version: 1.0.0
+dataset_uuid: 5f7755d9-0b29-4008-983e-1e757e468416
+tags: []

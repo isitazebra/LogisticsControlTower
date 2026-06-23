@@ -1,0 +1,38 @@
+slice_name: 'Overview: Missing feed worklist'
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 23__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner
+  - doc_type
+  - channel
+  - mins_overdue
+  - last_seen_at
+  order_by_cols:
+  - '["mins_overdue", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    mins_overdue:
+      showCellBars: true
+query_context: '{"datasource": {"id": 23, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["mins_overdue", false]], "columns": ["partner",
+  "doc_type", "channel", "mins_overdue", "last_seen_at"], "metrics": []}], "form_data":
+  {"datasource": "23__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["partner", "doc_type", "channel", "mins_overdue", "last_seen_at"], "order_by_cols":
+  ["[\"mins_overdue\", false]"], "row_limit": 100, "server_page_length": 25, "time_range":
+  "No filter", "column_config": {"mins_overdue": {"showCellBars": true}}}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 0fc57532-96db-447f-b176-79ebcfedec0c
+version: 1.0.0
+dataset_uuid: c802f1c0-1ca8-40e3-9476-550a53a4d1fd
+tags: []

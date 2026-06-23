@@ -1,4 +1,4 @@
-slice_name: Volume by family
+slice_name: 'Overview: Volume by family'
 description: null
 certified_by: null
 certification_details: null
@@ -27,7 +27,7 @@ query_context: '{"datasource": {"id": 51, "type": "table"}, "force": false, "que
   "label": "txns", "hasCustomLabel": true}], "groupby": ["family", "doc_label"], "row_limit":
   100, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
 cache_timeout: null
-uuid: fb175af9-f530-4986-88f4-c3cbabe38718
+uuid: 699690b2-b64c-4e6e-a554-0d88323783ad
 version: 1.0.0
 dataset_uuid: eff3e74b-1c05-48f1-867a-9591c25a5243
 tags: []
