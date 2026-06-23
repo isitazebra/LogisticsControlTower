@@ -1,0 +1,30 @@
+slice_name: 'Overview: Stale monitors'
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 33__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: stale
+    hasCustomLabel: true
+  subheader: sweep silent
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 33, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "COUNT(*)", "label": "stale", "hasCustomLabel": true}]}],
+  "form_data": {"datasource": "33__table", "viz_type": "big_number_total", "metric":
+  {"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "stale", "hasCustomLabel":
+  true}, "subheader": "sweep silent", "time_range": "No filter", "y_axis_format":
+  "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 13c4c9b8-ee04-4b57-9d00-fb24e980b1af
+version: 1.0.0
+dataset_uuid: a814cd6e-654f-4b2f-b5b8-3e37f59c0ebb
+tags: []

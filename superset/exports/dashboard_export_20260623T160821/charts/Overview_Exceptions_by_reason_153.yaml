@@ -1,0 +1,37 @@
+slice_name: 'Overview: Exceptions by reason'
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 31__table
+  viz_type: echarts_timeseries_bar
+  x_axis: reason_category
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(occurrences)
+    label: occ
+    hasCustomLabel: true
+  row_limit: 12
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 31, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 12, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(occurrences)",
+  "label": "occ", "hasCustomLabel": true}, false]], "columns": ["reason_category"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(occurrences)", "label":
+  "occ", "hasCustomLabel": true}], "series_columns": []}], "form_data": {"datasource":
+  "31__table", "viz_type": "echarts_timeseries_bar", "x_axis": "reason_category",
+  "groupby": [], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(occurrences)",
+  "label": "occ", "hasCustomLabel": true}], "row_limit": 12, "time_range": "No filter",
+  "x_axis_sort_asc": false, "x_axis_sort_series": "name", "order_desc": true}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: c74c6fbc-2e15-4f26-9e22-9ae8dc28e5fe
+version: 1.0.0
+dataset_uuid: 0f839b14-c333-44a0-be70-911a6cafb9d6
+tags: []

@@ -1,0 +1,33 @@
+slice_name: Volume by family
+description: null
+certified_by: null
+certification_details: null
+viz_type: treemap_v2
+params:
+  datasource: 51__table
+  viz_type: treemap_v2
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txns)
+    label: txns
+    hasCustomLabel: true
+  groupby:
+  - family
+  - doc_label
+  row_limit: 100
+  time_range: No filter
+query_context: '{"datasource": {"id": 51, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["family", "doc_label"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txns)", "label": "txns",
+  "hasCustomLabel": true}]}], "form_data": {"datasource": "51__table", "viz_type":
+  "treemap_v2", "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}], "groupby": ["family", "doc_label"], "row_limit":
+  100, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: fb175af9-f530-4986-88f4-c3cbabe38718
+version: 1.0.0
+dataset_uuid: eff3e74b-1c05-48f1-867a-9591c25a5243
+tags: []

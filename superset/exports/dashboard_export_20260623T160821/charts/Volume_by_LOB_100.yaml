@@ -1,0 +1,36 @@
+slice_name: Volume by LOB
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 22__table
+  viz_type: echarts_timeseries_bar
+  x_axis: lob
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txn_count)
+    label: txns
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["lob"], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)", "label": "txns", "hasCustomLabel":
+  true}], "series_columns": []}], "form_data": {"datasource": "22__table", "viz_type":
+  "echarts_timeseries_bar", "x_axis": "lob", "groupby": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(txn_count)", "label": "txns", "hasCustomLabel": true}],
+  "row_limit": 100, "time_range": "No filter", "x_axis_sort_asc": false, "x_axis_sort_series":
+  "name", "order_desc": true}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 368a27da-b8c5-4bde-bc24-e4add7719250
+version: 1.0.0
+dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
+tags: []

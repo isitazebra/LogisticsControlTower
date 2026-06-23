@@ -1,0 +1,53 @@
+slice_name: Document-type grid
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 51__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - doc_label
+  - family
+  - txns
+  - ok_pct
+  - failed
+  - rejected
+  - dupes
+  - value_usd
+  order_by_cols:
+  - '["txns", false]'
+  row_limit: 50
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    txns:
+      d3NumberFormat: ',.0f'
+      showCellBars: true
+    ok_pct:
+      d3NumberFormat: .1f
+      showCellBars: true
+    value_usd:
+      d3NumberFormat: $,.0f
+    failed:
+      showCellBars: true
+    rejected:
+      showCellBars: true
+query_context: '{"datasource": {"id": 51, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 50, "orderby": [["txns", false]], "columns": ["doc_label", "family",
+  "txns", "ok_pct", "failed", "rejected", "dupes", "value_usd"], "metrics": []}],
+  "form_data": {"datasource": "51__table", "viz_type": "table", "query_mode": "raw",
+  "all_columns": ["doc_label", "family", "txns", "ok_pct", "failed", "rejected", "dupes",
+  "value_usd"], "order_by_cols": ["[\"txns\", false]"], "row_limit": 50, "server_page_length":
+  25, "time_range": "No filter", "column_config": {"txns": {"d3NumberFormat": ",.0f",
+  "showCellBars": true}, "ok_pct": {"d3NumberFormat": ".1f", "showCellBars": true},
+  "value_usd": {"d3NumberFormat": "$,.0f"}, "failed": {"showCellBars": true}, "rejected":
+  {"showCellBars": true}}}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 7428a490-6864-4aeb-9138-2db0bc21e31e
+version: 1.0.0
+dataset_uuid: eff3e74b-1c05-48f1-867a-9591c25a5243
+tags: []

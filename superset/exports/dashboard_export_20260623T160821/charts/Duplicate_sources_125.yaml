@@ -1,0 +1,31 @@
+slice_name: Duplicate sources
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 49__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner
+  - control_number
+  - dupes
+  order_by_cols:
+  - '["dupes", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 49, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["dupes", false]], "columns": ["partner", "control_number",
+  "dupes"], "metrics": []}], "form_data": {"datasource": "49__table", "viz_type":
+  "table", "query_mode": "raw", "all_columns": ["partner", "control_number", "dupes"],
+  "order_by_cols": ["[\"dupes\", false]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 6d3b6180-9e61-49c9-ad17-8e9570b07776
+version: 1.0.0
+dataset_uuid: 8cfadd5d-237c-4beb-93fc-1151acee4ff2
+tags: []

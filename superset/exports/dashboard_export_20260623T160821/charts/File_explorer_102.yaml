@@ -1,0 +1,38 @@
+slice_name: File explorer
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 34__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - received_at
+  - file_name
+  - direction
+  - partner
+  - channel
+  - status
+  - declared_txn_count
+  - kchar
+  order_by_cols:
+  - '["received_at", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 34, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["received_at", false]], "columns": ["received_at",
+  "file_name", "direction", "partner", "channel", "status", "declared_txn_count",
+  "kchar"], "metrics": []}], "form_data": {"datasource": "34__table", "viz_type":
+  "table", "query_mode": "raw", "all_columns": ["received_at", "file_name", "direction",
+  "partner", "channel", "status", "declared_txn_count", "kchar"], "order_by_cols":
+  ["[\"received_at\", false]"], "row_limit": 200, "server_page_length": 25, "time_range":
+  "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 100b865a-1560-4f42-8212-02119c3c545c
+version: 1.0.0
+dataset_uuid: fc38dbd1-1415-46db-a000-58b8af161d55
+tags: []

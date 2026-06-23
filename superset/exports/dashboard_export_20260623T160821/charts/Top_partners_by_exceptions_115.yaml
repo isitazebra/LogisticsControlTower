@@ -1,0 +1,37 @@
+slice_name: Top partners by exceptions
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 43__table
+  viz_type: echarts_timeseries_bar
+  x_axis: partner
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(exceptions)
+    label: exceptions
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 43, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(exceptions)",
+  "label": "exceptions", "hasCustomLabel": true}, false]], "columns": ["partner"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(exceptions)", "label":
+  "exceptions", "hasCustomLabel": true}], "series_columns": []}], "form_data": {"datasource":
+  "43__table", "viz_type": "echarts_timeseries_bar", "x_axis": "partner", "groupby":
+  [], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(exceptions)", "label":
+  "exceptions", "hasCustomLabel": true}], "row_limit": 100, "time_range": "No filter",
+  "x_axis_sort_asc": false, "x_axis_sort_series": "name", "order_desc": true}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 0eef835c-dcbb-4ea3-ad00-d6ee6e10623b
+version: 1.0.0
+dataset_uuid: 32e83534-5c5a-4332-b29e-921dc4ed0168
+tags: []

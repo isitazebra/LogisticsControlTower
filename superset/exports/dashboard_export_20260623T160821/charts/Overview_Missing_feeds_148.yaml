@@ -1,0 +1,30 @@
+slice_name: 'Overview: Missing feeds'
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 23__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: missing
+    hasCustomLabel: true
+  subheader: overdue past grace
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 23, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "COUNT(*)", "label": "missing", "hasCustomLabel": true}]}],
+  "form_data": {"datasource": "23__table", "viz_type": "big_number_total", "metric":
+  {"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "missing", "hasCustomLabel":
+  true}, "subheader": "overdue past grace", "time_range": "No filter", "y_axis_format":
+  "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: b042c9f7-033a-4cb2-9870-969dc11364df
+version: 1.0.0
+dataset_uuid: c802f1c0-1ca8-40e3-9476-550a53a4d1fd
+tags: []

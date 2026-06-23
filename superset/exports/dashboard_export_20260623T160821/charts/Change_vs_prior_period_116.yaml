@@ -1,0 +1,32 @@
+slice_name: Change vs prior period
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 43__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner
+  - volume
+  - exceptions
+  - pct_change
+  order_by_cols:
+  - '["volume", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 43, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["volume", false]], "columns": ["partner", "volume",
+  "exceptions", "pct_change"], "metrics": []}], "form_data": {"datasource": "43__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["partner", "volume", "exceptions",
+  "pct_change"], "order_by_cols": ["[\"volume\", false]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 9516136f-31ec-4780-9e46-30a19151609c
+version: 1.0.0
+dataset_uuid: 32e83534-5c5a-4332-b29e-921dc4ed0168
+tags: []
