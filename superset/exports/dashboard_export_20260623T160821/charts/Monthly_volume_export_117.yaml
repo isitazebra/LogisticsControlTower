@@ -1,0 +1,45 @@
+slice_name: Monthly volume (export)
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 44__table
+  viz_type: table
+  query_mode: aggregate
+  groupby:
+  - month
+  - partner
+  - protocol
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txns)
+    label: txns
+    hasCustomLabel: true
+  - expressionType: SQL
+    sqlExpression: SUM(kchar)
+    label: kchar
+    hasCustomLabel: true
+  row_limit: 500
+  server_page_length: 25
+  order_desc: true
+  time_range: No filter
+query_context: '{"datasource": {"id": 44, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 500, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["month", "partner",
+  "protocol"], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}, {"expressionType": "SQL", "sqlExpression":
+  "SUM(kchar)", "label": "kchar", "hasCustomLabel": true}]}], "form_data": {"datasource":
+  "44__table", "viz_type": "table", "query_mode": "aggregate", "groupby": ["month",
+  "partner", "protocol"], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txns)",
+  "label": "txns", "hasCustomLabel": true}, {"expressionType": "SQL", "sqlExpression":
+  "SUM(kchar)", "label": "kchar", "hasCustomLabel": true}], "row_limit": 500, "server_page_length":
+  25, "order_desc": true, "time_range": "No filter"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: a32065b4-e78e-4c54-926d-e1bd225c441a
+version: 1.0.0
+dataset_uuid: 8208df11-789e-4b9a-93ac-759fdbd57ac0
+tags: []

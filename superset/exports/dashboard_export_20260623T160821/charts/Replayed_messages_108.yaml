@@ -1,0 +1,36 @@
+slice_name: Replayed messages
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 40__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - doc_type
+  - replay_count
+  - replayed_at
+  - current_status
+  order_by_cols:
+  - '["replayed_at", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 40, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["replayed_at", false]], "columns": ["business_ref",
+  "partner", "doc_type", "replay_count", "replayed_at", "current_status"], "metrics":
+  []}], "form_data": {"datasource": "40__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["business_ref", "partner", "doc_type", "replay_count", "replayed_at",
+  "current_status"], "order_by_cols": ["[\"replayed_at\", false]"], "row_limit": 100,
+  "server_page_length": 25, "time_range": "No filter"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 0955795e-2f53-450d-8592-07353994ec4f
+version: 1.0.0
+dataset_uuid: 071efe2c-915e-4f5d-bfd8-ff58893c06f7
+tags: []

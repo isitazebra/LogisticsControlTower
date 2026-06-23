@@ -1,0 +1,36 @@
+slice_name: Files missing transactions
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 36__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - interchange_id
+  - file_name
+  - partner
+  - declared_txn_count
+  - actual_txns
+  - missing_inside_file
+  order_by_cols:
+  - '["missing_inside_file", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 36, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["missing_inside_file", false]], "columns": ["interchange_id",
+  "file_name", "partner", "declared_txn_count", "actual_txns", "missing_inside_file"],
+  "metrics": []}], "form_data": {"datasource": "36__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["interchange_id", "file_name", "partner", "declared_txn_count",
+  "actual_txns", "missing_inside_file"], "order_by_cols": ["[\"missing_inside_file\",
+  false]"], "row_limit": 100, "server_page_length": 25, "time_range": "No filter"},
+  "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 9ac37efe-c1be-4ac6-8896-1e2d9487741b
+version: 1.0.0
+dataset_uuid: a0de0131-a2cf-4a38-bd3e-7793b68698ae
+tags: []

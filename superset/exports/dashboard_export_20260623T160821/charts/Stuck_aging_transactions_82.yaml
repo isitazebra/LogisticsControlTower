@@ -1,0 +1,43 @@
+slice_name: Stuck / aging transactions
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 26__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - channel
+  - doc_type
+  - current_stage
+  - age_min
+  - value_usd
+  order_by_cols:
+  - '["age_min", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    age_min:
+      showCellBars: true
+    value_usd:
+      d3NumberFormat: $,.0f
+query_context: '{"datasource": {"id": 26, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["age_min", false]], "columns": ["business_ref",
+  "partner", "channel", "doc_type", "current_stage", "age_min", "value_usd"], "metrics":
+  []}], "form_data": {"datasource": "26__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["business_ref", "partner", "channel", "doc_type", "current_stage",
+  "age_min", "value_usd"], "order_by_cols": ["[\"age_min\", false]"], "row_limit":
+  100, "server_page_length": 25, "time_range": "No filter", "column_config": {"age_min":
+  {"showCellBars": true}, "value_usd": {"d3NumberFormat": "$,.0f"}}}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 8059f8dd-ef14-4630-a73a-822d158f6463
+version: 1.0.0
+dataset_uuid: a63a954a-d3ee-4479-9a8a-770d2d763ba3
+tags: []

@@ -1,0 +1,36 @@
+slice_name: FA tracking
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 41__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - sent_at
+  - business_ref
+  - partner
+  - doc_type
+  - ack_at
+  - ack_status
+  - fa_state
+  order_by_cols:
+  - '["sent_at", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 41, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["sent_at", false]], "columns": ["sent_at", "business_ref",
+  "partner", "doc_type", "ack_at", "ack_status", "fa_state"], "metrics": []}], "form_data":
+  {"datasource": "41__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["sent_at", "business_ref", "partner", "doc_type", "ack_at", "ack_status", "fa_state"],
+  "order_by_cols": ["[\"sent_at\", false]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: ae1bd9f5-447c-4f90-958f-0c093015d1e9
+version: 1.0.0
+dataset_uuid: 052f2f74-31a3-4992-ab4d-23a78b62f416
+tags: []

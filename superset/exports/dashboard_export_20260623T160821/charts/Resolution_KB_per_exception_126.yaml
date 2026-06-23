@@ -1,0 +1,38 @@
+slice_name: Resolution KB (per exception)
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 50__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - reason_category
+  - error_code
+  - likely_cause
+  - suggested_action
+  - runbook_url
+  - event_time
+  order_by_cols:
+  - '["event_time", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 50, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["event_time", false]], "columns": ["business_ref",
+  "partner", "reason_category", "error_code", "likely_cause", "suggested_action",
+  "runbook_url", "event_time"], "metrics": []}], "form_data": {"datasource": "50__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["business_ref", "partner",
+  "reason_category", "error_code", "likely_cause", "suggested_action", "runbook_url",
+  "event_time"], "order_by_cols": ["[\"event_time\", false]"], "row_limit": 200, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 69d9072c-0c26-4b29-81d7-6e8288760596
+version: 1.0.0
+dataset_uuid: 543de57b-aaf3-47e5-a49a-fb0ca2d2e4f5
+tags: []

@@ -1,0 +1,31 @@
+slice_name: API transactions
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 22__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(txn_count) FILTER (WHERE protocol='api')
+    label: api
+    hasCustomLabel: true
+  subheader: API
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(txn_count) FILTER (WHERE protocol=''api'')", "label":
+  "api", "hasCustomLabel": true}]}], "form_data": {"datasource": "22__table", "viz_type":
+  "big_number_total", "metric": {"expressionType": "SQL", "sqlExpression": "SUM(txn_count)
+  FILTER (WHERE protocol=''api'')", "label": "api", "hasCustomLabel": true}, "subheader":
+  "API", "time_range": "No filter", "y_axis_format": "SMART_NUMBER"}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 9258c5b0-a3bb-4a79-8193-f9d0c6706013
+version: 1.0.0
+dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
+tags: []

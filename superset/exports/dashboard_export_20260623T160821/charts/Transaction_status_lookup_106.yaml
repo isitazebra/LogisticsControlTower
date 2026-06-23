@@ -1,0 +1,40 @@
+slice_name: Transaction status (lookup)
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 38__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - business_ref
+  - partner
+  - doc_type
+  - current_stage
+  - current_status
+  - replayed
+  - replay_count
+  - value_usd
+  - last_event_at
+  order_by_cols:
+  - '["last_event_at", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 38, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["last_event_at", false]], "columns": ["business_ref",
+  "partner", "doc_type", "current_stage", "current_status", "replayed", "replay_count",
+  "value_usd", "last_event_at"], "metrics": []}], "form_data": {"datasource": "38__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["business_ref", "partner",
+  "doc_type", "current_stage", "current_status", "replayed", "replay_count", "value_usd",
+  "last_event_at"], "order_by_cols": ["[\"last_event_at\", false]"], "row_limit":
+  100, "server_page_length": 25, "time_range": "No filter"}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: 853d7513-3bbe-4ae7-989d-648f7f0c8bd9
+version: 1.0.0
+dataset_uuid: 93c37cdb-b69e-4cf8-8c3f-9c5228ad487d
+tags: []

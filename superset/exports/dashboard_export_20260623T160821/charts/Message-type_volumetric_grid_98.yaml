@@ -1,0 +1,52 @@
+slice_name: Message-type volumetric grid
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 22__table
+  viz_type: table
+  query_mode: aggregate
+  groupby:
+  - doc_type
+  - protocol
+  - direction
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txn_count)
+    label: txns
+    hasCustomLabel: true
+  - expressionType: SQL
+    sqlExpression: SUM(failed_count)
+    label: failed
+    hasCustomLabel: true
+  - expressionType: SQL
+    sqlExpression: SUM(rejected_count)
+    label: rejected
+    hasCustomLabel: true
+  row_limit: 1000
+  server_page_length: 25
+  order_desc: true
+  time_range: No filter
+query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1000, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["doc_type", "protocol",
+  "direction"], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, {"expressionType": "SQL", "sqlExpression":
+  "SUM(failed_count)", "label": "failed", "hasCustomLabel": true}, {"expressionType":
+  "SQL", "sqlExpression": "SUM(rejected_count)", "label": "rejected", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "22__table", "viz_type": "table", "query_mode":
+  "aggregate", "groupby": ["doc_type", "protocol", "direction"], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(txn_count)", "label": "txns", "hasCustomLabel": true},
+  {"expressionType": "SQL", "sqlExpression": "SUM(failed_count)", "label": "failed",
+  "hasCustomLabel": true}, {"expressionType": "SQL", "sqlExpression": "SUM(rejected_count)",
+  "label": "rejected", "hasCustomLabel": true}], "row_limit": 1000, "server_page_length":
+  25, "order_desc": true, "time_range": "No filter"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 99741745-ac26-43de-8001-1fa6a562f0cb
+version: 1.0.0
+dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
+tags: []

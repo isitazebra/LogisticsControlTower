@@ -1,0 +1,31 @@
+slice_name: 'Overview: At-risk responses'
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 45__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*) FILTER (WHERE sla_state='at_risk')
+    label: atrisk
+    hasCustomLabel: true
+  subheader: before breach
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 45, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "COUNT(*) FILTER (WHERE sla_state=''at_risk'')", "label":
+  "atrisk", "hasCustomLabel": true}]}], "form_data": {"datasource": "45__table", "viz_type":
+  "big_number_total", "metric": {"expressionType": "SQL", "sqlExpression": "COUNT(*)
+  FILTER (WHERE sla_state=''at_risk'')", "label": "atrisk", "hasCustomLabel": true},
+  "subheader": "before breach", "time_range": "No filter", "y_axis_format": "SMART_NUMBER"},
+  "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: a4945b52-b61e-4b31-80b8-f0bc7dd0527a
+version: 1.0.0
+dataset_uuid: f6f3d650-f430-4d5c-8642-59a11d7f1c70
+tags: []
