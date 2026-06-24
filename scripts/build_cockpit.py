@@ -88,6 +88,12 @@ def build(kind, ds_id, c):
         params = {"datasource": ds, "viz_type": "big_number_total", "metric": met,
                   "subheader": c.get("subheader", ""), "time_range": NO_TIME,
                   "y_axis_format": c.get("number_format", "SMART_NUMBER")}
+        # optional, opt-in font sizing so long KPI titles/subheaders stay legible
+        # inside narrow tiles (fractions of tile height; only applied if specified).
+        if c.get("header_font_size") is not None:
+            params["header_font_size"] = c["header_font_size"]
+        if c.get("subheader_font_size") is not None:
+            params["subheader_font_size"] = c["subheader_font_size"]
         q = base_query({"columns": [], "metrics": [met], "row_limit": 1})
         return "big_number_total", params, qc(ds_id, params, q)
 

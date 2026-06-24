@@ -34,20 +34,23 @@ DS = {
 }
 
 # ---- chart specs (slice, dataset key, kind, layout w/h) ---------------------
+KPI = dict(h=22, header_font_size=0.3, subheader_font_size=0.125)
 CHARTS = [
-    # KPI row — integration health of the in-scope shipment set
-    dict(slice="Shipments tracked", dataset="sum", kind="bignum", w=2, h=14,
+    # KPI row — integration health of the in-scope shipment set.
+    # row1: 3 tiles @ w=4 (=12); row2: 2 tiles @ w=6 (=12). Wide + larger fonts
+    # so long titles/subheaders stay legible instead of wrapping + clipping.
+    dict(slice="Shipments tracked", dataset="sum", kind="bignum", w=4, **KPI,
          metric=("Shipments", "COUNT(*)"), subheader="shipments in integration scope"),
-    dict(slice="Choreography complete %", dataset="sum", kind="bignum", w=3, h=14,
+    dict(slice="Choreography complete %", dataset="sum", kind="bignum", w=4, **KPI,
          metric=("Complete %", "100.0*AVG(choreography_complete)"),
          number_format=".1f", subheader="all expected messages present"),
-    dict(slice="Response-SLA met %", dataset="sum", kind="bignum", w=3, h=14,
+    dict(slice="Response-SLA met %", dataset="sum", kind="bignum", w=4, **KPI,
          metric=("Resp SLA %", "100.0*SUM(response_sla_met)/NULLIF(SUM(CASE WHEN cnt_204>0 AND cnt_990>0 THEN 1 ELSE 0 END),0)"),
          number_format=".1f", subheader="204->990 within partner target"),
-    dict(slice="ACK coverage %", dataset="sum", kind="bignum", w=2, h=14,
+    dict(slice="ACK coverage %", dataset="sum", kind="bignum", w=6, **KPI,
          metric=("ACK %", "100.0*SUM(ack_received_cnt)/NULLIF(SUM(ack_required_cnt),0)"),
          number_format=".1f", subheader="ACKs received vs required"),
-    dict(slice="Shipments with flow anomalies", dataset="sum", kind="bignum", w=2, h=14,
+    dict(slice="Shipments with flow anomalies", dataset="sum", kind="bignum", w=6, **KPI,
          metric=("With anomalies", "SUM(CASE WHEN anomaly_count>0 THEN 1 ELSE 0 END)"),
          subheader="integration anomalies detected"),
     # distribution row

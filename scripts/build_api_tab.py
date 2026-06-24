@@ -27,23 +27,24 @@ DS = {
     "sum":    "vw_api_integration_summary",
 }
 
+KPI = dict(w=4, h=22, header_font_size=0.3, subheader_font_size=0.125)
 CHARTS = [
-    # KPI row -- API integration health
-    dict(slice="API calls tracked", dataset="detail", kind="bignum", w=2, h=14,
+    # KPI row -- API integration health (two rows of 3 wide tiles for legibility)
+    dict(slice="API calls tracked", dataset="detail", kind="bignum", **KPI,
          metric=("API calls", "COUNT(*)"), subheader="integration calls exchanged"),
-    dict(slice="API success rate %", dataset="detail", kind="bignum", w=2, h=14,
+    dict(slice="API success rate %", dataset="detail", kind="bignum", **KPI,
          metric=("Success %", "100.0*AVG(success::int)"),
          number_format=".1f", subheader="2xx responses"),
-    dict(slice="API latency-SLA met %", dataset="detail", kind="bignum", w=2, h=14,
+    dict(slice="API latency-SLA met %", dataset="detail", kind="bignum", **KPI,
          metric=("Latency SLA %", "100.0*AVG(sla_met::int)"),
          number_format=".1f", subheader="within partner target"),
-    dict(slice="API avg latency (ms)", dataset="detail", kind="bignum", w=2, h=14,
+    dict(slice="API avg latency (ms)", dataset="detail", kind="bignum", **KPI,
          metric=("Avg ms", "AVG(latency_ms)"), number_format=",d",
          subheader="request -> response"),
-    dict(slice="API server-error rate %", dataset="detail", kind="bignum", w=2, h=14,
+    dict(slice="API server-error rate %", dataset="detail", kind="bignum", **KPI,
          metric=("5xx %", "100.0*AVG((status_class='5xx')::int)"),
          number_format=".2f", subheader="5xx of all calls"),
-    dict(slice="API webhook delivery %", dataset="detail", kind="bignum", w=2, h=14,
+    dict(slice="API webhook delivery %", dataset="detail", kind="bignum", **KPI,
          metric=("Webhook %", "100.0*SUM(CASE WHEN is_webhook AND webhook_delivered THEN 1 ELSE 0 END)/NULLIF(SUM(is_webhook::int),0)"),
          number_format=".1f", subheader="webhooks delivered"),
     # distribution row
