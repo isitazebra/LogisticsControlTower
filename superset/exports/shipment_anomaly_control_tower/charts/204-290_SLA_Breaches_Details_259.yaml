@@ -1,0 +1,55 @@
+slice_name: 204->290 SLA Breaches Details
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 103__table
+  viz_type: table
+  slice_id: 259
+  query_mode: aggregate
+  groupby:
+  - metric_date
+  - tender_ts
+  - shipment_id
+  - partner_id
+  - partner_name
+  - carrier_id
+  - carrier_name
+  - response_ts
+  - response_minutes
+  - sla_minutes
+  - sla_status
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    metric_date: true
+    tender_ts: true
+    response_ts: true
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    expressionType: SIMPLE
+    operator: TEMPORAL_RANGE
+    subject: metric_date
+  order_by_cols: []
+  order_desc: true
+  server_page_length: 10
+  row_limit: 10000
+  percent_metric_calculation: row_limit
+  table_timestamp_format: smart_date
+  allow_render_html: true
+  show_cell_bars: true
+  color_pn: true
+  comparison_color_scheme: Green
+  comparison_type: values
+  extra_form_data: {}
+  dashboards: []
+query_context: '{"datasource":{"id":103,"type":"table"},"force":false,"queries":[{"filters":[{"col":"metric_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"timeGrain":"P1D","columnType":"BASE_AXIS","sqlExpression":"metric_date","label":"metric_date","expressionType":"SQL"},"tender_ts","shipment_id","partner_id","partner_name","carrier_id","carrier_name","response_ts","response_minutes","sla_minutes","sla_status"],"metrics":[],"orderby":[],"annotation_layers":[],"row_limit":10000,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[],"time_offsets":[]}],"form_data":{"datasource":"103__table","viz_type":"table","slice_id":259,"query_mode":"aggregate","groupby":["metric_date","tender_ts","shipment_id","partner_id","partner_name","carrier_id","carrier_name","response_ts","response_minutes","sla_minutes","sla_status"],"time_grain_sqla":"P1D","temporal_columns_lookup":{"metric_date":true,"tender_ts":true,"response_ts":true},"all_columns":[],"percent_metrics":[],"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","expressionType":"SIMPLE","operator":"TEMPORAL_RANGE","subject":"metric_date"}],"order_by_cols":[],"order_desc":true,"server_page_length":10,"row_limit":10000,"percent_metric_calculation":"row_limit","table_timestamp_format":"smart_date","allow_render_html":true,"show_cell_bars":true,"color_pn":true,"comparison_color_scheme":"Green","comparison_type":"values","extra_form_data":{},"dashboards":[],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 500cb120-d0ec-4b97-89b0-4d860cdd33ff
+version: 1.0.0
+dataset_uuid: 27019bf0-9088-4490-9899-bbd818b2802a

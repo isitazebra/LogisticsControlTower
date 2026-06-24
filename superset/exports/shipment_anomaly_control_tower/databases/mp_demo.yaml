@@ -1,0 +1,14 @@
+database_name: mp_demo
+sqlalchemy_uri: postgresql+psycopg2://cloud-user:XXXXXXXXXX@10.73.123.248:5432/mp_demo
+cache_timeout: null
+expose_in_sqllab: true
+allow_run_async: false
+allow_ctas: false
+allow_cvas: false
+allow_dml: false
+allow_file_upload: false
+extra:
+  allows_virtual_table_explore: true
+impersonate_user: false
+uuid: 0c87639f-0bf9-49ca-97dd-fd2e3fcaa72c
+version: 1.0.0

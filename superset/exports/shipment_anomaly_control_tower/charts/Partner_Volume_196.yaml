@@ -1,0 +1,57 @@
+slice_name: Partner Volume
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 74__table
+  viz_type: big_number_total
+  slice_id: 196
+  metric:
+    aggregate: SUM
+    column:
+      advanced_data_type: null
+      changed_on: '2026-06-19T06:31:05.421558'
+      column_name: transaction_count
+      created_on: '2026-06-19T06:31:05.421557'
+      description: null
+      expression: null
+      extra: null
+      filterable: true
+      groupby: true
+      id: 5674
+      is_active: true
+      is_dttm: false
+      python_date_format: null
+      type: BIGINT
+      type_generic: 0
+      uuid: 60ad1d28-4a08-4be2-8139-4640c59cb086
+      verbose_name: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Transaction
+    optionName: metric_yio5xmbtdah_ijo7s2tnie
+    sqlExpression: null
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    expressionType: SIMPLE
+    operator: TEMPORAL_RANGE
+    subject: transaction_date
+  header_font_size: 0.4
+  subtitle_font_size: 0.15
+  metric_name_font_size: 0.15
+  y_axis_format: SMART_NUMBER
+  time_format: smart_date
+  conditional_formatting: []
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":74,"type":"table"},"force":false,"queries":[{"filters":[{"col":"transaction_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[],"metrics":[{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:31:05.421558","column_name":"transaction_count","created_on":"2026-06-19T06:31:05.421557","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5674,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"60ad1d28-4a08-4be2-8139-4640c59cb086","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Transaction","optionName":"metric_yio5xmbtdah_ijo7s2tnie","sqlExpression":null}],"annotation_layers":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{}}],"form_data":{"datasource":"74__table","viz_type":"big_number_total","slice_id":196,"metric":{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:31:05.421558","column_name":"transaction_count","created_on":"2026-06-19T06:31:05.421557","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5674,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"60ad1d28-4a08-4be2-8139-4640c59cb086","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Transaction","optionName":"metric_yio5xmbtdah_ijo7s2tnie","sqlExpression":null},"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","expressionType":"SIMPLE","operator":"TEMPORAL_RANGE","subject":"transaction_date"}],"header_font_size":0.4,"subtitle_font_size":0.15,"metric_name_font_size":0.15,"y_axis_format":"SMART_NUMBER","time_format":"smart_date","conditional_formatting":[],"extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 208cc375-b6ed-4896-b833-cbd6ea98aaf3
+version: 1.0.0
+dataset_uuid: d0ccbe04-275a-4bde-b713-5a593318e910

@@ -1,0 +1,47 @@
+slice_name: Avg Health Score
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 78__table
+  viz_type: big_number_total
+  slice_id: 197
+  metric:
+    aggregate: null
+    column: null
+    datasourceWarning: false
+    expressionType: SQL
+    hasCustomLabel: true
+    label: Partners Health
+    optionName: metric_mvcgvv0fvpk_p0yw4y1nbh
+    sqlExpression: AVG(health_score)/100
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_iap71u090in_b2pkax72wtd
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: metric_date
+  header_font_size: 0.4
+  subtitle_font_size: 0.15
+  metric_name_font_size: 0.15
+  y_axis_format: .2%
+  time_format: smart_date
+  conditional_formatting: []
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":78,"type":"table"},"force":false,"queries":[{"filters":[{"col":"metric_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[],"metrics":[{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":true,"label":"Partners
+  Health","optionName":"metric_mvcgvv0fvpk_p0yw4y1nbh","sqlExpression":"AVG(health_score)/100"}],"annotation_layers":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{}}],"form_data":{"datasource":"78__table","viz_type":"big_number_total","slice_id":197,"metric":{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":true,"label":"Partners
+  Health","optionName":"metric_mvcgvv0fvpk_p0yw4y1nbh","sqlExpression":"AVG(health_score)/100"},"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_iap71u090in_b2pkax72wtd","isExtra":false,"isNew":false,"operator":"TEMPORAL_RANGE","sqlExpression":null,"subject":"metric_date"}],"header_font_size":0.4,"subtitle_font_size":0.15,"metric_name_font_size":0.15,"y_axis_format":".2%","time_format":"smart_date","conditional_formatting":[],"extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 36fcbcfb-6e30-4900-93ef-820ad351baaf
+version: 1.0.0
+dataset_uuid: 08f3e485-3949-4bf4-af2f-d42ed6cc9720

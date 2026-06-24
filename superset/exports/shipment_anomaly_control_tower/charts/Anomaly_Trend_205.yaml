@@ -1,0 +1,98 @@
+slice_name: Anomaly Trend
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_line
+params:
+  datasource: 69__table
+  viz_type: echarts_timeseries_line
+  slice_id: 205
+  x_axis:
+    label: Date
+    sqlExpression: detected_date
+    expressionType: SQL
+  time_grain_sqla: P1D
+  metrics:
+  - expressionType: SIMPLE
+    column:
+      advanced_data_type: null
+      changed_on: '2026-06-23T08:46:56.821509'
+      column_name: anomaly_count
+      created_on: '2026-06-23T08:46:56.508524'
+      description: null
+      expression: ''
+      extra: '{}'
+      filterable: true
+      groupby: true
+      id: 5643
+      is_active: true
+      is_dttm: false
+      python_date_format: null
+      type: BIGINT
+      type_generic: 0
+      uuid: 0644d7b6-bd62-4c68-9699-2363761f2e57
+      verbose_name: null
+    aggregate: SUM
+    sqlExpression: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Anomalies
+    optionName: metric_g3tkpfcrm6k_kq9wnx9rhv
+  groupby: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: detected_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_yuk820a3x1r_ksugebmmji8
+  - expressionType: SIMPLE
+    subject: anomaly_type
+    operator: NOT IN
+    operatorId: NOT_IN
+    comparator:
+    - VOLUME_ANOMALY
+    - SLA_BREACH
+    - STATUS_AGING
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_sx3v7dxo63_y6oz0zf6obn
+  row_limit: 10000
+  truncate_metric: true
+  show_empty_columns: true
+  comparison_type: values
+  annotation_layers: []
+  forecastPeriods: 10
+  forecastInterval: 0.8
+  x_axis_title_margin: 15
+  y_axis_title_margin: 30
+  y_axis_title_position: Left
+  sort_series_type: sum
+  color_scheme: supersetColors
+  show_legend: false
+  x_axis_time_format: smart_date
+  xAxisLabelInterval: auto
+  rich_tooltip: true
+  showTooltipTotal: true
+  tooltipTimeFormat: smart_date
+  y_axis_format: SMART_NUMBER
+  truncateXAxis: true
+  extra_form_data: {}
+  dashboards:
+  - 29
+  - 31
+query_context: '{"datasource":{"id":69,"type":"table"},"force":false,"queries":[{"filters":[{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"},{"col":"anomaly_type","op":"NOT IN","val":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"]}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"timeGrain":"P1D","columnType":"BASE_AXIS","label":"Date","sqlExpression":"detected_date","expressionType":"SQL"}],"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-23T08:46:56.821509","column_name":"anomaly_count","created_on":"2026-06-23T08:46:56.508524","description":null,"expression":"","extra":"{}","filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_g3tkpfcrm6k_kq9wnx9rhv"}],"orderby":[[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-23T08:46:56.821509","column_name":"anomaly_count","created_on":"2026-06-23T08:46:56.508524","description":null,"expression":"","extra":"{}","filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_g3tkpfcrm6k_kq9wnx9rhv"},false]],"annotation_layers":[],"row_limit":10000,"series_columns":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"time_offsets":[],"post_processing":[{"operation":"pivot","options":{"index":["Date"],"columns":[],"aggregates":{"Anomalies":{"operator":"mean"}},"drop_missing_columns":false}},{"operation":"flatten"}]}],"form_data":{"datasource":"69__table","viz_type":"echarts_timeseries_line","slice_id":205,"x_axis":{"label":"Date","sqlExpression":"detected_date","expressionType":"SQL"},"time_grain_sqla":"P1D","metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-23T08:46:56.821509","column_name":"anomaly_count","created_on":"2026-06-23T08:46:56.508524","description":null,"expression":"","extra":"{}","filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_g3tkpfcrm6k_kq9wnx9rhv"}],"groupby":[],"adhoc_filters":[{"expressionType":"SIMPLE","subject":"detected_date","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_yuk820a3x1r_ksugebmmji8"},{"expressionType":"SIMPLE","subject":"anomaly_type","operator":"NOT
+  IN","operatorId":"NOT_IN","comparator":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"],"clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_sx3v7dxo63_y6oz0zf6obn"}],"row_limit":10000,"truncate_metric":true,"show_empty_columns":true,"comparison_type":"values","annotation_layers":[],"forecastPeriods":10,"forecastInterval":0.8,"x_axis_title_margin":15,"y_axis_title_margin":30,"y_axis_title_position":"Left","sort_series_type":"sum","color_scheme":"supersetColors","show_legend":false,"x_axis_time_format":"smart_date","xAxisLabelInterval":"auto","rich_tooltip":true,"showTooltipTotal":true,"tooltipTimeFormat":"smart_date","y_axis_format":"SMART_NUMBER","truncateXAxis":true,"extra_form_data":{},"dashboards":[29,31],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: b3dc0531-42fb-4d29-8510-421c923b6928
+version: 1.0.0
+dataset_uuid: e7f277a4-6e91-4615-a998-63f581560dba

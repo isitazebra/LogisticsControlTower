@@ -1,0 +1,159 @@
+slice_name: Partner Health Scorecard
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 78__table
+  viz_type: table
+  slice_id: 198
+  query_mode: aggregate
+  groupby:
+  - expressionType: SQL
+    label: Date
+    sqlExpression: metric_date
+  - partner_name
+  - partner_risk_status
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    metric_date: true
+  metrics:
+  - aggregate: AVG
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: health_score
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5725
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: NUMERIC(5, 2)
+      type_generic: 0
+      uuid: 07d5e42e-3824-4360-8a75-61724808f99a
+      verbose_name: null
+      warning_markdown: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Avg Health Score
+    optionName: metric_lad4d6dh71g_1eo1l780l97
+    sqlExpression: null
+  - aggregate: SUM
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: shipments_count
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5722
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: INTEGER
+      type_generic: 0
+      uuid: 96e3a198-7c89-40a3-94f1-94dd06cb650d
+      verbose_name: null
+      warning_markdown: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Shipments
+    optionName: metric_jehy21qup2_0pdkng5r66oe
+    sqlExpression: null
+  - aggregate: SUM
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: exception_count
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5724
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: INTEGER
+      type_generic: 0
+      uuid: 2b0c84bd-8071-42af-9432-1f60a4848b23
+      verbose_name: null
+      warning_markdown: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Issues
+    optionName: metric_1cwzuvlqipzj_6zqzhjjy57r
+    sqlExpression: null
+  - aggregate: AVG
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: sla_percent
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5723
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: NUMERIC(5, 2)
+      type_generic: 0
+      uuid: fd78a39d-b74d-43f8-8647-bebafd64cc12
+      verbose_name: null
+      warning_markdown: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Avg SLA %
+    optionName: metric_zv7zxauf54_fflzaa52xgg
+    sqlExpression: null
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    expressionType: SIMPLE
+    operator: TEMPORAL_RANGE
+    subject: metric_date
+  order_by_cols: []
+  order_desc: true
+  server_page_length: 10
+  row_limit: 10000
+  percent_metric_calculation: row_limit
+  table_timestamp_format: smart_date
+  allow_render_html: true
+  show_cell_bars: true
+  color_pn: true
+  comparison_color_scheme: Green
+  comparison_type: values
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":78,"type":"table"},"force":false,"queries":[{"filters":[{"col":"metric_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"expressionType":"SQL","label":"Date","sqlExpression":"metric_date"},"partner_name","partner_risk_status"],"metrics":[{"aggregate":"AVG","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"health_score","description":null,"expression":null,"filterable":true,"groupby":true,"id":5725,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(5,
+  2)","type_generic":0,"uuid":"07d5e42e-3824-4360-8a75-61724808f99a","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Avg
+  Health Score","optionName":"metric_lad4d6dh71g_1eo1l780l97","sqlExpression":null},{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"shipments_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5722,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"INTEGER","type_generic":0,"uuid":"96e3a198-7c89-40a3-94f1-94dd06cb650d","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Shipments","optionName":"metric_jehy21qup2_0pdkng5r66oe","sqlExpression":null},{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"exception_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5724,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"INTEGER","type_generic":0,"uuid":"2b0c84bd-8071-42af-9432-1f60a4848b23","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Issues","optionName":"metric_1cwzuvlqipzj_6zqzhjjy57r","sqlExpression":null},{"aggregate":"AVG","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"sla_percent","description":null,"expression":null,"filterable":true,"groupby":true,"id":5723,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(5,
+  2)","type_generic":0,"uuid":"fd78a39d-b74d-43f8-8647-bebafd64cc12","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Avg
+  SLA %","optionName":"metric_zv7zxauf54_fflzaa52xgg","sqlExpression":null}],"orderby":[[{"aggregate":"AVG","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"health_score","description":null,"expression":null,"filterable":true,"groupby":true,"id":5725,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(5,
+  2)","type_generic":0,"uuid":"07d5e42e-3824-4360-8a75-61724808f99a","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Avg
+  Health Score","optionName":"metric_lad4d6dh71g_1eo1l780l97","sqlExpression":null},false]],"annotation_layers":[],"row_limit":10000,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[],"time_offsets":[]}],"form_data":{"datasource":"78__table","viz_type":"table","slice_id":198,"query_mode":"aggregate","groupby":[{"expressionType":"SQL","label":"Date","sqlExpression":"metric_date"},"partner_name","partner_risk_status"],"time_grain_sqla":"P1D","temporal_columns_lookup":{"metric_date":true},"metrics":[{"aggregate":"AVG","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"health_score","description":null,"expression":null,"filterable":true,"groupby":true,"id":5725,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(5,
+  2)","type_generic":0,"uuid":"07d5e42e-3824-4360-8a75-61724808f99a","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Avg
+  Health Score","optionName":"metric_lad4d6dh71g_1eo1l780l97","sqlExpression":null},{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"shipments_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5722,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"INTEGER","type_generic":0,"uuid":"96e3a198-7c89-40a3-94f1-94dd06cb650d","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Shipments","optionName":"metric_jehy21qup2_0pdkng5r66oe","sqlExpression":null},{"aggregate":"SUM","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"exception_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5724,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"INTEGER","type_generic":0,"uuid":"2b0c84bd-8071-42af-9432-1f60a4848b23","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Issues","optionName":"metric_1cwzuvlqipzj_6zqzhjjy57r","sqlExpression":null},{"aggregate":"AVG","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"sla_percent","description":null,"expression":null,"filterable":true,"groupby":true,"id":5723,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(5,
+  2)","type_generic":0,"uuid":"fd78a39d-b74d-43f8-8647-bebafd64cc12","verbose_name":null,"warning_markdown":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Avg
+  SLA %","optionName":"metric_zv7zxauf54_fflzaa52xgg","sqlExpression":null}],"all_columns":[],"percent_metrics":[],"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","expressionType":"SIMPLE","operator":"TEMPORAL_RANGE","subject":"metric_date"}],"order_by_cols":[],"order_desc":true,"server_page_length":10,"row_limit":10000,"percent_metric_calculation":"row_limit","table_timestamp_format":"smart_date","allow_render_html":true,"show_cell_bars":true,"color_pn":true,"comparison_color_scheme":"Green","comparison_type":"values","extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 28da1274-e715-4e8a-a305-f551b1d484da
+version: 1.0.0
+dataset_uuid: 08f3e485-3949-4bf4-af2f-d42ed6cc9720

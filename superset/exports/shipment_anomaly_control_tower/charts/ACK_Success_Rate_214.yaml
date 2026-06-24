@@ -1,0 +1,52 @@
+slice_name: ACK Success Rate
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number
+params:
+  datasource: 74__table
+  viz_type: big_number
+  slice_id: 214
+  x_axis: transaction_date
+  time_grain_sqla: P1D
+  aggregation: mean
+  metric:
+    aggregate: null
+    column: null
+    datasourceWarning: false
+    expressionType: SQL
+    hasCustomLabel: true
+    label: transactions
+    optionName: metric_i6gw217ev8c_lw9n92kjlz
+    sqlExpression: SUM(ack_received_count)/sum(transaction_count)
+  adhoc_filters:
+  - clause: WHERE
+    comparator: No filter
+    expressionType: SIMPLE
+    operator: TEMPORAL_RANGE
+    subject: transaction_date
+  compare_lag: 7
+  show_trend_line: false
+  start_y_axis_at_zero: true
+  color_picker:
+    a: 1
+    b: 135
+    g: 122
+    r: 0
+  header_font_size: 0.4
+  subheader_font_size: 0.15
+  subtitle_font_size: 0.15
+  metric_name_font_size: 0.15
+  y_axis_format: .2%
+  time_format: smart_date
+  rolling_type: None
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":74,"type":"table"},"force":false,"queries":[{"filters":[{"col":"transaction_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"timeGrain":"P1D","columnType":"BASE_AXIS","sqlExpression":"transaction_date","label":"transaction_date","expressionType":"SQL","isColumnReference":true}],"metrics":[{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":true,"label":"transactions","optionName":"metric_i6gw217ev8c_lw9n92kjlz","sqlExpression":"SUM(ack_received_count)/sum(transaction_count)"}],"annotation_layers":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[{"operation":"pivot","options":{"index":["transaction_date"],"columns":[],"aggregates":{"transactions":{"operator":"mean"}},"drop_missing_columns":true}},{"operation":"flatten"}]}],"form_data":{"datasource":"74__table","viz_type":"big_number","slice_id":214,"x_axis":"transaction_date","time_grain_sqla":"P1D","aggregation":"mean","metric":{"aggregate":null,"column":null,"datasourceWarning":false,"expressionType":"SQL","hasCustomLabel":true,"label":"transactions","optionName":"metric_i6gw217ev8c_lw9n92kjlz","sqlExpression":"SUM(ack_received_count)/sum(transaction_count)"},"adhoc_filters":[{"clause":"WHERE","comparator":"No
+  filter","expressionType":"SIMPLE","operator":"TEMPORAL_RANGE","subject":"transaction_date"}],"compare_lag":7,"show_trend_line":false,"start_y_axis_at_zero":true,"color_picker":{"a":1,"b":135,"g":122,"r":0},"header_font_size":0.4,"subheader_font_size":0.15,"subtitle_font_size":0.15,"metric_name_font_size":0.15,"y_axis_format":".2%","time_format":"smart_date","rolling_type":"None","extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 2f8364bc-30e9-43a3-b8a6-8754874ba034
+version: 1.0.0
+dataset_uuid: d0ccbe04-275a-4bde-b713-5a593318e910

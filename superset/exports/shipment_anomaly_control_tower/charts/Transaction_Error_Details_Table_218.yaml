@@ -1,0 +1,108 @@
+slice_name: Transaction Error Details Table
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 98__table
+  viz_type: table
+  slice_id: 218
+  query_mode: aggregate
+  groupby:
+  - expressionType: SQL
+    label: Transaction ID
+    sqlExpression: transaction_id
+  - expressionType: SQL
+    label: Partner
+    sqlExpression: partner_id
+  - expressionType: SQL
+    label: Carrier
+    sqlExpression: carrier_id
+  - expressionType: SQL
+    label: Shipment
+    sqlExpression: shipment_id
+  - expressionType: SQL
+    label: Type
+    sqlExpression: transaction_type
+  - expressionType: SQL
+    label: Date & Time
+    sqlExpression: transaction_timestamp
+  - expressionType: SQL
+    label: Status
+    sqlExpression: processing_status
+  - expressionType: SQL
+    label: ACK Required
+    sqlExpression: ack_required
+  - expressionType: SQL
+    label: ACK Received
+    sqlExpression: ack_received
+  - expressionType: SQL
+    label: Error Code
+    sqlExpression: error_code
+  - expressionType: SQL
+    label: Error Description
+    sqlExpression: error_description
+  - expressionType: SQL
+    label: Control Number
+    sqlExpression: control_number
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    transaction_timestamp: true
+    ack_timestamp: true
+    created_at: true
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: transaction_timestamp
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_y2e282rfar9_v1ogh5qpj9
+  - expressionType: SQL
+    sqlExpression: processing_status NOT IN ('processed') or ack_received= false
+    clause: WHERE
+    subject: null
+    operator: null
+    comparator: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_odjo25p49v_foiid81yxw
+  order_by_cols: []
+  order_desc: true
+  server_page_length: 10
+  row_limit: 10000
+  percent_metric_calculation: row_limit
+  table_timestamp_format: smart_date
+  allow_render_html: true
+  show_cell_bars: true
+  color_pn: true
+  comparison_color_scheme: Green
+  comparison_type: values
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":98,"type":"table"},"force":false,"queries":[{"filters":[{"col":"transaction_timestamp","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":"(processing_status
+  NOT IN (''processed'') or ack_received= false)"},"applied_time_extras":{},"columns":[{"expressionType":"SQL","label":"Transaction
+  ID","sqlExpression":"transaction_id"},{"expressionType":"SQL","label":"Partner","sqlExpression":"partner_id"},{"expressionType":"SQL","label":"Carrier","sqlExpression":"carrier_id"},{"expressionType":"SQL","label":"Shipment","sqlExpression":"shipment_id"},{"expressionType":"SQL","label":"Type","sqlExpression":"transaction_type"},{"expressionType":"SQL","label":"Date
+  & Time","sqlExpression":"transaction_timestamp"},{"expressionType":"SQL","label":"Status","sqlExpression":"processing_status"},{"expressionType":"SQL","label":"ACK
+  Required","sqlExpression":"ack_required"},{"expressionType":"SQL","label":"ACK Received","sqlExpression":"ack_received"},{"expressionType":"SQL","label":"Error
+  Code","sqlExpression":"error_code"},{"expressionType":"SQL","label":"Error Description","sqlExpression":"error_description"},{"expressionType":"SQL","label":"Control
+  Number","sqlExpression":"control_number"}],"metrics":[],"orderby":[],"annotation_layers":[],"row_limit":10000,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[],"time_offsets":[]}],"form_data":{"datasource":"98__table","viz_type":"table","slice_id":218,"query_mode":"aggregate","groupby":[{"expressionType":"SQL","label":"Transaction
+  ID","sqlExpression":"transaction_id"},{"expressionType":"SQL","label":"Partner","sqlExpression":"partner_id"},{"expressionType":"SQL","label":"Carrier","sqlExpression":"carrier_id"},{"expressionType":"SQL","label":"Shipment","sqlExpression":"shipment_id"},{"expressionType":"SQL","label":"Type","sqlExpression":"transaction_type"},{"expressionType":"SQL","label":"Date
+  & Time","sqlExpression":"transaction_timestamp"},{"expressionType":"SQL","label":"Status","sqlExpression":"processing_status"},{"expressionType":"SQL","label":"ACK
+  Required","sqlExpression":"ack_required"},{"expressionType":"SQL","label":"ACK Received","sqlExpression":"ack_received"},{"expressionType":"SQL","label":"Error
+  Code","sqlExpression":"error_code"},{"expressionType":"SQL","label":"Error Description","sqlExpression":"error_description"},{"expressionType":"SQL","label":"Control
+  Number","sqlExpression":"control_number"}],"time_grain_sqla":"P1D","temporal_columns_lookup":{"transaction_timestamp":true,"ack_timestamp":true,"created_at":true},"all_columns":[],"percent_metrics":[],"adhoc_filters":[{"expressionType":"SIMPLE","subject":"transaction_timestamp","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_y2e282rfar9_v1ogh5qpj9"},{"expressionType":"SQL","sqlExpression":"processing_status
+  NOT IN (''processed'') or ack_received= false","clause":"WHERE","subject":null,"operator":null,"comparator":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_odjo25p49v_foiid81yxw"}],"order_by_cols":[],"order_desc":true,"server_page_length":10,"row_limit":10000,"percent_metric_calculation":"row_limit","table_timestamp_format":"smart_date","allow_render_html":true,"show_cell_bars":true,"color_pn":true,"comparison_color_scheme":"Green","comparison_type":"values","extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: dbcacf42-9af3-4e27-a969-66238f7faeef
+version: 1.0.0
+dataset_uuid: 56027737-30f5-4496-b22a-e7dc992aa078

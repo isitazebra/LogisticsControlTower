@@ -1,0 +1,22 @@
+theme_name: mp_demo_theme_blue
+json_data:
+  borderRadius: 10
+  colorPrimary: '#0066CC'
+  colorSuccess: '#00A76F'
+  colorWarning: '#FF8B00'
+  colorError: '#E53935'
+  colorInfo: '#0066CC'
+  colorText: '#0F172A'
+  colorTextSecondary: '#64748B'
+  colorBgBase: '#F8FAFC'
+  colorBgContainer: '#FFFFFF'
+  colorBorder: '#E2E8F0'
+  fontFamily: Inter, Roboto, Arial, sans-serif
+  fontSize: 13
+  fontSizeHeading1: 24
+  fontSizeHeading2: 20
+  fontSizeHeading3: 16
+  controlHeight: 36
+  boxShadow: 0 2px 8px rgba(15, 23, 42, 0.08)
+uuid: 574aacca-3f6a-49fd-8568-a53e9f4cbc57
+version: 1.0.0

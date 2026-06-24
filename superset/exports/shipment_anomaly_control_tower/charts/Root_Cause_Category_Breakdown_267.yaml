@@ -1,0 +1,111 @@
+slice_name: Root Cause Category Breakdown
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 75__table
+  viz_type: echarts_timeseries_bar
+  slice_id: 267
+  x_axis:
+    label: Root Cause Category
+    sqlExpression: root_cause_category
+    expressionType: SQL
+  x_axis_sort_asc: true
+  metrics:
+  - expressionType: SIMPLE
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: anomaly_id
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5677
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: VARCHAR(40)
+      type_generic: 1
+      uuid: 1692ba83-ea36-429c-8394-2710b3a2cb00
+      verbose_name: null
+      warning_markdown: null
+    aggregate: COUNT_DISTINCT
+    sqlExpression: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Anomalies
+    optionName: metric_rgngrm0f8x_88swrjp4yk6
+  groupby: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator:
+    - VOLUME_ANOMALY
+    - SLA_BREACH
+    - STATUS_AGING
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_rpf1rlqgsy_78gljsxk1cm
+    isExtra: false
+    isNew: false
+    operator: NOT IN
+    operatorId: NOT_IN
+    sqlExpression: null
+    subject: anomaly_type
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_cm1pxe9dvpe_9yp8nxzxml4
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: detected_date
+  order_desc: true
+  row_limit: 100
+  truncate_metric: true
+  show_empty_columns: true
+  comparison_type: values
+  annotation_layers: []
+  forecastPeriods: 10
+  forecastInterval: 0.8
+  orientation: horizontal
+  x_axis_title_margin: 15
+  y_axis_title_margin: 30
+  y_axis_title_position: Left
+  sort_series_type: sum
+  color_scheme: supersetColors
+  time_shift_color: true
+  show_value: true
+  only_total: true
+  show_legend: false
+  legendType: scroll
+  legendOrientation: top
+  x_axis_time_format: smart_date
+  xAxisLabelInterval: auto
+  y_axis_format: SMART_NUMBER
+  y_axis_bounds:
+  - null
+  - null
+  truncateXAxis: true
+  rich_tooltip: true
+  showTooltipTotal: true
+  tooltipTimeFormat: smart_date
+  extra_form_data: {}
+  dashboards:
+  - 29
+query_context: '{"datasource":{"id":75,"type":"table"},"force":false,"queries":[{"filters":[{"col":"anomaly_type","op":"NOT
+  IN","val":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"]},{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[{"columnType":"BASE_AXIS","label":"Root
+  Cause Category","sqlExpression":"root_cause_category","expressionType":"SQL"}],"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"anomaly_id","description":null,"expression":null,"filterable":true,"groupby":true,"id":5677,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"VARCHAR(40)","type_generic":1,"uuid":"1692ba83-ea36-429c-8394-2710b3a2cb00","verbose_name":null,"warning_markdown":null},"aggregate":"COUNT_DISTINCT","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_rgngrm0f8x_88swrjp4yk6"}],"orderby":[[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"anomaly_id","description":null,"expression":null,"filterable":true,"groupby":true,"id":5677,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"VARCHAR(40)","type_generic":1,"uuid":"1692ba83-ea36-429c-8394-2710b3a2cb00","verbose_name":null,"warning_markdown":null},"aggregate":"COUNT_DISTINCT","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_rgngrm0f8x_88swrjp4yk6"},false]],"annotation_layers":[],"row_limit":100,"series_columns":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"time_offsets":[],"post_processing":[{"operation":"pivot","options":{"index":["Root
+  Cause Category"],"columns":[],"aggregates":{"Anomalies":{"operator":"mean"}},"drop_missing_columns":false}},{"operation":"flatten"}]}],"form_data":{"datasource":"75__table","viz_type":"echarts_timeseries_bar","slice_id":267,"x_axis":{"label":"Root
+  Cause Category","sqlExpression":"root_cause_category","expressionType":"SQL"},"x_axis_sort_asc":true,"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"anomaly_id","description":null,"expression":null,"filterable":true,"groupby":true,"id":5677,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"VARCHAR(40)","type_generic":1,"uuid":"1692ba83-ea36-429c-8394-2710b3a2cb00","verbose_name":null,"warning_markdown":null},"aggregate":"COUNT_DISTINCT","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Anomalies","optionName":"metric_rgngrm0f8x_88swrjp4yk6"}],"groupby":[],"adhoc_filters":[{"clause":"WHERE","comparator":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"],"datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_rpf1rlqgsy_78gljsxk1cm","isExtra":false,"isNew":false,"operator":"NOT
+  IN","operatorId":"NOT_IN","sqlExpression":null,"subject":"anomaly_type"},{"clause":"WHERE","comparator":"No
+  filter","datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_cm1pxe9dvpe_9yp8nxzxml4","isExtra":false,"isNew":false,"operator":"TEMPORAL_RANGE","sqlExpression":null,"subject":"detected_date"}],"order_desc":true,"row_limit":100,"truncate_metric":true,"show_empty_columns":true,"comparison_type":"values","annotation_layers":[],"forecastPeriods":10,"forecastInterval":0.8,"orientation":"horizontal","x_axis_title_margin":15,"y_axis_title_margin":30,"y_axis_title_position":"Left","sort_series_type":"sum","color_scheme":"supersetColors","time_shift_color":true,"show_value":true,"only_total":true,"show_legend":false,"legendType":"scroll","legendOrientation":"top","x_axis_time_format":"smart_date","xAxisLabelInterval":"auto","y_axis_format":"SMART_NUMBER","y_axis_bounds":[null,null],"truncateXAxis":true,"rich_tooltip":true,"showTooltipTotal":true,"tooltipTimeFormat":"smart_date","extra_form_data":{},"dashboards":[29],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 723c7306-83ee-4b50-b5be-010a2e079e41
+version: 1.0.0
+dataset_uuid: 2321af11-495c-4f3f-a438-e3bef6a7911f

@@ -1,0 +1,103 @@
+slice_name: Partner Anomaly Heatmap
+description: null
+certified_by: null
+certification_details: null
+viz_type: heatmap_v2
+params:
+  datasource: 69__table
+  viz_type: heatmap_v2
+  slice_id: 207
+  x_axis:
+    expressionType: SQL
+    label: Partners
+    sqlExpression: partner_id
+  groupby:
+    expressionType: SQL
+    label: Anomaly Type
+    sqlExpression: anomaly_type
+  metric:
+    aggregate: SUM
+    column:
+      advanced_data_type: null
+      changed_on: '2026-06-19T06:17:00.642137'
+      column_name: anomaly_count
+      created_on: '2026-06-19T06:17:00.642135'
+      description: null
+      expression: null
+      extra: null
+      filterable: true
+      groupby: true
+      id: 5643
+      is_active: true
+      is_dttm: false
+      python_date_format: null
+      type: BIGINT
+      type_generic: 0
+      uuid: 0644d7b6-bd62-4c68-9699-2363761f2e57
+      verbose_name: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Anomalies
+    optionName: metric_4xvr9x579t7_gn5xr4k9xgn
+    sqlExpression: null
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: anomaly_type
+    operator: NOT IN
+    operatorId: NOT_IN
+    comparator:
+    - STATUS_AGING
+    - SLA_BREACH
+    - VOLUME_ANOMALY
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_1zpu6etdbj8_he9ah9nmj46
+  - expressionType: SIMPLE
+    subject: detected_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_hylyyfb7n68_oddddwqpepr
+  row_limit: 100
+  normalize_across: heatmap
+  legend_type: continuous
+  linear_color_scheme: superset_seq_1
+  border_color:
+    a: 1
+    b: 0
+    g: 0
+    r: 0
+  xscale_interval: -1
+  yscale_interval: -1
+  left_margin: auto
+  bottom_margin: auto
+  value_bounds:
+  - null
+  - null
+  y_axis_format: SMART_NUMBER
+  x_axis_time_format: smart_date
+  show_legend: true
+  show_percentage: true
+  extra_form_data: {}
+  dashboards:
+  - 29
+  - 31
+query_context: '{"datasource":{"id":69,"type":"table"},"force":false,"queries":[{"filters":[{"col":"anomaly_type","op":"NOT
+  IN","val":["STATUS_AGING","SLA_BREACH","VOLUME_ANOMALY"]},{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[{"columnType":"BASE_AXIS","expressionType":"SQL","label":"Partners","sqlExpression":"partner_id"},{"expressionType":"SQL","label":"Anomaly
+  Type","sqlExpression":"anomaly_type"}],"metrics":[{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:17:00.642137","column_name":"anomaly_count","created_on":"2026-06-19T06:17:00.642135","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Anomalies","optionName":"metric_4xvr9x579t7_gn5xr4k9xgn","sqlExpression":null}],"orderby":[],"annotation_layers":[],"row_limit":100,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[{"operation":"rank","options":{"metric":"Anomalies"}}]}],"form_data":{"datasource":"69__table","viz_type":"heatmap_v2","slice_id":207,"x_axis":{"expressionType":"SQL","label":"Partners","sqlExpression":"partner_id"},"groupby":{"expressionType":"SQL","label":"Anomaly
+  Type","sqlExpression":"anomaly_type"},"metric":{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:17:00.642137","column_name":"anomaly_count","created_on":"2026-06-19T06:17:00.642135","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Anomalies","optionName":"metric_4xvr9x579t7_gn5xr4k9xgn","sqlExpression":null},"adhoc_filters":[{"expressionType":"SIMPLE","subject":"anomaly_type","operator":"NOT
+  IN","operatorId":"NOT_IN","comparator":["STATUS_AGING","SLA_BREACH","VOLUME_ANOMALY"],"clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_1zpu6etdbj8_he9ah9nmj46"},{"expressionType":"SIMPLE","subject":"detected_date","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_hylyyfb7n68_oddddwqpepr"}],"row_limit":100,"normalize_across":"heatmap","legend_type":"continuous","linear_color_scheme":"superset_seq_1","border_color":{"a":1,"b":0,"g":0,"r":0},"xscale_interval":-1,"yscale_interval":-1,"left_margin":"auto","bottom_margin":"auto","value_bounds":[null,null],"y_axis_format":"SMART_NUMBER","x_axis_time_format":"smart_date","show_legend":true,"show_percentage":true,"extra_form_data":{},"dashboards":[29,31],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: cbb8e448-5228-4001-ae70-49b2fdd2cf2e
+version: 1.0.0
+dataset_uuid: e7f277a4-6e91-4615-a998-63f581560dba

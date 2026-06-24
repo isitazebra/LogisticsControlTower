@@ -1,0 +1,80 @@
+slice_name: Actionable Exception Table
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 75__table
+  viz_type: table
+  slice_id: 237
+  query_mode: aggregate
+  groupby:
+  - label: Detected Date
+    sqlExpression: detected_date
+    expressionType: SQL
+  - anomaly_id
+  - shipment_id
+  - partner_name
+  - partner_id
+  - anomaly_type
+  - business_impact_amount
+  - recommended_action
+  - root_cause_category
+  time_grain_sqla: P1D
+  temporal_columns_lookup:
+    detected_date: true
+    promised_delivery_date: true
+    actual_delivery_date: true
+  all_columns: []
+  percent_metrics: []
+  adhoc_filters:
+  - clause: WHERE
+    comparator:
+    - STATUS_AGING
+    - VOLUME_ANOMALY
+    - SLA_BREACH
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_nvxu8bhmm2m_3j7z23o3dp6
+    isExtra: false
+    isNew: false
+    operator: NOT IN
+    operatorId: NOT_IN
+    sqlExpression: null
+    subject: anomaly_type
+  - clause: WHERE
+    comparator: No filter
+    datasourceWarning: false
+    expressionType: SIMPLE
+    filterOptionName: filter_kctw2plu0cd_q0hiqn61jn
+    isExtra: false
+    isNew: false
+    operator: TEMPORAL_RANGE
+    sqlExpression: null
+    subject: detected_date
+  order_by_cols: []
+  order_desc: true
+  server_page_length: 10
+  row_limit: 10000
+  percent_metric_calculation: row_limit
+  table_timestamp_format: smart_date
+  allow_render_html: true
+  show_cell_bars: true
+  color_pn: true
+  comparison_color_scheme: Green
+  comparison_type: values
+  extra_form_data: {}
+  dashboards:
+  - 29
+  - 31
+query_context: '{"datasource":{"id":75,"type":"table"},"force":false,"queries":[{"filters":[{"col":"anomaly_type","op":"NOT
+  IN","val":["STATUS_AGING","VOLUME_ANOMALY","SLA_BREACH"]},{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"label":"Detected
+  Date","sqlExpression":"detected_date","expressionType":"SQL"},"anomaly_id","shipment_id","partner_name","partner_id","anomaly_type","business_impact_amount","recommended_action","root_cause_category"],"metrics":[],"orderby":[],"annotation_layers":[],"row_limit":10000,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[],"time_offsets":[]}],"form_data":{"datasource":"75__table","viz_type":"table","slice_id":237,"query_mode":"aggregate","groupby":[{"label":"Detected
+  Date","sqlExpression":"detected_date","expressionType":"SQL"},"anomaly_id","shipment_id","partner_name","partner_id","anomaly_type","business_impact_amount","recommended_action","root_cause_category"],"time_grain_sqla":"P1D","temporal_columns_lookup":{"detected_date":true,"promised_delivery_date":true,"actual_delivery_date":true},"all_columns":[],"percent_metrics":[],"adhoc_filters":[{"clause":"WHERE","comparator":["STATUS_AGING","VOLUME_ANOMALY","SLA_BREACH"],"datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_nvxu8bhmm2m_3j7z23o3dp6","isExtra":false,"isNew":false,"operator":"NOT
+  IN","operatorId":"NOT_IN","sqlExpression":null,"subject":"anomaly_type"},{"clause":"WHERE","comparator":"No
+  filter","datasourceWarning":false,"expressionType":"SIMPLE","filterOptionName":"filter_kctw2plu0cd_q0hiqn61jn","isExtra":false,"isNew":false,"operator":"TEMPORAL_RANGE","sqlExpression":null,"subject":"detected_date"}],"order_by_cols":[],"order_desc":true,"server_page_length":10,"row_limit":10000,"percent_metric_calculation":"row_limit","table_timestamp_format":"smart_date","allow_render_html":true,"show_cell_bars":true,"color_pn":true,"comparison_color_scheme":"Green","comparison_type":"values","extra_form_data":{},"dashboards":[29,31],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 9dab1ac5-d4df-4ff4-a746-dc5b4d7d2875
+version: 1.0.0
+dataset_uuid: 2321af11-495c-4f3f-a438-e3bef6a7911f

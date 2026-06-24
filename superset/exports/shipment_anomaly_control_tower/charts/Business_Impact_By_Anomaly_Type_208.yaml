@@ -1,0 +1,119 @@
+slice_name: Business Impact By Anomaly Type
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 75__table
+  viz_type: echarts_timeseries_bar
+  slice_id: 208
+  x_axis:
+    expressionType: SQL
+    label: Anomaly Type
+    sqlExpression: anomaly_type
+    datasourceWarning: false
+  x_axis_sort_asc: true
+  metrics:
+  - expressionType: SIMPLE
+    column:
+      advanced_data_type: null
+      changed_on: '2026-06-19T06:31:33.056267'
+      column_name: business_impact_amount
+      created_on: '2026-06-19T06:31:33.056266'
+      description: null
+      expression: null
+      extra: null
+      filterable: true
+      groupby: true
+      id: 5694
+      is_active: true
+      is_dttm: false
+      python_date_format: null
+      type: NUMERIC(14, 2)
+      type_generic: 0
+      uuid: 5a0fc0e9-056a-449f-8d20-e8ad45202785
+      verbose_name: null
+    aggregate: SUM
+    sqlExpression: null
+    datasourceWarning: false
+    hasCustomLabel: true
+    label: Business Impact($)
+    optionName: metric_rgngrm0f8x_88swrjp4yk6
+  groupby: []
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: anomaly_type
+    operator: NOT IN
+    operatorId: NOT_IN
+    comparator:
+    - VOLUME_ANOMALY
+    - SLA_BREACH
+    - STATUS_AGING
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_rpf1rlqgsy_78gljsxk1cm
+  - expressionType: SIMPLE
+    subject: detected_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_cm1pxe9dvpe_9yp8nxzxml4
+  order_desc: true
+  row_limit: 100
+  truncate_metric: true
+  show_empty_columns: true
+  comparison_type: values
+  annotation_layers: []
+  forecastPeriods: 10
+  forecastInterval: 0.8
+  orientation: horizontal
+  x_axis_title_margin: 15
+  y_axis_title_margin: 30
+  y_axis_title_position: Left
+  sort_series_type: sum
+  color_scheme: supersetColors
+  time_shift_color: true
+  show_value: true
+  only_total: true
+  show_legend: false
+  legendType: scroll
+  legendOrientation: top
+  x_axis_time_format: smart_date
+  xAxisLabelInterval: auto
+  y_axis_format: SMART_NUMBER
+  y_axis_bounds:
+  - null
+  - null
+  truncateXAxis: true
+  rich_tooltip: true
+  showTooltipTotal: true
+  tooltipTimeFormat: smart_date
+  extra_form_data: {}
+  dashboards:
+  - 29
+  - 31
+query_context: '{"datasource":{"id":75,"type":"table"},"force":false,"queries":[{"filters":[{"col":"anomaly_type","op":"NOT
+  IN","val":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"]},{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":[{"columnType":"BASE_AXIS","expressionType":"SQL","label":"Anomaly
+  Type","sqlExpression":"anomaly_type","datasourceWarning":false}],"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:31:33.056267","column_name":"business_impact_amount","created_on":"2026-06-19T06:31:33.056266","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5694,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(14,
+  2)","type_generic":0,"uuid":"5a0fc0e9-056a-449f-8d20-e8ad45202785","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Business
+  Impact($)","optionName":"metric_rgngrm0f8x_88swrjp4yk6"}],"orderby":[[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:31:33.056267","column_name":"business_impact_amount","created_on":"2026-06-19T06:31:33.056266","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5694,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(14,
+  2)","type_generic":0,"uuid":"5a0fc0e9-056a-449f-8d20-e8ad45202785","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Business
+  Impact($)","optionName":"metric_rgngrm0f8x_88swrjp4yk6"},false]],"annotation_layers":[],"row_limit":100,"series_columns":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"time_offsets":[],"post_processing":[{"operation":"pivot","options":{"index":["Anomaly
+  Type"],"columns":[],"aggregates":{"Business Impact($)":{"operator":"mean"}},"drop_missing_columns":false}},{"operation":"flatten"}]}],"form_data":{"datasource":"75__table","viz_type":"echarts_timeseries_bar","slice_id":208,"x_axis":{"expressionType":"SQL","label":"Anomaly
+  Type","sqlExpression":"anomaly_type","datasourceWarning":false},"x_axis_sort_asc":true,"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:31:33.056267","column_name":"business_impact_amount","created_on":"2026-06-19T06:31:33.056266","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5694,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"NUMERIC(14,
+  2)","type_generic":0,"uuid":"5a0fc0e9-056a-449f-8d20-e8ad45202785","verbose_name":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":true,"label":"Business
+  Impact($)","optionName":"metric_rgngrm0f8x_88swrjp4yk6"}],"groupby":[],"adhoc_filters":[{"expressionType":"SIMPLE","subject":"anomaly_type","operator":"NOT
+  IN","operatorId":"NOT_IN","comparator":["VOLUME_ANOMALY","SLA_BREACH","STATUS_AGING"],"clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_rpf1rlqgsy_78gljsxk1cm"},{"expressionType":"SIMPLE","subject":"detected_date","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_cm1pxe9dvpe_9yp8nxzxml4"}],"order_desc":true,"row_limit":100,"truncate_metric":true,"show_empty_columns":true,"comparison_type":"values","annotation_layers":[],"forecastPeriods":10,"forecastInterval":0.8,"orientation":"horizontal","x_axis_title_margin":15,"y_axis_title_margin":30,"y_axis_title_position":"Left","sort_series_type":"sum","color_scheme":"supersetColors","time_shift_color":true,"show_value":true,"only_total":true,"show_legend":false,"legendType":"scroll","legendOrientation":"top","x_axis_time_format":"smart_date","xAxisLabelInterval":"auto","y_axis_format":"SMART_NUMBER","y_axis_bounds":[null,null],"truncateXAxis":true,"rich_tooltip":true,"showTooltipTotal":true,"tooltipTimeFormat":"smart_date","extra_form_data":{},"dashboards":[29,31],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: e3a4ae71-241d-4c01-8631-86e98ffa6dd1
+version: 1.0.0
+dataset_uuid: 2321af11-495c-4f3f-a438-e3bef6a7911f

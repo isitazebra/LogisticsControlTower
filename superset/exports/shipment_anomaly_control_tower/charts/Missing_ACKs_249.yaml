@@ -1,0 +1,67 @@
+slice_name: Missing ACKs
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number
+params:
+  datasource: 105__table
+  viz_type: big_number
+  x_axis: metric_date
+  time_grain_sqla: P1D
+  aggregation: sum
+  metric:
+    expressionType: SIMPLE
+    column:
+      advanced_data_type: null
+      certification_details: null
+      certified_by: null
+      column_name: missing_ack_count
+      description: null
+      expression: null
+      filterable: true
+      groupby: true
+      id: 5985
+      is_certified: false
+      is_dttm: false
+      python_date_format: null
+      type: BIGINT
+      type_generic: 0
+      uuid: be5b32e6-44fe-48f2-a6c3-e86d7842370f
+      verbose_name: null
+      warning_markdown: null
+    aggregate: SUM
+    sqlExpression: null
+    datasourceWarning: false
+    hasCustomLabel: false
+    label: SUM(missing_ack_count)
+    optionName: metric_hs9x3awxc9_09ii3uu04sas
+  adhoc_filters:
+  - clause: WHERE
+    subject: metric_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    expressionType: SIMPLE
+  compare_lag: 7
+  show_trend_line: true
+  start_y_axis_at_zero: true
+  color_picker:
+    r: 0
+    g: 122
+    b: 135
+    a: 1
+  header_font_size: 0.4
+  subheader_font_size: 0.15
+  subtitle_font_size: 0.15
+  metric_name_font_size: 0.15
+  y_axis_format: SMART_NUMBER
+  time_format: smart_date
+  rolling_type: None
+  extra_form_data: {}
+  dashboards: []
+query_context: '{"datasource":{"id":105,"type":"table"},"force":false,"queries":[{"filters":[{"col":"metric_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"time_grain_sqla":"P1D","having":"","where":""},"applied_time_extras":{},"columns":[{"timeGrain":"P1D","columnType":"BASE_AXIS","sqlExpression":"metric_date","label":"metric_date","expressionType":"SQL","isColumnReference":true}],"metrics":[{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"missing_ack_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5985,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"be5b32e6-44fe-48f2-a6c3-e86d7842370f","verbose_name":null,"warning_markdown":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":false,"label":"SUM(missing_ack_count)","optionName":"metric_hs9x3awxc9_09ii3uu04sas"}],"annotation_layers":[],"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[{"operation":"pivot","options":{"index":["metric_date"],"columns":[],"aggregates":{"SUM(missing_ack_count)":{"operator":"mean"}},"drop_missing_columns":true}},{"operation":"flatten"}]}],"form_data":{"datasource":"105__table","viz_type":"big_number","x_axis":"metric_date","time_grain_sqla":"P1D","aggregation":"sum","metric":{"expressionType":"SIMPLE","column":{"advanced_data_type":null,"certification_details":null,"certified_by":null,"column_name":"missing_ack_count","description":null,"expression":null,"filterable":true,"groupby":true,"id":5985,"is_certified":false,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"be5b32e6-44fe-48f2-a6c3-e86d7842370f","verbose_name":null,"warning_markdown":null},"aggregate":"SUM","sqlExpression":null,"datasourceWarning":false,"hasCustomLabel":false,"label":"SUM(missing_ack_count)","optionName":"metric_hs9x3awxc9_09ii3uu04sas"},"adhoc_filters":[{"clause":"WHERE","subject":"metric_date","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","expressionType":"SIMPLE"}],"compare_lag":7,"show_trend_line":true,"start_y_axis_at_zero":true,"color_picker":{"r":0,"g":122,"b":135,"a":1},"header_font_size":0.4,"subheader_font_size":0.15,"subtitle_font_size":0.15,"metric_name_font_size":0.15,"y_axis_format":"SMART_NUMBER","time_format":"smart_date","rolling_type":"None","extra_form_data":{},"dashboards":[],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 02858b22-ece8-4e2f-a586-34a9bebaa2f0
+version: 1.0.0
+dataset_uuid: ea70c3a0-a41b-4f41-b45a-c0d8c484d058

@@ -1,0 +1,92 @@
+slice_name: Anomaly Severity Distribution
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 69__table
+  viz_type: pie
+  slice_id: 206
+  groupby:
+  - severity
+  metric:
+    aggregate: SUM
+    column:
+      advanced_data_type: null
+      changed_on: '2026-06-19T06:17:00.642137'
+      column_name: anomaly_count
+      created_on: '2026-06-19T06:17:00.642135'
+      description: null
+      expression: null
+      extra: null
+      filterable: true
+      groupby: true
+      id: 5643
+      is_active: true
+      is_dttm: false
+      python_date_format: null
+      type: BIGINT
+      type_generic: 0
+      uuid: 0644d7b6-bd62-4c68-9699-2363761f2e57
+      verbose_name: null
+    datasourceWarning: false
+    expressionType: SIMPLE
+    hasCustomLabel: true
+    label: Anomalies
+    optionName: metric_4xvr9x579t7_gn5xr4k9xgn
+    sqlExpression: null
+  adhoc_filters:
+  - expressionType: SIMPLE
+    subject: anomaly_type
+    operator: NOT IN
+    operatorId: NOT_IN
+    comparator:
+    - VOLUME_ANOMALY
+    - STATUS_AGING
+    - SLA_BREACH
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_4w69axbm1td_tpie0slxns
+  - expressionType: SIMPLE
+    subject: detected_date
+    operator: TEMPORAL_RANGE
+    comparator: No filter
+    clause: WHERE
+    sqlExpression: null
+    isExtra: false
+    isNew: false
+    datasourceWarning: false
+    filterOptionName: filter_suqi55xgrug_9vjcfnfi63w
+  row_limit: 100
+  sort_by_metric: true
+  color_scheme: supersetColors
+  show_labels_threshold: 5
+  show_legend: true
+  legendType: scroll
+  legendOrientation: top
+  label_type: key_value_percent
+  number_format: SMART_NUMBER
+  date_format: smart_date
+  show_labels: true
+  labels_outside: true
+  label_line: true
+  show_total: true
+  outerRadius: 70
+  donut: true
+  innerRadius: 39
+  extra_form_data: {}
+  dashboards:
+  - 29
+  - 31
+query_context: '{"datasource":{"id":69,"type":"table"},"force":false,"queries":[{"filters":[{"col":"anomaly_type","op":"NOT
+  IN","val":["VOLUME_ANOMALY","STATUS_AGING","SLA_BREACH"]},{"col":"detected_date","op":"TEMPORAL_RANGE","val":"No
+  filter"}],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":["severity"],"metrics":[{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:17:00.642137","column_name":"anomaly_count","created_on":"2026-06-19T06:17:00.642135","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Anomalies","optionName":"metric_4xvr9x579t7_gn5xr4k9xgn","sqlExpression":null}],"orderby":[[{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:17:00.642137","column_name":"anomaly_count","created_on":"2026-06-19T06:17:00.642135","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Anomalies","optionName":"metric_4xvr9x579t7_gn5xr4k9xgn","sqlExpression":null},false]],"annotation_layers":[],"row_limit":100,"series_limit":0,"group_others_when_limit_reached":false,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{},"post_processing":[{"operation":"contribution","options":{"columns":["Anomalies"],"rename_columns":["Anomalies__contribution"]}}]}],"form_data":{"datasource":"69__table","viz_type":"pie","slice_id":206,"groupby":["severity"],"metric":{"aggregate":"SUM","column":{"advanced_data_type":null,"changed_on":"2026-06-19T06:17:00.642137","column_name":"anomaly_count","created_on":"2026-06-19T06:17:00.642135","description":null,"expression":null,"extra":null,"filterable":true,"groupby":true,"id":5643,"is_active":true,"is_dttm":false,"python_date_format":null,"type":"BIGINT","type_generic":0,"uuid":"0644d7b6-bd62-4c68-9699-2363761f2e57","verbose_name":null},"datasourceWarning":false,"expressionType":"SIMPLE","hasCustomLabel":true,"label":"Anomalies","optionName":"metric_4xvr9x579t7_gn5xr4k9xgn","sqlExpression":null},"adhoc_filters":[{"expressionType":"SIMPLE","subject":"anomaly_type","operator":"NOT
+  IN","operatorId":"NOT_IN","comparator":["VOLUME_ANOMALY","STATUS_AGING","SLA_BREACH"],"clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_4w69axbm1td_tpie0slxns"},{"expressionType":"SIMPLE","subject":"detected_date","operator":"TEMPORAL_RANGE","comparator":"No
+  filter","clause":"WHERE","sqlExpression":null,"isExtra":false,"isNew":false,"datasourceWarning":false,"filterOptionName":"filter_suqi55xgrug_9vjcfnfi63w"}],"row_limit":100,"sort_by_metric":true,"color_scheme":"supersetColors","show_labels_threshold":5,"show_legend":true,"legendType":"scroll","legendOrientation":"top","label_type":"key_value_percent","number_format":"SMART_NUMBER","date_format":"smart_date","show_labels":true,"labels_outside":true,"label_line":true,"show_total":true,"outerRadius":70,"donut":true,"innerRadius":39,"extra_form_data":{},"dashboards":[29,31],"force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 6754988a-a77f-44e6-ac73-3f24568d4889
+version: 1.0.0
+dataset_uuid: e7f277a4-6e91-4615-a998-63f581560dba
