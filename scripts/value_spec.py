@@ -32,6 +32,7 @@ T_HOME = "Home"
 T_SHIP = "Shipment view"
 T_TXN  = "Transaction view"
 T_ISSUE = "Exceptions"
+T_CHAN = "Channel Health"   # Arrival & channel/endpoint health (Q1 cockpit, reused)
 T_ANOM = "Anomalies"
 T_EDI  = "EDI view"
 T_API  = "API view"
@@ -90,6 +91,16 @@ REUSED = [
     ("Duplicates suppressed", T_ISSUE), ("Exceptions by reason", T_ISSUE),
     ("Partner vs platform", T_ISSUE), ("Exception queue", T_ISSUE),
     ("Failure signatures", T_ISSUE),
+    # Channel Health — Q1 arrival / channel / endpoint monitors from the original
+    # Integration Visibility Cockpit. Reused in place (link-appended), so the
+    # original cockpit dashboard keeps them too. All on the single world: monitor
+    # tables (monitor_heartbeat / endpoint_health / expected_feeds / pipeline_health)
+    # + txn_current, same partner names + channels as the rest of the dashboard.
+    ("Monitors reporting", T_CHAN), ("Stale / silent monitors", T_CHAN),
+    ("Channel health", T_CHAN), ("Dead / degraded connections", T_CHAN),
+    ("Missing expected feeds", T_CHAN), ("Hung pipelines", T_CHAN),
+    ("Landed, not picked up", T_CHAN), ("Stuck / aging transactions", T_CHAN),
+    ("Cert / key expiry", T_CHAN),
     # EDI view (reused: ack + file are inherently EDI)
     ("FA tracking", T_EDI), ("File explorer", T_EDI),
     # Partner Insights (SLA folded in)
@@ -151,13 +162,10 @@ NEW_CHARTS = [
     dict(slice="ACK coverage", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
          kind="bignum", number_format=".1f", subheader="ACKs received vs required",
          metric=("ack", "100.0*SUM(ack_received_cnt)/NULLIF(SUM(ack_required_cnt),0)")),
-    dict(slice="Response-SLA met", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
-         kind="bignum", number_format=".1f", subheader="flows with no exception",
-         metric=("sla", "100.0*SUM((has_exception=0)::int)/NULLIF(COUNT(*),0)")),
     dict(slice="Shipments w/ flow anomalies", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
          kind="bignum", subheader="exceptions / incomplete flows",
          metric=("anom", "SUM(CASE WHEN has_exception>0 OR NOT choreography_complete THEN 1 ELSE 0 END)")),
-    dict(slice="Choreography mix", tab=T_SHIP, dataset="vw_txn_shipment",
+    dict(slice="Completeness mix", tab=T_SHIP, dataset="vw_txn_shipment",
          kind="pie", groupby="choreography_status", metric=("ships", "COUNT(*)")),
     dict(slice="Shipment message mix", tab=T_SHIP, dataset="vw_txn_detail",
          kind="bar", dim="doc_type", metric=("msgs", "COUNT(*)"), row_limit=30),
@@ -180,11 +188,15 @@ NEW_CHARTS = [
     # required select filter with enableEmptyFilter=true returns zero rows until
     # the user picks a shipment_id, which is exactly the desired drill behavior.
     # Same columns as the Transaction-view detail (vw_txn_detail) for consistency.
+    # Columns + order kept IDENTICAL to "Txn · Details" below so the drill-down set
+    # and the Transaction view show the same shape (one is the per-shipment slice
+    # of the other).
     dict(slice="Shipment message set", tab=T_SHIP, dataset="vw_txn_detail",
          kind="raw", row_limit=300,
-         cols=["shipment_id", "business_ref", "doc_type", "direction", "event_time",
-               "status", "ack_required", "ack_received", "error_code", "control_number"],
-         order=[("event_time", True)]),
+         cols=["shipment_id", "business_ref", "partner", "doc_type", "direction",
+               "event_time", "status", "ack_required", "ack_received",
+               "error_code", "control_number"],
+         order=[("event_time", False)]),
 
     # ===== Transaction view — the SHARED txn-detail source (vw_txn_detail) =====
     # Same rows the Shipment view consolidates; aligned columns. Replaces the old
@@ -277,9 +289,8 @@ LAYOUT = [
         ("Shipments in scope", 6, KH),
         ("Choreography complete", 6, KH, "Flow complete %"),
         # KPI row 2: integration health.
-        ("ACK coverage", 4, KH), ("Response-SLA met", 4, KH),
-        ("Shipments w/ flow anomalies", 4, KH),
-        ("Choreography mix", 6, CH), ("Shipment message mix", 6, CH),
+        ("ACK coverage", 6, KH), ("Shipments w/ flow anomalies", 6, KH),
+        ("Completeness mix", 6, CH), ("Shipment message mix", 6, CH),
         ("Shipment · Integration worklist", 12, BH, "Shipment integration worklist"),
         ("Shipment message set", 12, TH),
     ]),
@@ -294,6 +305,18 @@ LAYOUT = [
         ("Exceptions by reason", 6, CH), ("Partner vs platform", 6, CH),
         ("Exception queue", 12, BH),
         ("Failure signatures", 12, CH),
+    ]),
+    (T_CHAN, [   # Arrival & channel health (Q1 cockpit, reused in place)
+        # Top: scope KPI + the silent-monitor catch.
+        ("Monitors reporting", 3, KH), ("Stale / silent monitors", 9, 40),
+        # Endpoint / channel posture.
+        ("Channel health", 6, 42), ("Dead / degraded connections", 6, 42),
+        # Arrival gaps + processing back-pressure.
+        ("Missing expected feeds", 6, 42), ("Hung pipelines", 6, 40),
+        # Stuck in-flight work.
+        ("Landed, not picked up", 6, 42), ("Stuck / aging transactions", 6, 44),
+        # Forward-looking risk.
+        ("Cert / key expiry", 12, 42),
     ]),
     (T_ANOM, [   # EXTERNAL — Q15
         ("Silent feeds", 3, KH), ("Severe-drop feeds", 3, KH),

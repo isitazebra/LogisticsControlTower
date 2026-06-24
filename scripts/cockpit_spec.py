@@ -182,7 +182,11 @@ DATASETS = {
         GROUP BY 1,2,3,4 ORDER BY occurrences DESC"""),
 
     "q11_attribution": dict(sql="""
-        SELECT CASE WHEN reason_category IN ('bad_input_file','rejected_by_partner','duplicate')
+        -- Attribution follows the status/reason contract of sql/13: a 'rejected'
+        -- message was refused by the receiving partner/their validation (theirs),
+        -- and a bad_input_file is a partner-supplied bad file (theirs); a 'failed'
+        -- message broke in our transport/translation/system stack (ours).
+        SELECT CASE WHEN status='rejected' OR reason_category='bad_input_file'
                     THEN 'partner (theirs)' ELSE 'platform (ours)' END AS attribution,
                count(*) AS occurrences
         FROM txn_events WHERE status IN ('failed','rejected') AND reason_category IS NOT NULL
