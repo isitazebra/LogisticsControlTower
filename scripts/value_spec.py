@@ -29,7 +29,7 @@ SLUG = "integration-command-center"
 
 # -- tab titles (vision flow) ------------------------------------------------
 T_HOME = "Home"
-T_SHIP = "Consignment view"
+T_SHIP = "Shipment view"
 T_TXN  = "Transaction view"
 T_ISSUE = "Exceptions"
 T_CHAN = "Channel Health"   # Arrival & channel/endpoint health (Q1 cockpit, reused)
@@ -50,13 +50,13 @@ NEW_DS = {
     "vw_shipment_integration": dict(sql="SELECT * FROM vw_shipment_integration", dttm="shipment_date"),
     "vw_shipment_messages": dict(sql="SELECT * FROM vw_shipment_messages", dttm="transaction_timestamp"),
     "vw_shipment_journey": dict(sql="SELECT * FROM vw_shipment_journey", dttm="status_timestamp"),
-    # SINGLE DATA WORLD (sql/14): the Consignment + Transaction tabs read the
-    # SAME transactions as every other tab (public.txn_events, cockpit contract).
-    # vw_consignment_detail is the single message source feeding BOTH tabs;
-    # vw_consignment is the per-interchange ROLLUP of those SAME rows. One source
-    # + aligned columns + shared partners/doc-types -> all totals reconcile.
-    "vw_consignment": dict(sql="SELECT * FROM vw_consignment", dttm="last_msg_ts"),
-    "vw_consignment_detail": dict(sql="SELECT * FROM vw_consignment_detail", dttm="event_time"),
+    # SINGLE DATA WORLD (sql/14): the Shipment + Transaction tabs read the SAME
+    # transactions as every other tab (public.txn_events, cockpit contract).
+    # vw_shipment_detail is the single message source feeding BOTH tabs;
+    # vw_shipment is the per-shipment (interchange) ROLLUP of those SAME rows. One
+    # source + aligned columns + shared partners/doc-types -> all totals reconcile.
+    "vw_shipment": dict(sql="SELECT * FROM vw_shipment", dttm="last_msg_ts"),
+    "vw_shipment_detail": dict(sql="SELECT * FROM vw_shipment_detail", dttm="event_time"),
 }
 DATASETS = {**C.DATASETS, **NEW_DS}
 
@@ -110,7 +110,10 @@ REUSED = [
 
 NEW_CHARTS = [
     # ===== Home — Control-Tower KPIs (cockpit world, teal, no prefix) =====
-    # Doc-type families: Orders=850 PO, Invoices=810, Notices/ASN=856.
+    # Order lifecycle (the only three message types in the world):
+    #   Order = 990 confirmation, Order updates = 214, Invoice = 210.
+    # Each KPI uses a unique "Home · " internal name + sliceNameOverride so the
+    # build never hijacks identically-named charts on dashboards 10/12/13.
     # Row 1 KPIs: Total messages / Success / Exceptions (failed+rejected).
     dict(slice="Total messages", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", metric=("vol", "SUM(txn_count)"), subheader="messages processed"),
@@ -127,16 +130,16 @@ NEW_CHARTS = [
     dict(slice="Home · Exceptions", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="failed + rejected",
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
-    # Row 2 KPIs: doc-type families.
-    dict(slice="Orders (850)", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="purchase orders",
-         metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='850')")),
-    dict(slice="Invoices (810)", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="invoices",
-         metric=("inv", "SUM(txn_count) FILTER (WHERE doc_type='810')")),
-    dict(slice="Notices / ASN", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="ship notices (856)",
-         metric=("asn", "SUM(txn_count) FILTER (WHERE doc_type='856')")),
+    # Row 2 KPIs: the order lifecycle — order, order updates, invoice.
+    dict(slice="Home · Order", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="order confirmations (990)",
+         metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='990')")),
+    dict(slice="Home · Order updates", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="order updates (214)",
+         metric=("upd", "SUM(txn_count) FILTER (WHERE doc_type='214')")),
+    dict(slice="Home · Invoice", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="invoices (210)",
+         metric=("inv", "SUM(txn_count) FILTER (WHERE doc_type='210')")),
     dict(slice="Message volume trend", tab=T_HOME, dataset="vw_rollup",
          kind="ts", x="bucket", chart="line", metric=("txns", "SUM(txn_count)")),
     dict(slice="Exceptions Trend", tab=T_HOME, dataset="vw_rollup",
@@ -150,68 +153,68 @@ NEW_CHARTS = [
          kind="bar", dim="partner", row_limit=15,
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
 
-    # ===== Consignment view — single-world rollup of public.txn_events =====
-    # Sourced on public.vw_consignment (sql/14) = a per-interchange (transmission /
-    # consignment) ROLLUP of the very same txn_events rows the Transaction view
-    # shows (public.vw_consignment_detail). interchange_id is the one real grouping
-    # in the cockpit contract; "complete" = received a 997 functional ack AND zero
-    # failed/rejected messages. Same transactions + partners as every other tab.
-    dict(slice="Consignments in scope", tab=T_SHIP, dataset="vw_consignment", **KPI,
-         kind="bignum", metric=("cons", "COUNT(*)"), subheader="EDI transmissions in scope"),
-    dict(slice="Flow complete %", tab=T_SHIP, dataset="vw_consignment", **KPI,
-         kind="bignum", number_format=".1f", subheader="acked, no exceptions",
+    # ===== Shipment view — single-world rollup of public.txn_events =====
+    # Sourced on public.vw_shipment (sql/14) = a per-ORDER ROLLUP of the very
+    # same txn_events rows the Transaction view shows (public.vw_shipment_detail).
+    # shipment_id == the order (ORD-NNNNNN); each order is 1×990 confirmation,
+    # N×214 updates, and (when closed) 1×210 invoice. "complete" = invoice issued
+    # AND zero failed/rejected. Same transactions + partners as every other tab.
+    dict(slice="Shipments in scope", tab=T_SHIP, dataset="vw_shipment", **KPI,
+         kind="bignum", metric=("ships", "COUNT(*)"), subheader="orders in integration scope"),
+    dict(slice="Flow complete %", tab=T_SHIP, dataset="vw_shipment", **KPI,
+         kind="bignum", number_format=".1f", subheader="invoiced, no exceptions",
          metric=("pct", "100.0*AVG(complete::int)")),
-    dict(slice="ACK coverage", tab=T_SHIP, dataset="vw_consignment", **KPI,
-         kind="bignum", number_format=".1f", subheader="997 functional ack received",
-         metric=("ack", "100.0*SUM(has_ack::int)/NULLIF(COUNT(*),0)")),
-    dict(slice="Consignments w/ exceptions", tab=T_SHIP, dataset="vw_consignment", **KPI,
+    dict(slice="Invoice coverage", tab=T_SHIP, dataset="vw_shipment", **KPI,
+         kind="bignum", number_format=".1f", subheader="invoice (210) issued",
+         metric=("inv", "100.0*SUM(has_invoice::int)/NULLIF(COUNT(*),0)")),
+    dict(slice="Shipments w/ exceptions", tab=T_SHIP, dataset="vw_shipment", **KPI,
          kind="bignum", subheader="failed / rejected messages",
          metric=("exc", "SUM(CASE WHEN exception_cnt>0 THEN 1 ELSE 0 END)")),
-    dict(slice="Completeness mix", tab=T_SHIP, dataset="vw_consignment",
-         kind="pie", groupby="completeness_status", metric=("cons", "COUNT(*)")),
-    dict(slice="Consignment message mix", tab=T_SHIP, dataset="vw_consignment_detail",
+    dict(slice="Completeness mix", tab=T_SHIP, dataset="vw_shipment",
+         kind="pie", groupby="completeness_status", metric=("ships", "COUNT(*)")),
+    dict(slice="Shipment message mix", tab=T_SHIP, dataset="vw_shipment_detail",
          kind="bar", dim="doc_type", metric=("msgs", "COUNT(*)"), row_limit=30),
-    # Worklist = the consignment consolidation. Exceptions/missing-ack float to top.
-    dict(slice="Consignment worklist", tab=T_SHIP, dataset="vw_consignment",
+    # Worklist = the order consolidation. Exceptions / open orders float to top.
+    dict(slice="Shipment worklist", tab=T_SHIP, dataset="vw_shipment",
          kind="raw", row_limit=200,
-         cols=["consignment_id", "partner", "protocol", "total_messages",
-               "distinct_doc_types", "completeness_status", "has_ack",
+         cols=["shipment_id", "partner", "protocol", "total_messages",
+               "update_count", "completeness_status", "has_invoice",
                "exception_cnt", "duplicate_cnt", "value_usd", "last_msg_ts"],
          order=[("exception_cnt", False), ("last_msg_ts", False)]),
-    # Drill-down message set: EMPTY until a specific consignment is chosen, via a
-    # REQUIRED native filter on consignment_id (SHIP_DRILLDOWN_FILTER below, scoped
-    # to ONLY this chart). Columns + order kept IDENTICAL to "Txn · Details" so the
+    # Drill-down message set: EMPTY until a specific shipment is chosen, via a
+    # REQUIRED native filter on shipment_id (SHIP_DRILLDOWN_FILTER below, scoped to
+    # ONLY this chart). Columns + order kept IDENTICAL to "Txn · Details" so the
     # drill-down set and the Transaction view show the same shape (one is the
-    # per-consignment slice of the other).
-    dict(slice="Consignment message set", tab=T_SHIP, dataset="vw_consignment_detail",
+    # per-shipment slice of the other).
+    dict(slice="Shipment message set", tab=T_SHIP, dataset="vw_shipment_detail",
          kind="raw", row_limit=300,
-         cols=["consignment_id", "business_ref", "partner", "doc_type", "direction",
+         cols=["shipment_id", "business_ref", "partner", "doc_type", "direction",
                "event_time", "status", "reason_category", "error_code", "control_number"],
          order=[("event_time", False)]),
 
-    # ===== Transaction view — the SHARED txn-detail source (vw_consignment_detail) =====
-    # Same rows the Consignment view consolidates; aligned columns. One source
-    # (public.txn_events via vw_consignment_detail) so both tabs reconcile. Unique
+    # ===== Transaction view — the SHARED txn-detail source (vw_shipment_detail) =====
+    # Same rows the Shipment view consolidates; aligned columns. One source
+    # (public.txn_events via vw_shipment_detail) so both tabs reconcile. Unique
     # internal slice names ("Txn · ") + sliceNameOverride friendly titles avoid
     # hijacking the shared cockpit LOB charts (dashboards 10/12/13 still use them).
-    dict(slice="Txn · Details", tab=T_TXN, dataset="vw_consignment_detail", kind="raw",
-         cols=["consignment_id", "business_ref", "partner", "doc_type", "direction",
+    dict(slice="Txn · Details", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
+         cols=["shipment_id", "business_ref", "partner", "doc_type", "direction",
                "event_time", "status", "reason_category", "error_code", "control_number"],
          order=[("event_time", False)], row_limit=200),
-    dict(slice="Txn · Incoming data", tab=T_TXN, dataset="vw_consignment_detail", kind="raw",
-         cols=["event_time", "business_ref", "consignment_id", "doc_type", "status",
+    dict(slice="Txn · Incoming data", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type", "status",
                "control_number"],
          filters=[("direction", "==", "in")],
          order=[("event_time", False)], row_limit=50),
-    dict(slice="Txn · Outgoing data", tab=T_TXN, dataset="vw_consignment_detail", kind="raw",
-         cols=["event_time", "business_ref", "consignment_id", "doc_type", "status",
+    dict(slice="Txn · Outgoing data", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type", "status",
                "control_number"],
          filters=[("direction", "==", "out")],
          order=[("event_time", False)], row_limit=50),
-    dict(slice="Txn · Ack data", tab=T_TXN, dataset="vw_consignment_detail", kind="raw",
-         cols=["event_time", "business_ref", "consignment_id", "doc_type",
-               "status", "control_number"],
-         filters=[("doc_type", "==", "997")],
+    dict(slice="Txn · Invoice data", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type",
+               "status", "value_usd", "control_number"],
+         filters=[("doc_type", "==", "210")],
          order=[("event_time", False)], row_limit=50),
 
     # ===== EDI view (protocol-scoped rollup) =====
@@ -264,8 +267,10 @@ LAYOUT = [
         ("Total messages", 3, KH), ("Success", 3, KH),
         ("Home · Auto-processed %", 3, KH, "Auto-processed %"),
         ("Home · Exceptions", 3, KH, "Exceptions"),
-        # Row 2: doc-type families.
-        ("Orders (850)", 4, KH), ("Invoices (810)", 4, KH), ("Notices / ASN", 4, KH),
+        # Row 2: the order lifecycle.
+        ("Home · Order", 4, KH, "Order"),
+        ("Home · Order updates", 4, KH, "Order updates"),
+        ("Home · Invoice", 4, KH, "Invoice"),
         # Volume: wide trend + protocol split pie.
         ("Message volume trend", 8, CH), ("EDI vs API split", 4, CH),
         # Exceptions: wide trend + reason pie.
@@ -274,21 +279,21 @@ LAYOUT = [
         # Breakdown bars get full breathing room (were squeezed at width 3).
         ("Volume by message type", 6, CH), ("Exceptions by partner", 6, CH),
     ]),
-    (T_SHIP, [   # Consignment rollup of the SHARED txn source (public.vw_consignment)
+    (T_SHIP, [   # Shipment rollup of the SHARED txn source (public.vw_shipment)
         # KPI row 1: scale + flow completeness (split into 2 rows for legibility).
-        ("Consignments in scope", 6, KH),
+        ("Shipments in scope", 6, KH),
         ("Flow complete %", 6, KH),
         # KPI row 2: integration health.
-        ("ACK coverage", 6, KH), ("Consignments w/ exceptions", 6, KH),
-        ("Completeness mix", 6, CH), ("Consignment message mix", 6, CH),
-        ("Consignment worklist", 12, BH),
-        ("Consignment message set", 12, TH),
+        ("Invoice coverage", 6, KH), ("Shipments w/ exceptions", 6, KH),
+        ("Completeness mix", 6, CH), ("Shipment message mix", 6, CH),
+        ("Shipment worklist", 12, BH),
+        ("Shipment message set", 12, TH),
     ]),
     (T_TXN, [   # SHARED txn detail (public.vw_txn_detail) — same rows the Shipment view rolls up
         ("Txn · Details", 12, TH, "Details"),
         ("Txn · Incoming data", 6, CH, "Incoming data"),
         ("Txn · Outgoing data", 6, CH, "Outgoing data"),
-        ("Txn · Ack data", 12, BH, "Ack data"),
+        ("Txn · Invoice data", 12, BH, "Invoice data"),
     ]),
     (T_ISSUE, [
         ("Failed (period)", 4, KH), ("Rejected (period)", 4, KH), ("Duplicates suppressed", 4, KH),
@@ -368,6 +373,6 @@ NATIVE_FILTERS = [
 # This is a build_value.py change (orchestrator-owned); the contract is declared
 # below. The chart itself stays empty until the filter supplies a shipment_id.
 SHIP_DRILLDOWN_FILTER = dict(
-    name="Consignment (drill-down)", column="consignment_id",
-    dataset="vw_consignment_detail", slice="Consignment message set", required=True,
+    name="Shipment (drill-down)", column="shipment_id",
+    dataset="vw_shipment_detail", slice="Shipment message set", required=True,
 )
