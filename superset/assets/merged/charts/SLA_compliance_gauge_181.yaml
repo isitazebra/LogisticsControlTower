@@ -1,0 +1,31 @@
+slice_name: SLA compliance (gauge)
+description: null
+certified_by: null
+certification_details: null
+viz_type: gauge_chart
+params:
+  datasource: 66__table
+  viz_type: gauge_chart
+  metric:
+    expressionType: SQL
+    sqlExpression: MAX(sla_compliance_pct)
+    label: sla
+    hasCustomLabel: true
+  row_limit: 1
+  time_range: No filter
+  min_val: 0
+  max_val: 100
+query_context: '{"datasource": {"id": 66, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "MAX(sla_compliance_pct)", "label": "sla", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "66__table", "viz_type": "gauge_chart", "metric":
+  {"expressionType": "SQL", "sqlExpression": "MAX(sla_compliance_pct)", "label": "sla",
+  "hasCustomLabel": true}, "row_limit": 1, "time_range": "No filter", "min_val": 0,
+  "max_val": 100}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 7888c719-4fc7-4933-8e92-0dd39ba24973
+version: 1.0.0
+dataset_uuid: 15601a36-717e-4ebc-85cf-61c145ccdea1
+tags: []

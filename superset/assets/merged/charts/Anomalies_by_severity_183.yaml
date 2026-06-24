@@ -1,0 +1,42 @@
+slice_name: Anomalies by severity
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 69__table
+  viz_type: pie
+  groupby:
+  - severity
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(anomaly_count)
+    label: anomalies
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  innerRadius: 45
+  donut: true
+  label_type: key_percent
+  show_labels: true
+  labels_outside: true
+  number_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 69, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(anomaly_count)",
+  "label": "anomalies", "hasCustomLabel": true}, false]], "columns": ["severity"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(anomaly_count)", "label":
+  "anomalies", "hasCustomLabel": true}]}], "form_data": {"datasource": "69__table",
+  "viz_type": "pie", "groupby": ["severity"], "metric": {"expressionType": "SQL",
+  "sqlExpression": "SUM(anomaly_count)", "label": "anomalies", "hasCustomLabel": true},
+  "row_limit": 100, "time_range": "No filter", "show_legend": true, "innerRadius":
+  45, "donut": true, "label_type": "key_percent", "show_labels": true, "labels_outside":
+  true, "number_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 740b4cf3-de2f-4350-8740-41fe26a74af1
+version: 1.0.0
+dataset_uuid: 7ae286b6-7a7f-4cea-bf50-60315bfe3c86
+tags: []

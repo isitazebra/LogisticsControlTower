@@ -31,8 +31,10 @@ SOURCE_DASHBOARDS = ("Integration Visibility Cockpit", "EDI Anomaly Control Towe
 
 
 def native_filters(sc, chart_ids):
-    """Time-range + the merged select filters, each seeded from its owning
-    dataset (two Partner filters: partner_id/shipments, partner/transactions)."""
+    """Time-range + the merged select filters, grouped under labelled DIVIDERs
+    (one per world) so the panel reads as two clearly separated subject areas.
+    Two Partner filters (partner_id/shipments, partner/transactions) because the
+    worlds key partners differently and cannot cross-filter."""
     all_charts = list(chart_ids.values())
     cfgs = [{
         "id": "NATIVE_FILTER-time-range", "name": "Time range",
@@ -42,19 +44,24 @@ def native_filters(sc, chart_ids):
         "type": "NATIVE_FILTER", "chartsInScope": all_charts,
     }]
     seed = {}
-    for label, col, dsname in M.NATIVE_FILTERS:
-        if dsname not in seed:
-            seed[dsname] = get_dataset_id(sc, dsname)
+    for gi, (group, filters) in enumerate(M.FILTER_GROUPS):
         cfgs.append({
-            "id": f"NATIVE_FILTER-{col}", "name": label, "filterType": "filter_select",
-            "targets": [{"column": {"name": col}, "datasetId": seed[dsname]}],
-            "controlValues": {"multiSelect": True, "enableEmptyFilter": False,
-                              "defaultToFirstItem": False, "searchAllOptions": False,
-                              "inverseSelection": False},
-            "defaultDataMask": {"filterState": {}}, "cascadeParentIds": [],
-            "scope": {"rootPath": ["ROOT_ID"], "excluded": []},
-            "type": "NATIVE_FILTER", "chartsInScope": all_charts,
+            "id": f"NATIVE_FILTER_DIVIDER-{gi}", "type": "DIVIDER",
+            "title": group, "description": "",
         })
+        for label, col, dsname in filters:
+            if dsname not in seed:
+                seed[dsname] = get_dataset_id(sc, dsname)
+            cfgs.append({
+                "id": f"NATIVE_FILTER-{col}", "name": label, "filterType": "filter_select",
+                "targets": [{"column": {"name": col}, "datasetId": seed[dsname]}],
+                "controlValues": {"multiSelect": True, "enableEmptyFilter": False,
+                                  "defaultToFirstItem": False, "searchAllOptions": False,
+                                  "inverseSelection": False},
+                "defaultDataMask": {"filterState": {}}, "cascadeParentIds": [],
+                "scope": {"rootPath": ["ROOT_ID"], "excluded": []},
+                "type": "NATIVE_FILTER", "chartsInScope": all_charts,
+            })
     return cfgs
 
 
@@ -89,6 +96,19 @@ def build_dashboard(sc):
     print("URL:", str(sc.baseurl).rstrip("/") + f"/superset/dashboard/{M.DASHBOARD_SLUG}/")
 
 
+def rename_anomaly(sc):
+    """Drop the "EDI · " prefix from the live anomaly charts (in place, so the
+    existing objects are reused, not orphaned). Must run before ensure_charts,
+    which keys off slice_name. Idempotent: skips charts already renamed."""
+    by_name = {c["slice_name"]: c["id"] for c in sc.get_charts()}
+    n = 0
+    for old, new in M.ANOM_RENAMES.items():
+        if old in by_name and new not in by_name:
+            sc.update_chart(by_name[old], slice_name=new)
+            n += 1
+    print(f"renamed {n} anomaly charts (dropped 'EDI · ' prefix)")
+
+
 def retire(sc):
     """Unpublish the two source dashboards now that the merged one is the base."""
     for title in SOURCE_DASHBOARDS:
@@ -107,6 +127,7 @@ def main():
     else:
         ds_ids = {n: get_dataset_id(sc, n) for n in M.DATASETS}
     if cmd in ("charts", "all"):
+        print("== rename =="); rename_anomaly(sc)
         print("== charts =="); B.ensure_charts(sc, ds_ids)
     if cmd in ("dashboard", "all"):
         print("== dashboard =="); build_dashboard(sc)

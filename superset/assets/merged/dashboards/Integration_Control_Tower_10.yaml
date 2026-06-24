@@ -23,7 +23,7 @@ position:
     id: GRID_ID
     children:
     - TABS-TOP
-    - ROW-N-FU51XMWM
+    - ROW-N-U4Z4KFKT
     parents:
     - ROOT_ID
   CHART-175:
@@ -32,9 +32,9 @@ position:
     children: []
     meta:
       chartId: 175
-      width: 2
+      width: 3
       height: 38
-      sliceName: "EDI \xB7 Total shipments"
+      sliceName: Total shipments
       uuid: a83418d6-68fb-5c74-bcf1-e9779a3f589b
     parents:
     - ROOT_ID
@@ -48,9 +48,9 @@ position:
     children: []
     meta:
       chartId: 176
-      width: 2
+      width: 3
       height: 38
-      sliceName: "EDI \xB7 Active partners"
+      sliceName: Active partners
       uuid: 48c6f1e4-762f-5439-8912-11e3c92485d3
     parents:
     - ROOT_ID
@@ -64,9 +64,9 @@ position:
     children: []
     meta:
       chartId: 177
-      width: 2
+      width: 3
       height: 38
-      sliceName: "EDI \xB7 Total anomalies"
+      sliceName: Total anomalies
       uuid: 43c658b7-84a8-5ea7-8cd4-dd9922219767
     parents:
     - ROOT_ID
@@ -80,42 +80,10 @@ position:
     children: []
     meta:
       chartId: 178
-      width: 2
+      width: 3
       height: 38
-      sliceName: "EDI \xB7 Critical anomalies"
+      sliceName: Critical anomalies
       uuid: bec2e4a1-b5a1-58f7-883b-c2494667386f
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S0
-    - ROW-0-0
-  CHART-179:
-    type: CHART
-    id: CHART-179
-    children: []
-    meta:
-      chartId: 179
-      width: 2
-      height: 38
-      sliceName: "EDI \xB7 SLA compliance %"
-      uuid: 68de0b82-6f7c-547a-a22a-33c417d66d92
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S0
-    - ROW-0-0
-  CHART-180:
-    type: CHART
-    id: CHART-180
-    children: []
-    meta:
-      chartId: 180
-      width: 2
-      height: 38
-      sliceName: "EDI \xB7 Avg partner health"
-      uuid: 64c84b27-14df-55b3-94b6-edac9d015df5
     parents:
     - ROOT_ID
     - GRID_ID
@@ -130,8 +98,6 @@ position:
     - CHART-176
     - CHART-177
     - CHART-178
-    - CHART-179
-    - CHART-180
     meta:
       background: BACKGROUND_TRANSPARENT
     parents:
@@ -139,6 +105,38 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
+  CHART-179:
+    type: CHART
+    id: CHART-179
+    children: []
+    meta:
+      chartId: 179
+      width: 3
+      height: 38
+      sliceName: SLA compliance %
+      uuid: 68de0b82-6f7c-547a-a22a-33c417d66d92
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S0
+    - ROW-0-1
+  CHART-180:
+    type: CHART
+    id: CHART-180
+    children: []
+    meta:
+      chartId: 180
+      width: 3
+      height: 38
+      sliceName: Avg partner health
+      uuid: 64c84b27-14df-55b3-94b6-edac9d015df5
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S0
+    - ROW-0-1
   CHART-181:
     type: CHART
     id: CHART-181
@@ -147,40 +145,8 @@ position:
       chartId: 181
       width: 4
       height: 46
-      sliceName: "EDI \xB7 SLA compliance (gauge)"
+      sliceName: SLA compliance (gauge)
       uuid: 8bfded08-de5a-5827-bef7-a734a013b0e2
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S0
-    - ROW-0-1
-  CHART-182:
-    type: CHART
-    id: CHART-182
-    children: []
-    meta:
-      chartId: 182
-      width: 4
-      height: 46
-      sliceName: "EDI \xB7 Shipment status mix"
-      uuid: f077f884-fbc8-54a1-be77-db0244c7c351
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S0
-    - ROW-0-1
-  CHART-183:
-    type: CHART
-    id: CHART-183
-    children: []
-    meta:
-      chartId: 183
-      width: 4
-      height: 46
-      sliceName: "EDI \xB7 Anomalies by severity"
-      uuid: 29591c07-ead0-5f36-a0e3-c39071d6d66d
     parents:
     - ROOT_ID
     - GRID_ID
@@ -191,7 +157,52 @@ position:
     type: ROW
     id: ROW-0-1
     children:
+    - CHART-179
+    - CHART-180
     - CHART-181
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S0
+  CHART-182:
+    type: CHART
+    id: CHART-182
+    children: []
+    meta:
+      chartId: 182
+      width: 4
+      height: 46
+      sliceName: Shipment status mix
+      uuid: f077f884-fbc8-54a1-be77-db0244c7c351
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S0
+    - ROW-0-2
+  CHART-183:
+    type: CHART
+    id: CHART-183
+    children: []
+    meta:
+      chartId: 183
+      width: 4
+      height: 46
+      sliceName: Anomalies by severity
+      uuid: 29591c07-ead0-5f36-a0e3-c39071d6d66d
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S0
+    - ROW-0-2
+  ROW-0-2:
+    type: ROW
+    id: ROW-0-2
+    children:
     - CHART-182
     - CHART-183
     meta:
@@ -209,14 +220,14 @@ position:
       chartId: 184
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Daily shipment volume"
+      sliceName: Daily shipment volume
       uuid: c8b3aa2d-1081-5e37-a0c7-894fc2492bc2
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-2
+    - ROW-0-3
   CHART-185:
     type: CHART
     id: CHART-185
@@ -225,17 +236,17 @@ position:
       chartId: 185
       width: 6
       height: 48
-      sliceName: "EDI \xB7 SLA compliance trend"
+      sliceName: SLA compliance trend
       uuid: ea29a375-a2a3-514a-9696-47188119fd1d
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-2
-  ROW-0-2:
+    - ROW-0-3
+  ROW-0-3:
     type: ROW
-    id: ROW-0-2
+    id: ROW-0-3
     children:
     - CHART-184
     - CHART-185
@@ -261,7 +272,7 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-3
+    - ROW-0-4
   CHART-147:
     type: CHART
     id: CHART-147
@@ -277,7 +288,7 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-3
+    - ROW-0-4
   CHART-148:
     type: CHART
     id: CHART-148
@@ -293,7 +304,7 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-3
+    - ROW-0-4
   CHART-149:
     type: CHART
     id: CHART-149
@@ -309,10 +320,10 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-3
-  ROW-0-3:
+    - ROW-0-4
+  ROW-0-4:
     type: ROW
-    id: ROW-0-3
+    id: ROW-0-4
     children:
     - CHART-143
     - CHART-147
@@ -340,10 +351,10 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S0
-    - ROW-0-4
-  ROW-0-4:
+    - ROW-0-5
+  ROW-0-5:
     type: ROW
-    id: ROW-0-4
+    id: ROW-0-5
     children:
     - CHART-150
     meta:
@@ -364,6 +375,7 @@ position:
     - ROW-0-2
     - ROW-0-3
     - ROW-0-4
+    - ROW-0-5
     parents:
     - ROOT_ID
     - GRID_ID
@@ -376,7 +388,7 @@ position:
       chartId: 186
       width: 3
       height: 38
-      sliceName: "EDI \xB7 Anomalies (total)"
+      sliceName: Anomalies (total)
       uuid: 3ea1fa47-4622-59fb-a536-9ca072776a53
     parents:
     - ROOT_ID
@@ -392,7 +404,7 @@ position:
       chartId: 187
       width: 3
       height: 38
-      sliceName: "EDI \xB7 Critical (count)"
+      sliceName: Critical (count)
       uuid: 167636ca-956c-594a-b120-05d8c1022352
     parents:
     - ROOT_ID
@@ -408,7 +420,7 @@ position:
       chartId: 188
       width: 3
       height: 38
-      sliceName: "EDI \xB7 Open anomalies"
+      sliceName: Open anomalies
       uuid: 1fdb1a18-5548-55f8-9ba6-3c2fe91ad3c5
     parents:
     - ROOT_ID
@@ -424,7 +436,7 @@ position:
       chartId: 189
       width: 3
       height: 38
-      sliceName: "EDI \xB7 Business impact $"
+      sliceName: Business impact $
       uuid: 8834a090-7532-5211-8a07-ff64e0b55a56
     parents:
     - ROOT_ID
@@ -455,7 +467,7 @@ position:
       chartId: 190
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Anomalies by type"
+      sliceName: Anomalies by type
       uuid: eeade2e0-e4d9-5c88-a08b-c5b0576d3a42
     parents:
     - ROOT_ID
@@ -471,7 +483,7 @@ position:
       chartId: 191
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Anomaly trend (daily)"
+      sliceName: Anomaly trend (daily)
       uuid: 3a337946-ec7d-599c-8698-b90ff217200c
     parents:
     - ROOT_ID
@@ -500,7 +512,7 @@ position:
       chartId: 192
       width: 4
       height: 46
-      sliceName: "EDI \xB7 Anomalies by status"
+      sliceName: Anomalies by status
       uuid: fdaa7942-cc52-5dc6-b3e6-d511cb3333fc
     parents:
     - ROOT_ID
@@ -516,7 +528,7 @@ position:
       chartId: 193
       width: 8
       height: 46
-      sliceName: "EDI \xB7 Business impact trend"
+      sliceName: Business impact trend
       uuid: b3ecd6b9-e0a4-5e70-bc0c-5658f37f6726
     parents:
     - ROOT_ID
@@ -545,7 +557,7 @@ position:
       chartId: 194
       width: 12
       height: 52
-      sliceName: "EDI \xB7 Exception workbench"
+      sliceName: Exception workbench
       uuid: bbd5d2fd-2661-54c1-821f-7feca736aa8b
     parents:
     - ROOT_ID
@@ -587,7 +599,7 @@ position:
       chartId: 195
       width: 12
       height: 44
-      sliceName: "EDI \xB7 Partner health scorecard"
+      sliceName: Partner health scorecard
       uuid: a8502931-9c23-5060-8a7d-de2e88b07cad
     parents:
     - ROOT_ID
@@ -619,7 +631,7 @@ position:
       chartId: 196
       width: 12
       height: 44
-      sliceName: "EDI \xB7 Partner risk matrix"
+      sliceName: Partner risk matrix
       uuid: eac2f5d7-84d6-5680-8589-e798f0d47bae
     parents:
     - ROOT_ID
@@ -651,7 +663,7 @@ position:
       chartId: 197
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Anomaly rate by partner"
+      sliceName: Anomaly rate by partner
       uuid: bd00049a-6d8c-56dc-ac18-b5000a9f4773
     parents:
     - ROOT_ID
@@ -669,7 +681,7 @@ position:
       chartId: 198
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Shipment volume by partner"
+      sliceName: Shipment volume by partner
       uuid: 88dbb463-ef86-51f1-8004-ef013552b5a5
     parents:
     - ROOT_ID
@@ -874,7 +886,7 @@ position:
       chartId: 199
       width: 6
       height: 48
-      sliceName: "EDI \xB7 EDI funnel"
+      sliceName: EDI funnel
       uuid: 816b4d43-b113-5f2f-8a71-e462ec6244d2
     parents:
     - ROOT_ID
@@ -892,7 +904,7 @@ position:
       chartId: 200
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Flow completeness"
+      sliceName: Flow completeness
       uuid: 5285a647-c0b7-53f6-a71f-adebe8554e49
     parents:
     - ROOT_ID
@@ -925,7 +937,7 @@ position:
       chartId: 201
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Message SLA % by type"
+      sliceName: Message SLA % by type
       uuid: a5d97f94-5d31-58cf-a5ec-464ceb096735
     parents:
     - ROOT_ID
@@ -943,7 +955,7 @@ position:
       chartId: 202
       width: 6
       height: 48
-      sliceName: "EDI \xB7 ACK SLA trend"
+      sliceName: ACK SLA trend
       uuid: 6c6fdcd7-2c42-52cc-ab93-db4f35d070ce
     parents:
     - ROOT_ID
@@ -976,7 +988,7 @@ position:
       chartId: 203
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Volume by hour"
+      sliceName: Volume by hour
       uuid: 230c60b2-36a0-59ba-ba0d-e9b1c5b4aa4e
     parents:
     - ROOT_ID
@@ -994,7 +1006,7 @@ position:
       chartId: 204
       width: 6
       height: 48
-      sliceName: "EDI \xB7 SLA performance trend"
+      sliceName: SLA performance trend
       uuid: 521140e4-255d-50e4-bad3-a0286e823ba6
     parents:
     - ROOT_ID
@@ -1147,14 +1159,16 @@ position:
       chartId: 205
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Status distribution"
+      sliceName: Shipment status distribution
       uuid: cf45c60c-2be5-5dd9-b66d-fa010ac06ac7
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-    - ROW-4-0
+    - TABS-S4
+    - TAB-S4-0
+    - ROW-40-0
   CHART-206:
     type: CHART
     id: CHART-206
@@ -1163,17 +1177,19 @@ position:
       chartId: 206
       width: 6
       height: 48
-      sliceName: "EDI \xB7 Delivery performance mix"
+      sliceName: Delivery performance mix
       uuid: c74095a9-2341-56d1-a84d-6ffd37f042a0
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-    - ROW-4-0
-  ROW-4-0:
+    - TABS-S4
+    - TAB-S4-0
+    - ROW-40-0
+  ROW-40-0:
     type: ROW
-    id: ROW-4-0
+    id: ROW-40-0
     children:
     - CHART-205
     - CHART-206
@@ -1184,6 +1200,8 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S4
+    - TABS-S4
+    - TAB-S4-0
   CHART-207:
     type: CHART
     id: CHART-207
@@ -1192,14 +1210,16 @@ position:
       chartId: 207
       width: 4
       height: 46
-      sliceName: "EDI \xB7 Delay severity"
+      sliceName: Delay severity
       uuid: 526cf43e-b89e-584e-bf10-4138f0ca0be1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-    - ROW-4-1
+    - TABS-S4
+    - TAB-S4-0
+    - ROW-40-1
   CHART-208:
     type: CHART
     id: CHART-208
@@ -1208,17 +1228,19 @@ position:
       chartId: 208
       width: 8
       height: 46
-      sliceName: "EDI \xB7 Volume actual vs expected"
+      sliceName: Volume actual vs expected
       uuid: 6b50e86b-610a-593f-be8c-84a41d97d98a
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-    - ROW-4-1
-  ROW-4-1:
+    - TABS-S4
+    - TAB-S4-0
+    - ROW-40-1
+  ROW-40-1:
     type: ROW
-    id: ROW-4-1
+    id: ROW-40-1
     children:
     - CHART-207
     - CHART-208
@@ -1229,6 +1251,8 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S4
+    - TABS-S4
+    - TAB-S4-0
   CHART-209:
     type: CHART
     id: CHART-209
@@ -1237,17 +1261,19 @@ position:
       chartId: 209
       width: 12
       height: 52
-      sliceName: "EDI \xB7 Status aging worklist"
+      sliceName: Status aging worklist
       uuid: c48bea9e-4faf-55d4-a002-898f3960e026
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-    - ROW-4-2
-  ROW-4-2:
+    - TABS-S4
+    - TAB-S4-0
+    - ROW-40-2
+  ROW-40-2:
     type: ROW
-    id: ROW-4-2
+    id: ROW-40-2
     children:
     - CHART-209
     meta:
@@ -1257,19 +1283,23 @@ position:
     - GRID_ID
     - TABS-TOP
     - TAB-S4
-  TAB-S4:
+    - TABS-S4
+    - TAB-S4-0
+  TAB-S4-0:
     type: TAB
-    id: TAB-S4
+    id: TAB-S4-0
     meta:
       text: Shipments
     children:
-    - ROW-4-0
-    - ROW-4-1
-    - ROW-4-2
+    - ROW-40-0
+    - ROW-40-1
+    - ROW-40-2
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
+    - TAB-S4
+    - TABS-S4
   CHART-135:
     type: CHART
     id: CHART-135
@@ -1284,10 +1314,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-0
   CHART-136:
     type: CHART
     id: CHART-136
@@ -1302,10 +1332,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-0
   CHART-137:
     type: CHART
     id: CHART-137
@@ -1320,10 +1350,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-0
   CHART-138:
     type: CHART
     id: CHART-138
@@ -1338,13 +1368,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-0
-  ROW-50-0:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-0
+  ROW-41-0:
     type: ROW
-    id: ROW-50-0
+    id: ROW-41-0
     children:
     - CHART-135
     - CHART-136
@@ -1356,9 +1386,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
   CHART-139:
     type: CHART
     id: CHART-139
@@ -1373,10 +1403,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-1
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-1
   CHART-140:
     type: CHART
     id: CHART-140
@@ -1391,13 +1421,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-1
-  ROW-50-1:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-1
+  ROW-41-1:
     type: ROW
-    id: ROW-50-1
+    id: ROW-41-1
     children:
     - CHART-139
     - CHART-140
@@ -1407,9 +1437,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
   CHART-141:
     type: CHART
     id: CHART-141
@@ -1424,13 +1454,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-    - ROW-50-2
-  ROW-50-2:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+    - ROW-41-2
+  ROW-41-2:
     type: ROW
-    id: ROW-50-2
+    id: ROW-41-2
     children:
     - CHART-141
     meta:
@@ -1439,24 +1469,24 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-0
-  TAB-S5-0:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-1
+  TAB-S4-1:
     type: TAB
-    id: TAB-S5-0
+    id: TAB-S4-1
     meta:
       text: All Transactions
     children:
-    - ROW-50-0
-    - ROW-50-1
-    - ROW-50-2
+    - ROW-41-0
+    - ROW-41-1
+    - ROW-41-2
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
+    - TAB-S4
+    - TABS-S4
   CHART-105:
     type: CHART
     id: CHART-105
@@ -1471,10 +1501,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
-    - ROW-51-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
+    - ROW-42-0
   CHART-106:
     type: CHART
     id: CHART-106
@@ -1489,13 +1519,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
-    - ROW-51-0
-  ROW-51-0:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
+    - ROW-42-0
+  ROW-42-0:
     type: ROW
-    id: ROW-51-0
+    id: ROW-42-0
     children:
     - CHART-105
     - CHART-106
@@ -1505,9 +1535,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
   CHART-107:
     type: CHART
     id: CHART-107
@@ -1522,10 +1552,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
-    - ROW-51-1
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
+    - ROW-42-1
   CHART-108:
     type: CHART
     id: CHART-108
@@ -1540,13 +1570,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
-    - ROW-51-1
-  ROW-51-1:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
+    - ROW-42-1
+  ROW-42-1:
     type: ROW
-    id: ROW-51-1
+    id: ROW-42-1
     children:
     - CHART-107
     - CHART-108
@@ -1556,23 +1586,23 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-1
-  TAB-S5-1:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-2
+  TAB-S4-2:
     type: TAB
-    id: TAB-S5-1
+    id: TAB-S4-2
     meta:
       text: Lookup & Replay
     children:
-    - ROW-51-0
-    - ROW-51-1
+    - ROW-42-0
+    - ROW-42-1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
+    - TAB-S4
+    - TABS-S4
   CHART-101:
     type: CHART
     id: CHART-101
@@ -1587,10 +1617,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
-    - ROW-52-0
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
+    - ROW-43-0
   CHART-102:
     type: CHART
     id: CHART-102
@@ -1605,13 +1635,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
-    - ROW-52-0
-  ROW-52-0:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
+    - ROW-43-0
+  ROW-43-0:
     type: ROW
-    id: ROW-52-0
+    id: ROW-43-0
     children:
     - CHART-101
     - CHART-102
@@ -1621,9 +1651,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
   CHART-103:
     type: CHART
     id: CHART-103
@@ -1638,10 +1668,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
-    - ROW-52-1
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
+    - ROW-43-1
   CHART-104:
     type: CHART
     id: CHART-104
@@ -1656,13 +1686,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
-    - ROW-52-1
-  ROW-52-1:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
+    - ROW-43-1
+  ROW-43-1:
     type: ROW
-    id: ROW-52-1
+    id: ROW-43-1
     children:
     - CHART-103
     - CHART-104
@@ -1672,42 +1702,43 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-    - TAB-S5-2
-  TAB-S5-2:
+    - TAB-S4
+    - TABS-S4
+    - TAB-S4-3
+  TAB-S4-3:
     type: TAB
-    id: TAB-S5-2
+    id: TAB-S4-3
     meta:
       text: Files
     children:
-    - ROW-52-0
-    - ROW-52-1
+    - ROW-43-0
+    - ROW-43-1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-    - TABS-S5
-  TABS-S5:
+    - TAB-S4
+    - TABS-S4
+  TABS-S4:
     type: TABS
-    id: TABS-S5
+    id: TABS-S4
     children:
-    - TAB-S5-0
-    - TAB-S5-1
-    - TAB-S5-2
+    - TAB-S4-0
+    - TAB-S4-1
+    - TAB-S4-2
+    - TAB-S4-3
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S5
-  TAB-S5:
+    - TAB-S4
+  TAB-S4:
     type: TAB
-    id: TAB-S5
+    id: TAB-S4
     meta:
-      text: Transactions
+      text: Shipments & Transactions
     children:
-    - TABS-S5
+    - TABS-S4
     parents:
     - ROOT_ID
     - GRID_ID
@@ -1726,10 +1757,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-0
   CHART-90:
     type: CHART
     id: CHART-90
@@ -1744,10 +1775,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-0
   CHART-91:
     type: CHART
     id: CHART-91
@@ -1762,10 +1793,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-0
   CHART-92:
     type: CHART
     id: CHART-92
@@ -1780,13 +1811,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-0
-  ROW-60-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-0
+  ROW-50-0:
     type: ROW
-    id: ROW-60-0
+    id: ROW-50-0
     children:
     - CHART-89
     - CHART-90
@@ -1798,9 +1829,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
   CHART-93:
     type: CHART
     id: CHART-93
@@ -1815,10 +1846,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-1
   CHART-94:
     type: CHART
     id: CHART-94
@@ -1833,10 +1864,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-1
   CHART-95:
     type: CHART
     id: CHART-95
@@ -1851,13 +1882,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-1
-  ROW-60-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-1
+  ROW-50-1:
     type: ROW
-    id: ROW-60-1
+    id: ROW-50-1
     children:
     - CHART-93
     - CHART-94
@@ -1868,9 +1899,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
   CHART-96:
     type: CHART
     id: CHART-96
@@ -1885,10 +1916,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-2
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-2
   CHART-97:
     type: CHART
     id: CHART-97
@@ -1903,13 +1934,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-2
-  ROW-60-2:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-2
+  ROW-50-2:
     type: ROW
-    id: ROW-60-2
+    id: ROW-50-2
     children:
     - CHART-96
     - CHART-97
@@ -1919,9 +1950,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
   CHART-98:
     type: CHART
     id: CHART-98
@@ -1936,10 +1967,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-3
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-3
   CHART-99:
     type: CHART
     id: CHART-99
@@ -1954,13 +1985,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-3
-  ROW-60-3:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-3
+  ROW-50-3:
     type: ROW
-    id: ROW-60-3
+    id: ROW-50-3
     children:
     - CHART-98
     - CHART-99
@@ -1970,9 +2001,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
   CHART-100:
     type: CHART
     id: CHART-100
@@ -1987,13 +2018,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-    - ROW-60-4
-  ROW-60-4:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+    - ROW-50-4
+  ROW-50-4:
     type: ROW
-    id: ROW-60-4
+    id: ROW-50-4
     children:
     - CHART-100
     meta:
@@ -2002,26 +2033,26 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-0
-  TAB-S6-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-0
+  TAB-S5-0:
     type: TAB
-    id: TAB-S6-0
+    id: TAB-S5-0
     meta:
       text: Volume & Throughput
     children:
-    - ROW-60-0
-    - ROW-60-1
-    - ROW-60-2
-    - ROW-60-3
-    - ROW-60-4
+    - ROW-50-0
+    - ROW-50-1
+    - ROW-50-2
+    - ROW-50-3
+    - ROW-50-4
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
+    - TAB-S5
+    - TABS-S5
   CHART-127:
     type: CHART
     id: CHART-127
@@ -2036,10 +2067,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-0
   CHART-128:
     type: CHART
     id: CHART-128
@@ -2054,10 +2085,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-0
   CHART-129:
     type: CHART
     id: CHART-129
@@ -2072,13 +2103,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-0
-  ROW-61-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-0
+  ROW-51-0:
     type: ROW
-    id: ROW-61-0
+    id: ROW-51-0
     children:
     - CHART-127
     - CHART-128
@@ -2089,9 +2120,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
   CHART-130:
     type: CHART
     id: CHART-130
@@ -2106,13 +2137,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-1
-  ROW-61-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-1
+  ROW-51-1:
     type: ROW
-    id: ROW-61-1
+    id: ROW-51-1
     children:
     - CHART-130
     meta:
@@ -2121,9 +2152,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
   CHART-131:
     type: CHART
     id: CHART-131
@@ -2138,10 +2169,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-2
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-2
   CHART-132:
     type: CHART
     id: CHART-132
@@ -2156,13 +2187,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-2
-  ROW-61-2:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-2
+  ROW-51-2:
     type: ROW
-    id: ROW-61-2
+    id: ROW-51-2
     children:
     - CHART-131
     - CHART-132
@@ -2172,9 +2203,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
   CHART-133:
     type: CHART
     id: CHART-133
@@ -2189,10 +2220,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-3
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-3
   CHART-134:
     type: CHART
     id: CHART-134
@@ -2207,13 +2238,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-    - ROW-61-3
-  ROW-61-3:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+    - ROW-51-3
+  ROW-51-3:
     type: ROW
-    id: ROW-61-3
+    id: ROW-51-3
     children:
     - CHART-133
     - CHART-134
@@ -2223,47 +2254,25 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-    - TAB-S6-1
-  TAB-S6-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-1
+  TAB-S5-1:
     type: TAB
-    id: TAB-S6-1
+    id: TAB-S5-1
     meta:
       text: Transaction Types
     children:
-    - ROW-61-0
-    - ROW-61-1
-    - ROW-61-2
-    - ROW-61-3
+    - ROW-51-0
+    - ROW-51-1
+    - ROW-51-2
+    - ROW-51-3
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S6
-    - TABS-S6
-  TABS-S6:
-    type: TABS
-    id: TABS-S6
-    children:
-    - TAB-S6-0
-    - TAB-S6-1
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S6
-  TAB-S6:
-    type: TAB
-    id: TAB-S6
-    meta:
-      text: Flow & Message Types
-    children:
-    - TABS-S6
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
   CHART-75:
     type: CHART
     id: CHART-75
@@ -2278,10 +2287,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-0
   CHART-76:
     type: CHART
     id: CHART-76
@@ -2296,10 +2305,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-0
   CHART-77:
     type: CHART
     id: CHART-77
@@ -2314,13 +2323,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-0
-  ROW-70-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-0
+  ROW-52-0:
     type: ROW
-    id: ROW-70-0
+    id: ROW-52-0
     children:
     - CHART-75
     - CHART-76
@@ -2331,9 +2340,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
   CHART-78:
     type: CHART
     id: CHART-78
@@ -2348,10 +2357,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-1
   CHART-79:
     type: CHART
     id: CHART-79
@@ -2366,13 +2375,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-1
-  ROW-70-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-1
+  ROW-52-1:
     type: ROW
-    id: ROW-70-1
+    id: ROW-52-1
     children:
     - CHART-78
     - CHART-79
@@ -2382,9 +2391,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
   CHART-80:
     type: CHART
     id: CHART-80
@@ -2399,10 +2408,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-2
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-2
   CHART-81:
     type: CHART
     id: CHART-81
@@ -2417,13 +2426,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-2
-  ROW-70-2:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-2
+  ROW-52-2:
     type: ROW
-    id: ROW-70-2
+    id: ROW-52-2
     children:
     - CHART-80
     - CHART-81
@@ -2433,9 +2442,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
   CHART-82:
     type: CHART
     id: CHART-82
@@ -2450,10 +2459,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-3
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-3
   CHART-83:
     type: CHART
     id: CHART-83
@@ -2468,13 +2477,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-    - ROW-70-3
-  ROW-70-3:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+    - ROW-52-3
+  ROW-52-3:
     type: ROW
-    id: ROW-70-3
+    id: ROW-52-3
     children:
     - CHART-82
     - CHART-83
@@ -2484,25 +2493,25 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-0
-  TAB-S7-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-2
+  TAB-S5-2:
     type: TAB
-    id: TAB-S7-0
+    id: TAB-S5-2
     meta:
       text: Arrival & Channel Health
     children:
-    - ROW-70-0
-    - ROW-70-1
-    - ROW-70-2
-    - ROW-70-3
+    - ROW-52-0
+    - ROW-52-1
+    - ROW-52-2
+    - ROW-52-3
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
+    - TAB-S5
+    - TABS-S5
   CHART-84:
     type: CHART
     id: CHART-84
@@ -2517,10 +2526,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-    - ROW-71-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+    - ROW-53-0
   CHART-85:
     type: CHART
     id: CHART-85
@@ -2535,10 +2544,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-    - ROW-71-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+    - ROW-53-0
   CHART-86:
     type: CHART
     id: CHART-86
@@ -2553,13 +2562,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-    - ROW-71-0
-  ROW-71-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+    - ROW-53-0
+  ROW-53-0:
     type: ROW
-    id: ROW-71-0
+    id: ROW-53-0
     children:
     - CHART-84
     - CHART-85
@@ -2570,9 +2579,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
   CHART-87:
     type: CHART
     id: CHART-87
@@ -2587,10 +2596,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-    - ROW-71-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+    - ROW-53-1
   CHART-88:
     type: CHART
     id: CHART-88
@@ -2605,13 +2614,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-    - ROW-71-1
-  ROW-71-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+    - ROW-53-1
+  ROW-53-1:
     type: ROW
-    id: ROW-71-1
+    id: ROW-53-1
     children:
     - CHART-87
     - CHART-88
@@ -2621,23 +2630,23 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-1
-  TAB-S7-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-3
+  TAB-S5-3:
     type: TAB
-    id: TAB-S7-1
+    id: TAB-S5-3
     meta:
       text: Exceptions
     children:
-    - ROW-71-0
-    - ROW-71-1
+    - ROW-53-0
+    - ROW-53-1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
+    - TAB-S5
+    - TABS-S5
   CHART-122:
     type: CHART
     id: CHART-122
@@ -2652,10 +2661,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-    - ROW-72-0
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+    - ROW-54-0
   CHART-123:
     type: CHART
     id: CHART-123
@@ -2670,13 +2679,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-    - ROW-72-0
-  ROW-72-0:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+    - ROW-54-0
+  ROW-54-0:
     type: ROW
-    id: ROW-72-0
+    id: ROW-54-0
     children:
     - CHART-122
     - CHART-123
@@ -2686,9 +2695,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
   CHART-124:
     type: CHART
     id: CHART-124
@@ -2703,10 +2712,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-    - ROW-72-1
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+    - ROW-54-1
   CHART-125:
     type: CHART
     id: CHART-125
@@ -2721,13 +2730,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-    - ROW-72-1
-  ROW-72-1:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+    - ROW-54-1
+  ROW-54-1:
     type: ROW
-    id: ROW-72-1
+    id: ROW-54-1
     children:
     - CHART-124
     - CHART-125
@@ -2737,9 +2746,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
   CHART-126:
     type: CHART
     id: CHART-126
@@ -2754,13 +2763,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-    - ROW-72-2
-  ROW-72-2:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+    - ROW-54-2
+  ROW-54-2:
     type: ROW
-    id: ROW-72-2
+    id: ROW-54-2
     children:
     - CHART-126
     meta:
@@ -2769,43 +2778,241 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-    - TAB-S7-2
-  TAB-S7-2:
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-4
+  TAB-S5-4:
     type: TAB
-    id: TAB-S7-2
+    id: TAB-S5-4
     meta:
       text: Diagnostics
     children:
-    - ROW-72-0
-    - ROW-72-1
-    - ROW-72-2
+    - ROW-54-0
+    - ROW-54-1
+    - ROW-54-2
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S7
-    - TABS-S7
-  TABS-S7:
-    type: TABS
-    id: TABS-S7
-    children:
-    - TAB-S7-0
-    - TAB-S7-1
-    - TAB-S7-2
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S7
-  TAB-S7:
-    type: TAB
-    id: TAB-S7
+    - TAB-S5
+    - TABS-S5
+  CHART-142:
+    type: CHART
+    id: CHART-142
+    children: []
     meta:
-      text: Operations
+      chartId: 142
+      width: 3
+      height: 48
+      sliceName: Overall compliance %
+      uuid: d3e5b30e-8381-5ddf-9d21-69eebf490bb8
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+    - ROW-55-0
+  CHART-119:
+    type: CHART
+    id: CHART-119
+    children: []
+    meta:
+      chartId: 119
+      width: 6
+      height: 48
+      sliceName: Compliance by rule
+      uuid: 4691b849-58dd-5132-9ecd-c57c9080e368
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+    - ROW-55-0
+  ROW-55-0:
+    type: ROW
+    id: ROW-55-0
     children:
-    - TABS-S7
+    - CHART-142
+    - CHART-119
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+  CHART-120:
+    type: CHART
+    id: CHART-120
+    children: []
+    meta:
+      chartId: 120
+      width: 6
+      height: 48
+      sliceName: Responses due soon (at-risk)
+      uuid: 082c2d49-a588-5480-9126-42b476acf2cf
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+    - ROW-55-1
+  ROW-55-1:
+    type: ROW
+    id: ROW-55-1
+    children:
+    - CHART-120
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+  CHART-121:
+    type: CHART
+    id: CHART-121
+    children: []
+    meta:
+      chartId: 121
+      width: 12
+      height: 46
+      sliceName: Breaches (missed)
+      uuid: 47d111c0-51cf-5964-9641-a8e6b18dbe3b
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+    - ROW-55-2
+  ROW-55-2:
+    type: ROW
+    id: ROW-55-2
+    children:
+    - CHART-121
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-5
+  TAB-S5-5:
+    type: TAB
+    id: TAB-S5-5
+    meta:
+      text: Response-SLA
+    children:
+    - ROW-55-0
+    - ROW-55-1
+    - ROW-55-2
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+  CHART-117:
+    type: CHART
+    id: CHART-117
+    children: []
+    meta:
+      chartId: 117
+      width: 8
+      height: 48
+      sliceName: Monthly volume (export)
+      uuid: 1ec7a378-ffe6-527a-948a-25cac2292f8a
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-6
+    - ROW-56-0
+  CHART-118:
+    type: CHART
+    id: CHART-118
+    children: []
+    meta:
+      chartId: 118
+      width: 4
+      height: 48
+      sliceName: Volume by protocol
+      uuid: f3771b90-ae3f-5b09-8b8a-b1170874443f
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-6
+    - ROW-56-0
+  ROW-56-0:
+    type: ROW
+    id: ROW-56-0
+    children:
+    - CHART-117
+    - CHART-118
+    meta:
+      background: BACKGROUND_TRANSPARENT
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+    - TAB-S5-6
+  TAB-S5-6:
+    type: TAB
+    id: TAB-S5-6
+    meta:
+      text: Usage
+    children:
+    - ROW-56-0
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+    - TABS-S5
+  TABS-S5:
+    type: TABS
+    id: TABS-S5
+    children:
+    - TAB-S5-0
+    - TAB-S5-1
+    - TAB-S5-2
+    - TAB-S5-3
+    - TAB-S5-4
+    - TAB-S5-5
+    - TAB-S5-6
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - TABS-TOP
+    - TAB-S5
+  TAB-S5:
+    type: TAB
+    id: TAB-S5
+    meta:
+      text: Analytics & Operations
+    children:
+    - TABS-S5
     parents:
     - ROOT_ID
     - GRID_ID
@@ -2824,10 +3031,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-0
   CHART-157:
     type: CHART
     id: CHART-157
@@ -2842,10 +3049,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-0
   CHART-158:
     type: CHART
     id: CHART-158
@@ -2860,10 +3067,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-0
   CHART-159:
     type: CHART
     id: CHART-159
@@ -2878,13 +3085,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-0
-  ROW-80-0:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-0
+  ROW-60-0:
     type: ROW
-    id: ROW-80-0
+    id: ROW-60-0
     children:
     - CHART-156
     - CHART-157
@@ -2896,9 +3103,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
   CHART-160:
     type: CHART
     id: CHART-160
@@ -2913,10 +3120,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-1
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-1
   CHART-161:
     type: CHART
     id: CHART-161
@@ -2931,13 +3138,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-1
-  ROW-80-1:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-1
+  ROW-60-1:
     type: ROW
-    id: ROW-80-1
+    id: ROW-60-1
     children:
     - CHART-160
     - CHART-161
@@ -2947,9 +3154,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
   CHART-162:
     type: CHART
     id: CHART-162
@@ -2964,10 +3171,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-2
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-2
   CHART-163:
     type: CHART
     id: CHART-163
@@ -2982,13 +3189,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-2
-  ROW-80-2:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-2
+  ROW-60-2:
     type: ROW
-    id: ROW-80-2
+    id: ROW-60-2
     children:
     - CHART-162
     - CHART-163
@@ -2998,9 +3205,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
   CHART-164:
     type: CHART
     id: CHART-164
@@ -3015,13 +3222,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-    - ROW-80-3
-  ROW-80-3:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+    - ROW-60-3
+  ROW-60-3:
     type: ROW
-    id: ROW-80-3
+    id: ROW-60-3
     children:
     - CHART-164
     meta:
@@ -3030,25 +3237,25 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-0
-  TAB-S8-0:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-0
+  TAB-S6-0:
     type: TAB
-    id: TAB-S8-0
+    id: TAB-S6-0
     meta:
       text: "LOB \xB7 Overview"
     children:
-    - ROW-80-0
-    - ROW-80-1
-    - ROW-80-2
-    - ROW-80-3
+    - ROW-60-0
+    - ROW-60-1
+    - ROW-60-2
+    - ROW-60-3
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
+    - TAB-S6
+    - TABS-S6
   CHART-165:
     type: CHART
     id: CHART-165
@@ -3063,13 +3270,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
-    - ROW-81-0
-  ROW-81-0:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
+    - ROW-61-0
+  ROW-61-0:
     type: ROW
-    id: ROW-81-0
+    id: ROW-61-0
     children:
     - CHART-165
     meta:
@@ -3078,9 +3285,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
   CHART-166:
     type: CHART
     id: CHART-166
@@ -3095,10 +3302,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
-    - ROW-81-1
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
+    - ROW-61-1
   CHART-167:
     type: CHART
     id: CHART-167
@@ -3113,13 +3320,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
-    - ROW-81-1
-  ROW-81-1:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
+    - ROW-61-1
+  ROW-61-1:
     type: ROW
-    id: ROW-81-1
+    id: ROW-61-1
     children:
     - CHART-166
     - CHART-167
@@ -3129,9 +3336,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
   CHART-168:
     type: CHART
     id: CHART-168
@@ -3146,13 +3353,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
-    - ROW-81-2
-  ROW-81-2:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
+    - ROW-61-2
+  ROW-61-2:
     type: ROW
-    id: ROW-81-2
+    id: ROW-61-2
     children:
     - CHART-168
     meta:
@@ -3161,24 +3368,24 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-1
-  TAB-S8-1:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-1
+  TAB-S6-1:
     type: TAB
-    id: TAB-S8-1
+    id: TAB-S6-1
     meta:
       text: "LOB \xB7 Details"
     children:
-    - ROW-81-0
-    - ROW-81-1
-    - ROW-81-2
+    - ROW-61-0
+    - ROW-61-1
+    - ROW-61-2
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
+    - TAB-S6
+    - TABS-S6
   CHART-169:
     type: CHART
     id: CHART-169
@@ -3193,13 +3400,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-2
-    - ROW-82-0
-  ROW-82-0:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-2
+    - ROW-62-0
+  ROW-62-0:
     type: ROW
-    id: ROW-82-0
+    id: ROW-62-0
     children:
     - CHART-169
     meta:
@@ -3208,9 +3415,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-2
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-2
   CHART-170:
     type: CHART
     id: CHART-170
@@ -3225,13 +3432,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-2
-    - ROW-82-1
-  ROW-82-1:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-2
+    - ROW-62-1
+  ROW-62-1:
     type: ROW
-    id: ROW-82-1
+    id: ROW-62-1
     children:
     - CHART-170
     meta:
@@ -3240,23 +3447,23 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-2
-  TAB-S8-2:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-2
+  TAB-S6-2:
     type: TAB
-    id: TAB-S8-2
+    id: TAB-S6-2
     meta:
       text: "LOB \xB7 Traffic"
     children:
-    - ROW-82-0
-    - ROW-82-1
+    - ROW-62-0
+    - ROW-62-1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
+    - TAB-S6
+    - TABS-S6
   CHART-171:
     type: CHART
     id: CHART-171
@@ -3271,10 +3478,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
-    - ROW-83-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
+    - ROW-63-0
   CHART-172:
     type: CHART
     id: CHART-172
@@ -3289,10 +3496,10 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
-    - ROW-83-0
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
+    - ROW-63-0
   CHART-173:
     type: CHART
     id: CHART-173
@@ -3307,13 +3514,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
-    - ROW-83-0
-  ROW-83-0:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
+    - ROW-63-0
+  ROW-63-0:
     type: ROW
-    id: ROW-83-0
+    id: ROW-63-0
     children:
     - CHART-171
     - CHART-172
@@ -3324,9 +3531,9 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
   CHART-174:
     type: CHART
     id: CHART-174
@@ -3341,13 +3548,13 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
-    - ROW-83-1
-  ROW-83-1:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
+    - ROW-63-1
+  ROW-63-1:
     type: ROW
-    id: ROW-83-1
+    id: ROW-63-1
     children:
     - CHART-174
     meta:
@@ -3356,259 +3563,43 @@ position:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-    - TAB-S8-3
-  TAB-S8-3:
+    - TAB-S6
+    - TABS-S6
+    - TAB-S6-3
+  TAB-S6-3:
     type: TAB
-    id: TAB-S8-3
+    id: TAB-S6-3
     meta:
       text: "LOB \xB7 Exceptions"
     children:
-    - ROW-83-0
-    - ROW-83-1
+    - ROW-63-0
+    - ROW-63-1
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-    - TABS-S8
-  TABS-S8:
+    - TAB-S6
+    - TABS-S6
+  TABS-S6:
     type: TABS
-    id: TABS-S8
+    id: TABS-S6
     children:
-    - TAB-S8-0
-    - TAB-S8-1
-    - TAB-S8-2
-    - TAB-S8-3
+    - TAB-S6-0
+    - TAB-S6-1
+    - TAB-S6-2
+    - TAB-S6-3
     parents:
     - ROOT_ID
     - GRID_ID
     - TABS-TOP
-    - TAB-S8
-  TAB-S8:
+    - TAB-S6
+  TAB-S6:
     type: TAB
-    id: TAB-S8
+    id: TAB-S6
     meta:
       text: LOB Cockpit
     children:
-    - TABS-S8
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-  CHART-142:
-    type: CHART
-    id: CHART-142
-    children: []
-    meta:
-      chartId: 142
-      width: 3
-      height: 48
-      sliceName: Overall compliance %
-      uuid: d3e5b30e-8381-5ddf-9d21-69eebf490bb8
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-    - ROW-90-0
-  CHART-119:
-    type: CHART
-    id: CHART-119
-    children: []
-    meta:
-      chartId: 119
-      width: 6
-      height: 48
-      sliceName: Compliance by rule
-      uuid: 4691b849-58dd-5132-9ecd-c57c9080e368
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-    - ROW-90-0
-  ROW-90-0:
-    type: ROW
-    id: ROW-90-0
-    children:
-    - CHART-142
-    - CHART-119
-    meta:
-      background: BACKGROUND_TRANSPARENT
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-  CHART-120:
-    type: CHART
-    id: CHART-120
-    children: []
-    meta:
-      chartId: 120
-      width: 6
-      height: 48
-      sliceName: Responses due soon (at-risk)
-      uuid: 082c2d49-a588-5480-9126-42b476acf2cf
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-    - ROW-90-1
-  ROW-90-1:
-    type: ROW
-    id: ROW-90-1
-    children:
-    - CHART-120
-    meta:
-      background: BACKGROUND_TRANSPARENT
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-  CHART-121:
-    type: CHART
-    id: CHART-121
-    children: []
-    meta:
-      chartId: 121
-      width: 12
-      height: 46
-      sliceName: Breaches (missed)
-      uuid: 47d111c0-51cf-5964-9641-a8e6b18dbe3b
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-    - ROW-90-2
-  ROW-90-2:
-    type: ROW
-    id: ROW-90-2
-    children:
-    - CHART-121
-    meta:
-      background: BACKGROUND_TRANSPARENT
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-0
-  TAB-S9-0:
-    type: TAB
-    id: TAB-S9-0
-    meta:
-      text: Response-SLA
-    children:
-    - ROW-90-0
-    - ROW-90-1
-    - ROW-90-2
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-  CHART-117:
-    type: CHART
-    id: CHART-117
-    children: []
-    meta:
-      chartId: 117
-      width: 8
-      height: 48
-      sliceName: Monthly volume (export)
-      uuid: 1ec7a378-ffe6-527a-948a-25cac2292f8a
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-1
-    - ROW-91-0
-  CHART-118:
-    type: CHART
-    id: CHART-118
-    children: []
-    meta:
-      chartId: 118
-      width: 4
-      height: 48
-      sliceName: Volume by protocol
-      uuid: f3771b90-ae3f-5b09-8b8a-b1170874443f
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-1
-    - ROW-91-0
-  ROW-91-0:
-    type: ROW
-    id: ROW-91-0
-    children:
-    - CHART-117
-    - CHART-118
-    meta:
-      background: BACKGROUND_TRANSPARENT
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-    - TAB-S9-1
-  TAB-S9-1:
-    type: TAB
-    id: TAB-S9-1
-    meta:
-      text: Usage
-    children:
-    - ROW-91-0
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-    - TABS-S9
-  TABS-S9:
-    type: TABS
-    id: TABS-S9
-    children:
-    - TAB-S9-0
-    - TAB-S9-1
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - TABS-TOP
-    - TAB-S9
-  TAB-S9:
-    type: TAB
-    id: TAB-S9
-    meta:
-      text: Usage & Response-SLA
-    children:
-    - TABS-S9
+    - TABS-S6
     parents:
     - ROOT_ID
     - GRID_ID
@@ -3624,142 +3615,139 @@ position:
     - TAB-S4
     - TAB-S5
     - TAB-S6
-    - TAB-S7
-    - TAB-S8
-    - TAB-S9
     parents:
     - ROOT_ID
     - GRID_ID
-  ROW-N-FU51XMWM:
+  ROW-N-U4Z4KFKT:
     children:
-    - CHART-1A7MW0KD
-    - CHART-VN3LOBMX
-    - CHART-C5B4YFCA
-    - CHART-GFRUTT85
-    - CHART-9FK3QWRT
-    - CHART-2YLXRG9X
-    - CHART-2DMEQDU8
-    - CHART-JQE1O9ZL
-    - CHART-IB5ZN1VP
-    - CHART-8LCSOUV9
-    - CHART-8I9H1IHO
-    - CHART-XJQWDP7K
-    - CHART-ZMGVU7L7
-    - CHART-ATR6FU7J
-    - CHART-FX1I1HP1
-    - CHART-OKZI7312
-    - CHART-QCTNCM4T
-    - CHART-M70BLAVO
-    - CHART-U2YXIBL0
-    - CHART-E0VM2NL7
-    - CHART-TZG8NX2X
-    - CHART-GMTSMEKT
-    - CHART-GGE5XSNN
-    - CHART-YBNRHSFH
-    - CHART-O31CP68S
-    - CHART-U0T1HXHU
-    - CHART-620WX51C
-    - CHART-J8X590DY
-    - CHART-KTLL293V
-    - CHART-ZHSOPXVO
-    - CHART-0MEXR1SK
-    - CHART-SWUE785Y
-    - CHART-NR787TSP
-    - CHART-S9SGQ8J4
-    - CHART-SSKW8VBH
-    - CHART-BL5RITG9
-    - CHART-WFZU7ZGT
-    - CHART-HKKW16EL
-    - CHART-IEQVFX5M
-    - CHART-NG7C2GW1
-    - CHART-NMEKV9J1
-    - CHART-F8QIXQGD
-    - CHART-MGVXOKBQ
-    - CHART-9BMX6OPF
-    - CHART-8NGDQE4J
-    - CHART-M2DE9N5C
-    - CHART-IQSQ221Q
-    - CHART-JU67RMNY
-    - CHART-WTP7I8H8
-    - CHART-MRGPX2WK
-    - CHART-6QF15OLJ
-    - CHART-1NX7A5CH
-    - CHART-LOGSW7Y7
-    - CHART-6MW8569Y
-    - CHART-GVHM6U14
-    - CHART-OF6SO2A7
-    - CHART-Z4A207QR
-    - CHART-H5IORDJ2
-    - CHART-X9GQKS02
-    - CHART-USTE9ZSE
-    - CHART-I8CP9VA5
-    - CHART-ADY27QIE
-    - CHART-M0N1BOPY
-    - CHART-37PQG8MC
-    - CHART-AKBH537Z
-    - CHART-X81PGA02
-    - CHART-VIQDCAZJ
-    - CHART-HOO52VQ2
-    - CHART-SBTQ25XN
-    - CHART-KN3X2QHQ
-    - CHART-NP49C083
-    - CHART-A0AG74JU
-    - CHART-1H5HR4ZG
-    - CHART-A0J1RGBZ
-    - CHART-HR6RZY6T
-    - CHART-PG6W0PMM
-    - CHART-Z72O8FJA
-    - CHART-1X1TL2MP
-    - CHART-CUFLX93G
-    - CHART-49YP7XGI
-    - CHART-FWHUAYW5
-    - CHART-PLRJPIOF
-    - CHART-4YURNYJU
-    - CHART-BDYGGX3N
-    - CHART-S2F7DN19
-    - CHART-94NQOFV6
-    - CHART-TGIOJSAT
-    - CHART-HYUZ72AJ
-    - CHART-D74IMZKC
-    - CHART-YD46VYAH
-    - CHART-BKCZUTRY
-    - CHART-00PJV50L
-    - CHART-SAO850HS
-    - CHART-E3PEKYB7
-    - CHART-IXZ4SO46
-    - CHART-HV2Q6PVT
-    - CHART-D5O5U0IW
-    - CHART-4A0SL6L5
-    - CHART-VW68M2YJ
-    - CHART-T3PMV3BU
-    - CHART-JA2XYH1M
-    - CHART-WF3DR3GQ
-    - CHART-364A8C8W
-    - CHART-NMJVNPYB
-    - CHART-AA7CRKUI
-    - CHART-FIAN7623
-    - CHART-QGTJK16B
-    - CHART-93GV2N14
-    - CHART-JAFPMNAB
-    - CHART-WTWZKD93
-    - CHART-F6APSKOJ
-    - CHART-AWM96LK2
-    - CHART-AJ4YDKGV
-    - CHART-DFLFYPB8
-    - CHART-M26BNDC8
-    - CHART-3GYPOX4E
-    - CHART-N4PL4TXK
-    - CHART-9IVM8FZN
-    - CHART-9NKJS531
-    - CHART-12H4T668
-    - CHART-KY4N3Z67
-    - CHART-0SAASQ3N
-    - CHART-BNNPXPKB
-    - CHART-WN0ITB96
-    - CHART-FQ3C5DTE
-    - CHART-TIJH2R3J
-    - CHART-EQ64MJHX
-    id: ROW-N-FU51XMWM
+    - CHART-J47LGFSZ
+    - CHART-DMB33F0Y
+    - CHART-WFV2EDTP
+    - CHART-TGCLTIAU
+    - CHART-J9YY54PB
+    - CHART-NE63VZ2X
+    - CHART-XP7OUB8T
+    - CHART-LAD16IZG
+    - CHART-TDE50U79
+    - CHART-IM25DF5A
+    - CHART-SGC0XHS3
+    - CHART-TNAT02AT
+    - CHART-L14IDUZ6
+    - CHART-C3SY4O48
+    - CHART-YB96W6C4
+    - CHART-6C00MXQ4
+    - CHART-E3UQMIG1
+    - CHART-PLTUVMPQ
+    - CHART-TIW5N1AF
+    - CHART-UAPZ658P
+    - CHART-N1UOF4X9
+    - CHART-MVDTTISZ
+    - CHART-IDUXFWQY
+    - CHART-Q6B082GY
+    - CHART-TEWXIP4R
+    - CHART-HQI71HLN
+    - CHART-IDSQHOPP
+    - CHART-0ZRGWUL3
+    - CHART-Y98XSOYP
+    - CHART-DGVCUG5W
+    - CHART-59IEQ51Z
+    - CHART-YH0NY6UY
+    - CHART-OVAEY48M
+    - CHART-055KRMXR
+    - CHART-XMH94A6W
+    - CHART-JXI6SUUJ
+    - CHART-V2GDFO2E
+    - CHART-K6B6FOG4
+    - CHART-6VTZE6E6
+    - CHART-IJ1RMGPZ
+    - CHART-QQQF98TA
+    - CHART-HHHIAPST
+    - CHART-8480OCDR
+    - CHART-W21OMXBN
+    - CHART-I17LUM3P
+    - CHART-908TKRC4
+    - CHART-E4JHIU42
+    - CHART-812QOEYN
+    - CHART-7O1L2N54
+    - CHART-EW8XWZ7C
+    - CHART-WH11WVK8
+    - CHART-A39K5JI7
+    - CHART-V1G7HLFW
+    - CHART-KZZBAO35
+    - CHART-IURFXX43
+    - CHART-F5A8VWJS
+    - CHART-INJT6KYU
+    - CHART-G3NKCAR1
+    - CHART-MUF53G5H
+    - CHART-QQVJH5NZ
+    - CHART-LODW3D8Y
+    - CHART-1GGDXUXH
+    - CHART-UR7ZXZLT
+    - CHART-JIJACHV7
+    - CHART-58BA2RV7
+    - CHART-DO41NUJK
+    - CHART-2IXOU7SC
+    - CHART-1SFGAR3Q
+    - CHART-DW2868S3
+    - CHART-14PPL7CG
+    - CHART-EPM0TYJT
+    - CHART-RO8D91KQ
+    - CHART-J5T9APJS
+    - CHART-6L0RTVLR
+    - CHART-30QWJ5BR
+    - CHART-BZXLAZT1
+    - CHART-U4IO0BF0
+    - CHART-W451OAGA
+    - CHART-AAOO1JBC
+    - CHART-PMDXIYNA
+    - CHART-NI3G2GDU
+    - CHART-UU0RWRL7
+    - CHART-1KJRR6JB
+    - CHART-141VPJOL
+    - CHART-B2MQ21AT
+    - CHART-YOSD7SMQ
+    - CHART-POV719FW
+    - CHART-3NBZCYPS
+    - CHART-ZL2MV0ON
+    - CHART-F3PE550D
+    - CHART-DD085JLX
+    - CHART-LX9SVLMN
+    - CHART-54XD01YT
+    - CHART-0G63HBY3
+    - CHART-OG58VIYX
+    - CHART-J6GGX173
+    - CHART-E6AT85Y6
+    - CHART-XZTH3038
+    - CHART-URTW2JZH
+    - CHART-MSUTJ1VW
+    - CHART-JDWA95F0
+    - CHART-G8SX09A6
+    - CHART-YGXPKCDS
+    - CHART-ARTIAC2P
+    - CHART-SHCGZ975
+    - CHART-50YTIY8K
+    - CHART-LEWWU8ZY
+    - CHART-820OV7EX
+    - CHART-MRQ8IUTZ
+    - CHART-KVX6K5EU
+    - CHART-MQA9P7VE
+    - CHART-E9E37WI3
+    - CHART-A1OCGDRG
+    - CHART-8TQ42JQS
+    - CHART-SQK7X7OO
+    - CHART-8P1DOP79
+    - CHART-IX22TDO1
+    - CHART-MZ6N4184
+    - CHART-QAR4YLVB
+    - CHART-W3F4D6WP
+    - CHART-W5NACO2J
+    - CHART-QHGQ182A
+    - CHART-7F65TOIC
+    - CHART-HPDKCG7U
+    - CHART-W1GMSY85
+    - CHART-RISXWD3W
+    - CHART-HW6QRI52
+    id: ROW-N-U4Z4KFKT
     meta:
       '0': ROOT_ID
       background: BACKGROUND_TRANSPARENT
@@ -3767,569 +3755,23 @@ position:
     parents:
     - ROOT_ID
     - GRID_ID
-  CHART-1A7MW0KD:
+  CHART-J47LGFSZ:
     children: []
-    id: CHART-1A7MW0KD
+    id: CHART-J47LGFSZ
     meta:
-      chartId: 101
+      chartId: 184
       height: 50
-      sliceName: Incoming vs outgoing files (24h)
-      uuid: 507a6f8f-7e81-4f50-bdf5-5598b18de934
+      sliceName: Daily shipment volume
+      uuid: acf42c5a-5652-4841-8741-839d9e0eec25
       width: 4
     type: CHART
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-VN3LOBMX:
+    - ROW-N-U4Z4KFKT
+  CHART-DMB33F0Y:
     children: []
-    id: CHART-VN3LOBMX
-    meta:
-      chartId: 166
-      height: 50
-      sliceName: 'LOB: Incoming data'
-      uuid: 706c8912-a7bb-4f16-87d6-06c7b6ee4e91
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-C5B4YFCA:
-    children: []
-    id: CHART-C5B4YFCA
-    meta:
-      chartId: 110
-      height: 50
-      sliceName: Rejected acks
-      uuid: 176713dd-a3e6-4a6a-96ed-9f1dc0e7ac45
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-GFRUTT85:
-    children: []
-    id: CHART-GFRUTT85
-    meta:
-      chartId: 96
-      height: 50
-      sliceName: Volume by message type
-      uuid: f64619b5-990e-4dc3-b653-4870ab31e68c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-9FK3QWRT:
-    children: []
-    id: CHART-9FK3QWRT
-    meta:
-      chartId: 99
-      height: 50
-      sliceName: Volume by partner (top 20)
-      uuid: 0f8436ae-b0ce-455f-8d2b-9f7b25df55d5
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-2YLXRG9X:
-    children: []
-    id: CHART-2YLXRG9X
-    meta:
-      chartId: 102
-      height: 50
-      sliceName: File explorer
-      uuid: 100b865a-1560-4f42-8212-02119c3c545c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-2DMEQDU8:
-    children: []
-    id: CHART-2DMEQDU8
-    meta:
-      chartId: 100
-      height: 50
-      sliceName: Volume by LOB
-      uuid: 368a27da-b8c5-4bde-bc24-e4add7719250
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-JQE1O9ZL:
-    children: []
-    id: CHART-JQE1O9ZL
-    meta:
-      chartId: 133
-      height: 50
-      sliceName: Top partners (filter by type)
-      uuid: 48d13779-243d-4798-b625-6d8d2034cb24
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-IB5ZN1VP:
-    children: []
-    id: CHART-IB5ZN1VP
-    meta:
-      chartId: 98
-      height: 50
-      sliceName: Message-type volumetric grid
-      uuid: 99741745-ac26-43de-8001-1fa6a562f0cb
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-8LCSOUV9:
-    children: []
-    id: CHART-8LCSOUV9
-    meta:
-      chartId: 120
-      height: 50
-      sliceName: Responses due soon (at-risk)
-      uuid: 7695af02-2028-4d04-bc7c-22da18603c5e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-8I9H1IHO:
-    children: []
-    id: CHART-8I9H1IHO
-    meta:
-      chartId: 162
-      height: 50
-      sliceName: 'LOB: Processing trend'
-      uuid: e8795ec1-4771-469d-918d-ce901fa5650c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-XJQWDP7K:
-    children: []
-    id: CHART-XJQWDP7K
-    meta:
-      chartId: 108
-      height: 50
-      sliceName: Replayed messages
-      uuid: 0955795e-2f53-450d-8592-07353994ec4f
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-ZMGVU7L7:
-    children: []
-    id: CHART-ZMGVU7L7
-    meta:
-      chartId: 109
-      height: 50
-      sliceName: Missing acks
-      uuid: 7bc85d2a-26b0-45fb-97c9-d8e66430d97c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-ATR6FU7J:
-    children: []
-    id: CHART-ATR6FU7J
-    meta:
-      chartId: 164
-      height: 50
-      sliceName: 'LOB: Count by message type'
-      uuid: c5b87945-e0ba-42c2-a9c7-caff7682c5ff
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-FX1I1HP1:
-    children: []
-    id: CHART-FX1I1HP1
-    meta:
-      chartId: 97
-      height: 50
-      sliceName: Throughput over time
-      uuid: edc2b866-abd2-4140-9a1b-2ddfcb3ab8ba
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-OKZI7312:
-    children: []
-    id: CHART-OKZI7312
-    meta:
-      chartId: 103
-      height: 50
-      sliceName: Files missing transactions
-      uuid: 9ac37efe-c1be-4ac6-8896-1e2d9487741b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-QCTNCM4T:
-    children: []
-    id: CHART-QCTNCM4T
-    meta:
-      chartId: 111
-      height: 50
-      sliceName: FA tracking
-      uuid: ae1bd9f5-447c-4f90-958f-0c093015d1e9
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-M70BLAVO:
-    children: []
-    id: CHART-M70BLAVO
-    meta:
-      chartId: 113
-      height: 50
-      sliceName: '% Met by partner'
-      uuid: bf9c0f2a-fe34-45d3-a693-8ea5ca75d4f4
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-U2YXIBL0:
-    children: []
-    id: CHART-U2YXIBL0
-    meta:
-      chartId: 165
-      height: 50
-      sliceName: 'LOB: Details'
-      uuid: 6c0e82e9-c488-4d64-a2ec-0b60bbff1f04
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-E0VM2NL7:
-    children: []
-    id: CHART-E0VM2NL7
-    meta:
-      chartId: 156
-      height: 50
-      sliceName: 'LOB: Total messages received'
-      uuid: f7f4a855-3644-4bba-8d79-4cbbbc42aa3c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-TZG8NX2X:
-    children: []
-    id: CHART-TZG8NX2X
-    meta:
-      chartId: 115
-      height: 50
-      sliceName: Top partners by exceptions
-      uuid: 0eef835c-dcbb-4ea3-ad00-d6ee6e10623b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-GMTSMEKT:
-    children: []
-    id: CHART-GMTSMEKT
-    meta:
-      chartId: 137
-      height: 50
-      sliceName: Terminal
-      uuid: b0eff8e9-b4f5-4f0f-a891-d437ac88cd7d
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-GGE5XSNN:
-    children: []
-    id: CHART-GGE5XSNN
-    meta:
-      chartId: 112
-      height: 50
-      sliceName: Partner SLA scorecard
-      uuid: 1df02c22-a3de-4154-9534-0eb0ede7be4e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-YBNRHSFH:
-    children: []
-    id: CHART-YBNRHSFH
-    meta:
-      chartId: 106
-      height: 50
-      sliceName: Transaction status (lookup)
-      uuid: 853d7513-3bbe-4ae7-989d-648f7f0c8bd9
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-O31CP68S:
-    children: []
-    id: CHART-O31CP68S
-    meta:
-      chartId: 114
-      height: 50
-      sliceName: Top partners by volume
-      uuid: 717a3c34-5299-4040-bb32-d1882f0a6f30
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-U0T1HXHU:
-    children: []
-    id: CHART-U0T1HXHU
-    meta:
-      chartId: 107
-      height: 50
-      sliceName: Step history
-      uuid: ddc85806-becd-4528-b622-d974897f2e07
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-620WX51C:
-    children: []
-    id: CHART-620WX51C
-    meta:
-      chartId: 149
-      height: 50
-      sliceName: 'Overview: Stale monitors'
-      uuid: 13c4c9b8-ee04-4b57-9d00-fb24e980b1af
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-J8X590DY:
-    children: []
-    id: CHART-J8X590DY
-    meta:
-      chartId: 105
-      height: 50
-      sliceName: Replays today
-      uuid: f24c7b46-bf83-412b-8721-3eb874c9944f
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-KTLL293V:
-    children: []
-    id: CHART-KTLL293V
-    meta:
-      chartId: 171
-      height: 50
-      sliceName: 'LOB: Open exceptions'
-      uuid: 210c823e-7ac1-4ed4-b41f-ce580836d694
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-ZHSOPXVO:
-    children: []
-    id: CHART-ZHSOPXVO
-    meta:
-      chartId: 135
-      height: 50
-      sliceName: Live transactions
-      uuid: 95cc6b03-f3b9-47c7-afde-ab2362ff292b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-0MEXR1SK:
-    children: []
-    id: CHART-0MEXR1SK
-    meta:
-      chartId: 121
-      height: 50
-      sliceName: Breaches (missed)
-      uuid: 428208cb-4479-4f39-8a48-f7f3b59ea8bb
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-SWUE785Y:
-    children: []
-    id: CHART-SWUE785Y
-    meta:
-      chartId: 104
-      height: 50
-      sliceName: Rejected at receipt (pre-parse)
-      uuid: e0999d72-b754-45e5-8fd2-6643e7931fa9
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-NR787TSP:
-    children: []
-    id: CHART-NR787TSP
-    meta:
-      chartId: 169
-      height: 50
-      sliceName: 'LOB: Traffic trend'
-      uuid: 7d8f9723-29f0-405d-8f59-12bc69a1017e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-S9SGQ8J4:
-    children: []
-    id: CHART-S9SGQ8J4
-    meta:
-      chartId: 136
-      height: 50
-      sliceName: In-flight (not terminal)
-      uuid: 6d342ad2-4a8c-4a97-a45f-ffca94dd16bf
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-SSKW8VBH:
-    children: []
-    id: CHART-SSKW8VBH
-    meta:
-      chartId: 170
-      height: 50
-      sliceName: 'LOB: Traffic report (partner x day)'
-      uuid: 82068dd7-7720-49b1-8ef5-36a6c8fac8a8
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-BL5RITG9:
-    children: []
-    id: CHART-BL5RITG9
-    meta:
-      chartId: 95
-      height: 50
-      sliceName: Inbound vs outbound
-      uuid: 6b4ab711-9325-4d7c-8ebe-7ebd924316d8
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-WFZU7ZGT:
-    children: []
-    id: CHART-WFZU7ZGT
-    meta:
-      chartId: 125
-      height: 50
-      sliceName: Duplicate sources
-      uuid: 6d3b6180-9e61-49c9-ad17-8e9570b07776
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-HKKW16EL:
-    children: []
-    id: CHART-HKKW16EL
-    meta:
-      chartId: 94
-      height: 50
-      sliceName: EDI vs API split
-      uuid: 8e72617d-1ab4-42fd-9b51-b51a51a8da02
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-IEQVFX5M:
-    children: []
-    id: CHART-IEQVFX5M
-    meta:
-      chartId: 93
-      height: 50
-      sliceName: Data volume (kchar)
-      uuid: 41da1510-6fb2-4d2e-a489-7e280956c7e9
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-NG7C2GW1:
-    children: []
-    id: CHART-NG7C2GW1
-    meta:
-      chartId: 139
-      height: 50
-      sliceName: Status distribution
-      uuid: a7285fd7-299b-4165-b619-a3a2a484d705
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-NMEKV9J1:
-    children: []
-    id: CHART-NMEKV9J1
+    id: CHART-DMB33F0Y
     meta:
       chartId: 122
       height: 50
@@ -4340,1186 +3782,10 @@ position:
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-F8QIXQGD:
+    - ROW-N-U4Z4KFKT
+  CHART-WFV2EDTP:
     children: []
-    id: CHART-F8QIXQGD
-    meta:
-      chartId: 92
-      height: 50
-      sliceName: Auto-processed %
-      uuid: 9c58f256-ed7e-45af-b331-4dc30e9b9b15
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-MGVXOKBQ:
-    children: []
-    id: CHART-MGVXOKBQ
-    meta:
-      chartId: 124
-      height: 50
-      sliceName: Re-failed replays
-      uuid: 00e8de84-7ce1-4722-bc30-8d44d2828063
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-9BMX6OPF:
-    children: []
-    id: CHART-9BMX6OPF
-    meta:
-      chartId: 91
-      height: 50
-      sliceName: API transactions
-      uuid: 9258c5b0-a3bb-4a79-8193-f9d0c6706013
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-8NGDQE4J:
-    children: []
-    id: CHART-8NGDQE4J
-    meta:
-      chartId: 159
-      height: 50
-      sliceName: 'LOB: Last message received'
-      uuid: 3c36edb2-cde6-454f-9ae2-b02c1ea3a367
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-M2DE9N5C:
-    children: []
-    id: CHART-M2DE9N5C
-    meta:
-      chartId: 90
-      height: 50
-      sliceName: EDI transactions
-      uuid: dd08e549-cedc-459e-8e62-a8dfc7a83bb6
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-IQSQ221Q:
-    children: []
-    id: CHART-IQSQ221Q
-    meta:
-      chartId: 147
-      height: 50
-      sliceName: 'Overview: Hung pipelines'
-      uuid: d1364ea3-b7a2-4fcb-96d8-d88fa30ebe2b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-JU67RMNY:
-    children: []
-    id: CHART-JU67RMNY
-    meta:
-      chartId: 134
-      height: 50
-      sliceName: Throughput by family
-      uuid: 4f7a7c64-3756-4eb2-82b3-0a0eca1fa894
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-WTP7I8H8:
-    children: []
-    id: CHART-WTP7I8H8
-    meta:
-      chartId: 89
-      height: 50
-      sliceName: Total transactions
-      uuid: f7ca83c7-8ad8-4767-80b0-b442c5f762e4
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-MRGPX2WK:
-    children: []
-    id: CHART-MRGPX2WK
-    meta:
-      chartId: 88
-      height: 50
-      sliceName: Exception queue
-      uuid: f2c44fd2-598f-4845-a699-1f5b67bb1981
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-6QF15OLJ:
-    children: []
-    id: CHART-6QF15OLJ
-    meta:
-      chartId: 87
-      height: 50
-      sliceName: Exceptions by reason
-      uuid: e4f86dfa-f224-450d-b85c-d554f69a8e9c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-1NX7A5CH:
-    children: []
-    id: CHART-1NX7A5CH
-    meta:
-      chartId: 161
-      height: 50
-      sliceName: 'LOB: Message by status'
-      uuid: 0cdc06c3-e0e8-4221-a638-acd6da5ea9e5
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-LOGSW7Y7:
-    children: []
-    id: CHART-LOGSW7Y7
-    meta:
-      chartId: 163
-      height: 50
-      sliceName: 'LOB: Message by type'
-      uuid: ebe329e7-314a-45b6-a0ec-7082d95cb1d7
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-6MW8569Y:
-    children: []
-    id: CHART-6MW8569Y
-    meta:
-      chartId: 130
-      height: 50
-      sliceName: Exceptions by family
-      uuid: 16f321df-5a3e-4f0c-9f5a-cfde02b8bca7
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-GVHM6U14:
-    children: []
-    id: CHART-GVHM6U14
-    meta:
-      chartId: 86
-      height: 50
-      sliceName: Duplicates suppressed
-      uuid: 473f2adb-96d0-4c81-a6c7-d140a4bc47d0
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-OF6SO2A7:
-    children: []
-    id: CHART-OF6SO2A7
-    meta:
-      chartId: 85
-      height: 50
-      sliceName: Rejected (period)
-      uuid: 4241c303-39b1-4f09-a668-68e587b34d78
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-Z4A207QR:
-    children: []
-    id: CHART-Z4A207QR
-    meta:
-      chartId: 84
-      height: 50
-      sliceName: Failed (period)
-      uuid: 044ef1a3-b752-47d8-88a9-8eedd6bab8ea
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-H5IORDJ2:
-    children: []
-    id: CHART-H5IORDJ2
-    meta:
-      chartId: 83
-      height: 50
-      sliceName: Cert / key expiry
-      uuid: 418dff48-e89f-4160-99eb-5fc3978749d9
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-X9GQKS02:
-    children: []
-    id: CHART-X9GQKS02
-    meta:
-      chartId: 82
-      height: 50
-      sliceName: Stuck / aging transactions
-      uuid: 8059f8dd-ef14-4630-a73a-822d158f6463
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-USTE9ZSE:
-    children: []
-    id: CHART-USTE9ZSE
-    meta:
-      chartId: 81
-      height: 50
-      sliceName: Landed, not picked up
-      uuid: 6ae7aef3-9246-4b38-a03a-b9c828cefc42
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-I8CP9VA5:
-    children: []
-    id: CHART-I8CP9VA5
-    meta:
-      chartId: 172
-      height: 50
-      sliceName: 'LOB: Resubmitted'
-      uuid: ca4aa142-2022-4bc2-aea0-85471dbcb2d8
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-ADY27QIE:
-    children: []
-    id: CHART-ADY27QIE
-    meta:
-      chartId: 80
-      height: 50
-      sliceName: Channel health
-      uuid: aed5d24b-797e-4df5-be6b-f8d9e3e4780e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-M0N1BOPY:
-    children: []
-    id: CHART-M0N1BOPY
-    meta:
-      chartId: 79
-      height: 50
-      sliceName: Dead / degraded connections
-      uuid: b11fe9b1-3b9e-4f3b-a04d-f73262263725
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-37PQG8MC:
-    children: []
-    id: CHART-37PQG8MC
-    meta:
-      chartId: 142
-      height: 50
-      sliceName: Overall compliance %
-      uuid: 2097d765-810b-4da7-8d71-a59c513056e6
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-AKBH537Z:
-    children: []
-    id: CHART-AKBH537Z
-    meta:
-      chartId: 78
-      height: 50
-      sliceName: Missing expected feeds
-      uuid: b4c4f91a-d830-49a2-b945-f2dc20ff20b7
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-X81PGA02:
-    children: []
-    id: CHART-X81PGA02
-    meta:
-      chartId: 77
-      height: 50
-      sliceName: Hung pipelines
-      uuid: f22ab0fc-917d-4df9-84e2-2fb162c48855
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-VIQDCAZJ:
-    children: []
-    id: CHART-VIQDCAZJ
-    meta:
-      chartId: 76
-      height: 50
-      sliceName: Stale / silent monitors
-      uuid: d5800166-9833-4ad7-9154-8046515a7708
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-HOO52VQ2:
-    children: []
-    id: CHART-HOO52VQ2
-    meta:
-      chartId: 75
-      height: 50
-      sliceName: Monitors reporting
-      uuid: 9b71872c-a0fc-48e6-8309-57dd94eb504c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-SBTQ25XN:
-    children: []
-    id: CHART-SBTQ25XN
-    meta:
-      chartId: 209
-      height: 50
-      sliceName: "EDI \xB7 Status aging worklist"
-      uuid: e6ff3b1e-fe58-4d18-ade7-6773203c1ac7
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-KN3X2QHQ:
-    children: []
-    id: CHART-KN3X2QHQ
-    meta:
-      chartId: 128
-      height: 50
-      sliceName: Document value (period)
-      uuid: 448cacd2-acf4-4e4b-afa9-eeaed227c175
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-NP49C083:
-    children: []
-    id: CHART-NP49C083
-    meta:
-      chartId: 208
-      height: 50
-      sliceName: "EDI \xB7 Volume actual vs expected"
-      uuid: 99016ebc-6869-40ae-884c-f8ffb4d150cf
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-A0AG74JU:
-    children: []
-    id: CHART-A0AG74JU
-    meta:
-      chartId: 207
-      height: 50
-      sliceName: "EDI \xB7 Delay severity"
-      uuid: e4f7ca38-7abd-4196-8a3f-e276439f2c66
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-1H5HR4ZG:
-    children: []
-    id: CHART-1H5HR4ZG
-    meta:
-      chartId: 206
-      height: 50
-      sliceName: "EDI \xB7 Delivery performance mix"
-      uuid: 46353bf4-9bbc-4c14-8009-d4698913ddbb
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-A0J1RGBZ:
-    children: []
-    id: CHART-A0J1RGBZ
-    meta:
-      chartId: 173
-      height: 50
-      sliceName: 'LOB: Exception by reason'
-      uuid: 4df77d64-a516-4822-8ee1-5c0c544afe76
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-HR6RZY6T:
-    children: []
-    id: CHART-HR6RZY6T
-    meta:
-      chartId: 119
-      height: 50
-      sliceName: Compliance by rule
-      uuid: 00d2953a-b07c-4ffa-a062-340a923fb988
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-PG6W0PMM:
-    children: []
-    id: CHART-PG6W0PMM
-    meta:
-      chartId: 117
-      height: 50
-      sliceName: Monthly volume (export)
-      uuid: a32065b4-e78e-4c54-926d-e1bd225c441a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-Z72O8FJA:
-    children: []
-    id: CHART-Z72O8FJA
-    meta:
-      chartId: 205
-      height: 50
-      sliceName: "EDI \xB7 Status distribution"
-      uuid: ff010808-86d8-4140-89cb-5ffbb0b1c352
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-1X1TL2MP:
-    children: []
-    id: CHART-1X1TL2MP
-    meta:
-      chartId: 204
-      height: 50
-      sliceName: "EDI \xB7 SLA performance trend"
-      uuid: e8df8072-657e-4bd0-88c9-7a802cccfd44
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-CUFLX93G:
-    children: []
-    id: CHART-CUFLX93G
-    meta:
-      chartId: 203
-      height: 50
-      sliceName: "EDI \xB7 Volume by hour"
-      uuid: 243543e4-1b50-4502-b163-a5a273d8a1b7
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-49YP7XGI:
-    children: []
-    id: CHART-49YP7XGI
-    meta:
-      chartId: 202
-      height: 50
-      sliceName: "EDI \xB7 ACK SLA trend"
-      uuid: e5cd7ade-d5ef-4749-852c-0869fe20382a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-FWHUAYW5:
-    children: []
-    id: CHART-FWHUAYW5
-    meta:
-      chartId: 201
-      height: 50
-      sliceName: "EDI \xB7 Message SLA % by type"
-      uuid: 92179e9e-48bb-4818-89cc-53213b7e7f96
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-PLRJPIOF:
-    children: []
-    id: CHART-PLRJPIOF
-    meta:
-      chartId: 200
-      height: 50
-      sliceName: "EDI \xB7 Flow completeness"
-      uuid: 036aaa1f-9e0a-4a52-bc30-adeef344e18a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-4YURNYJU:
-    children: []
-    id: CHART-4YURNYJU
-    meta:
-      chartId: 199
-      height: 50
-      sliceName: "EDI \xB7 EDI funnel"
-      uuid: 0208298b-afe6-4f9f-9b83-8ea32e50bbba
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-BDYGGX3N:
-    children: []
-    id: CHART-BDYGGX3N
-    meta:
-      chartId: 118
-      height: 50
-      sliceName: Volume by protocol
-      uuid: c753cfa1-5a41-4d14-8675-10fb31dc9bff
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-S2F7DN19:
-    children: []
-    id: CHART-S2F7DN19
-    meta:
-      chartId: 198
-      height: 50
-      sliceName: "EDI \xB7 Shipment volume by partner"
-      uuid: 71f3de83-0be7-43fb-a6de-81439e42f79a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-94NQOFV6:
-    children: []
-    id: CHART-94NQOFV6
-    meta:
-      chartId: 197
-      height: 50
-      sliceName: "EDI \xB7 Anomaly rate by partner"
-      uuid: f4efe38a-8a7d-4282-afd0-d7bebc91777d
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-TGIOJSAT:
-    children: []
-    id: CHART-TGIOJSAT
-    meta:
-      chartId: 196
-      height: 50
-      sliceName: "EDI \xB7 Partner risk matrix"
-      uuid: cb3db86d-7e91-456f-9d32-1d4a74845f73
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-HYUZ72AJ:
-    children: []
-    id: CHART-HYUZ72AJ
-    meta:
-      chartId: 195
-      height: 50
-      sliceName: "EDI \xB7 Partner health scorecard"
-      uuid: 6830421d-dc38-40da-be0d-673450fa701e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-D74IMZKC:
-    children: []
-    id: CHART-D74IMZKC
-    meta:
-      chartId: 148
-      height: 50
-      sliceName: 'Overview: Missing feeds'
-      uuid: b042c9f7-033a-4cb2-9870-969dc11364df
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-YD46VYAH:
-    children: []
-    id: CHART-YD46VYAH
-    meta:
-      chartId: 116
-      height: 50
-      sliceName: Change vs prior period
-      uuid: 9516136f-31ec-4780-9e46-30a19151609c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-BKCZUTRY:
-    children: []
-    id: CHART-BKCZUTRY
-    meta:
-      chartId: 194
-      height: 50
-      sliceName: "EDI \xB7 Exception workbench"
-      uuid: 24cc01e4-badf-4d4e-94e9-fcee448ad24c
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-00PJV50L:
-    children: []
-    id: CHART-00PJV50L
-    meta:
-      chartId: 193
-      height: 50
-      sliceName: "EDI \xB7 Business impact trend"
-      uuid: f2455a00-55b3-4168-9f94-70db02bf1152
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-SAO850HS:
-    children: []
-    id: CHART-SAO850HS
-    meta:
-      chartId: 157
-      height: 50
-      sliceName: 'LOB: Success'
-      uuid: e3d73698-875a-4d6c-b246-c02cad798729
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-E3PEKYB7:
-    children: []
-    id: CHART-E3PEKYB7
-    meta:
-      chartId: 174
-      height: 50
-      sliceName: 'LOB: Exception queue'
-      uuid: 60666e70-a9cc-42a7-b861-79ca54ce2e20
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-IXZ4SO46:
-    children: []
-    id: CHART-IXZ4SO46
-    meta:
-      chartId: 192
-      height: 50
-      sliceName: "EDI \xB7 Anomalies by status"
-      uuid: 9814977d-4d58-4bdd-a326-5f3ac82fd8e8
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-HV2Q6PVT:
-    children: []
-    id: CHART-HV2Q6PVT
-    meta:
-      chartId: 143
-      height: 50
-      sliceName: 'Overview: Transactions'
-      uuid: 9b0d30cc-43b0-4a24-a9eb-6c7e54e2c52b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-D5O5U0IW:
-    children: []
-    id: CHART-D5O5U0IW
-    meta:
-      chartId: 191
-      height: 50
-      sliceName: "EDI \xB7 Anomaly trend (daily)"
-      uuid: d806b1b7-3f05-4920-9c2c-f4953d2c6b49
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-4A0SL6L5:
-    children: []
-    id: CHART-4A0SL6L5
-    meta:
-      chartId: 190
-      height: 50
-      sliceName: "EDI \xB7 Anomalies by type"
-      uuid: d6bc4e38-36c4-4f50-ad5f-355d8c084a2d
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-VW68M2YJ:
-    children: []
-    id: CHART-VW68M2YJ
-    meta:
-      chartId: 189
-      height: 50
-      sliceName: "EDI \xB7 Business impact $"
-      uuid: 0c8d4447-cdae-460c-a8f0-efa7e0df417a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-T3PMV3BU:
-    children: []
-    id: CHART-T3PMV3BU
-    meta:
-      chartId: 188
-      height: 50
-      sliceName: "EDI \xB7 Open anomalies"
-      uuid: d3e08a90-4f92-4cb7-8c51-475145c2eea0
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-JA2XYH1M:
-    children: []
-    id: CHART-JA2XYH1M
-    meta:
-      chartId: 187
-      height: 50
-      sliceName: "EDI \xB7 Critical (count)"
-      uuid: 70b50e3c-3a84-4200-8301-f33d4b791533
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-WF3DR3GQ:
-    children: []
-    id: CHART-WF3DR3GQ
-    meta:
-      chartId: 123
-      height: 50
-      sliceName: Partner vs platform
-      uuid: c7d0fb1f-470e-4bb6-a5c9-64ac73edf270
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-364A8C8W:
-    children: []
-    id: CHART-364A8C8W
-    meta:
-      chartId: 186
-      height: 50
-      sliceName: "EDI \xB7 Anomalies (total)"
-      uuid: f164ceef-3d81-4a42-a30a-cdabc3b76dc2
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-NMJVNPYB:
-    children: []
-    id: CHART-NMJVNPYB
-    meta:
-      chartId: 167
-      height: 50
-      sliceName: 'LOB: Outgoing data'
-      uuid: 592adacf-0de7-46f4-9951-0d22973f3d8b
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-AA7CRKUI:
-    children: []
-    id: CHART-AA7CRKUI
-    meta:
-      chartId: 138
-      height: 50
-      sliceName: Replayed (all-time)
-      uuid: dd167d19-d698-4c5b-9eeb-e4f724f48fdf
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-FIAN7623:
-    children: []
-    id: CHART-FIAN7623
-    meta:
-      chartId: 185
-      height: 50
-      sliceName: "EDI \xB7 SLA compliance trend"
-      uuid: e405091d-5d3d-4a5e-ac2a-3a4793842193
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-QGTJK16B:
-    children: []
-    id: CHART-QGTJK16B
-    meta:
-      chartId: 184
-      height: 50
-      sliceName: "EDI \xB7 Daily shipment volume"
-      uuid: acf42c5a-5652-4841-8741-839d9e0eec25
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-93GV2N14:
-    children: []
-    id: CHART-93GV2N14
-    meta:
-      chartId: 183
-      height: 50
-      sliceName: "EDI \xB7 Anomalies by severity"
-      uuid: 740b4cf3-de2f-4350-8740-41fe26a74af1
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-JAFPMNAB:
-    children: []
-    id: CHART-JAFPMNAB
-    meta:
-      chartId: 140
-      height: 50
-      sliceName: All transactions
-      uuid: a1fe8d3c-49c3-4361-af50-de2f67ad5b3f
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-WTWZKD93:
-    children: []
-    id: CHART-WTWZKD93
-    meta:
-      chartId: 182
-      height: 50
-      sliceName: "EDI \xB7 Shipment status mix"
-      uuid: 9cfae0b1-b213-4eaa-91b1-5a5e7ab43903
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-F6APSKOJ:
-    children: []
-    id: CHART-F6APSKOJ
-    meta:
-      chartId: 129
-      height: 50
-      sliceName: Volume by family
-      uuid: fb175af9-f530-4986-88f4-c3cbabe38718
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-AWM96LK2:
-    children: []
-    id: CHART-AWM96LK2
-    meta:
-      chartId: 141
-      height: 50
-      sliceName: Transaction events (drill by ref)
-      uuid: 48307a8a-e6f0-4292-8cff-a70ebfb61ed1
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-AJ4YDKGV:
-    children: []
-    id: CHART-AJ4YDKGV
-    meta:
-      chartId: 181
-      height: 50
-      sliceName: "EDI \xB7 SLA compliance (gauge)"
-      uuid: 7888c719-4fc7-4933-8e92-0dd39ba24973
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-DFLFYPB8:
-    children: []
-    id: CHART-DFLFYPB8
-    meta:
-      chartId: 126
-      height: 50
-      sliceName: Resolution KB (per exception)
-      uuid: 69d9072c-0c26-4b29-81d7-6e8288760596
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-M26BNDC8:
-    children: []
-    id: CHART-M26BNDC8
-    meta:
-      chartId: 180
-      height: 50
-      sliceName: "EDI \xB7 Avg partner health"
-      uuid: efd2f9f1-4aac-4b10-9aac-ad377e44c244
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-3GYPOX4E:
-    children: []
-    id: CHART-3GYPOX4E
-    meta:
-      chartId: 131
-      height: 50
-      sliceName: Document-type grid
-      uuid: 7428a490-6864-4aeb-9138-2db0bc21e31e
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-N4PL4TXK:
-    children: []
-    id: CHART-N4PL4TXK
-    meta:
-      chartId: 179
-      height: 50
-      sliceName: "EDI \xB7 SLA compliance %"
-      uuid: 5b2d99ec-a7bc-4857-aac8-340451b2c064
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-9IVM8FZN:
-    children: []
-    id: CHART-9IVM8FZN
-    meta:
-      chartId: 178
-      height: 50
-      sliceName: "EDI \xB7 Critical anomalies"
-      uuid: bb6755f5-e773-4c77-b927-4fa1ccff3093
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-9NKJS531:
-    children: []
-    id: CHART-9NKJS531
-    meta:
-      chartId: 158
-      height: 50
-      sliceName: 'LOB: Failure'
-      uuid: 64d66241-a962-4907-8842-0a5fdb22c2aa
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-12H4T668:
-    children: []
-    id: CHART-12H4T668
-    meta:
-      chartId: 177
-      height: 50
-      sliceName: "EDI \xB7 Total anomalies"
-      uuid: e0595a1e-9da3-4da4-92a4-583f03f43c39
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-KY4N3Z67:
-    children: []
-    id: CHART-KY4N3Z67
-    meta:
-      chartId: 176
-      height: 50
-      sliceName: "EDI \xB7 Active partners"
-      uuid: 3ea6691b-c5ed-4122-b312-c1e81f816132
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-0SAASQ3N:
-    children: []
-    id: CHART-0SAASQ3N
-    meta:
-      chartId: 175
-      height: 50
-      sliceName: "EDI \xB7 Total shipments"
-      uuid: 5ca03456-12d2-480a-8d65-86672b621331
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-BNNPXPKB:
-    children: []
-    id: CHART-BNNPXPKB
-    meta:
-      chartId: 132
-      height: 50
-      sliceName: EDI vs API by type
-      uuid: ebe4b481-c0fd-4fcd-add9-a0e903a699e5
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-WN0ITB96:
-    children: []
-    id: CHART-WN0ITB96
-    meta:
-      chartId: 168
-      height: 50
-      sliceName: 'LOB: Ack data'
-      uuid: 212b76fc-463a-4e14-8ac0-852ba7114636
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-FQ3C5DTE:
-    children: []
-    id: CHART-FQ3C5DTE
-    meta:
-      chartId: 150
-      height: 50
-      sliceName: 'Overview: At-risk responses'
-      uuid: a4945b52-b61e-4b31-80b8-f0bc7dd0527a
-      width: 4
-    type: CHART
-    parents:
-    - ROOT_ID
-    - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-TIJH2R3J:
-    children: []
-    id: CHART-TIJH2R3J
+    id: CHART-WFV2EDTP
     meta:
       chartId: 127
       height: 50
@@ -5530,10 +3796,402 @@ position:
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-N-FU51XMWM
-  CHART-EQ64MJHX:
+    - ROW-N-U4Z4KFKT
+  CHART-TGCLTIAU:
     children: []
-    id: CHART-EQ64MJHX
+    id: CHART-TGCLTIAU
+    meta:
+      chartId: 137
+      height: 50
+      sliceName: Terminal
+      uuid: b0eff8e9-b4f5-4f0f-a891-d437ac88cd7d
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-J9YY54PB:
+    children: []
+    id: CHART-J9YY54PB
+    meta:
+      chartId: 85
+      height: 50
+      sliceName: Rejected (period)
+      uuid: 4241c303-39b1-4f09-a668-68e587b34d78
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-NE63VZ2X:
+    children: []
+    id: CHART-NE63VZ2X
+    meta:
+      chartId: 202
+      height: 50
+      sliceName: ACK SLA trend
+      uuid: e5cd7ade-d5ef-4749-852c-0869fe20382a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-XP7OUB8T:
+    children: []
+    id: CHART-XP7OUB8T
+    meta:
+      chartId: 201
+      height: 50
+      sliceName: Message SLA % by type
+      uuid: 92179e9e-48bb-4818-89cc-53213b7e7f96
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-LAD16IZG:
+    children: []
+    id: CHART-LAD16IZG
+    meta:
+      chartId: 75
+      height: 50
+      sliceName: Monitors reporting
+      uuid: 9b71872c-a0fc-48e6-8309-57dd94eb504c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-TDE50U79:
+    children: []
+    id: CHART-TDE50U79
+    meta:
+      chartId: 197
+      height: 50
+      sliceName: Anomaly rate by partner
+      uuid: f4efe38a-8a7d-4282-afd0-d7bebc91777d
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IM25DF5A:
+    children: []
+    id: CHART-IM25DF5A
+    meta:
+      chartId: 183
+      height: 50
+      sliceName: Anomalies by severity
+      uuid: 740b4cf3-de2f-4350-8740-41fe26a74af1
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-SGC0XHS3:
+    children: []
+    id: CHART-SGC0XHS3
+    meta:
+      chartId: 166
+      height: 50
+      sliceName: 'LOB: Incoming data'
+      uuid: 706c8912-a7bb-4f16-87d6-06c7b6ee4e91
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-TNAT02AT:
+    children: []
+    id: CHART-TNAT02AT
+    meta:
+      chartId: 77
+      height: 50
+      sliceName: Hung pipelines
+      uuid: f22ab0fc-917d-4df9-84e2-2fb162c48855
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-L14IDUZ6:
+    children: []
+    id: CHART-L14IDUZ6
+    meta:
+      chartId: 196
+      height: 50
+      sliceName: Partner risk matrix
+      uuid: cb3db86d-7e91-456f-9d32-1d4a74845f73
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-C3SY4O48:
+    children: []
+    id: CHART-C3SY4O48
+    meta:
+      chartId: 182
+      height: 50
+      sliceName: Shipment status mix
+      uuid: 9cfae0b1-b213-4eaa-91b1-5a5e7ab43903
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-YB96W6C4:
+    children: []
+    id: CHART-YB96W6C4
+    meta:
+      chartId: 159
+      height: 50
+      sliceName: 'LOB: Last message received'
+      uuid: 3c36edb2-cde6-454f-9ae2-b02c1ea3a367
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-6C00MXQ4:
+    children: []
+    id: CHART-6C00MXQ4
+    meta:
+      chartId: 99
+      height: 50
+      sliceName: Volume by partner (top 20)
+      uuid: 0f8436ae-b0ce-455f-8d2b-9f7b25df55d5
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-E3UQMIG1:
+    children: []
+    id: CHART-E3UQMIG1
+    meta:
+      chartId: 90
+      height: 50
+      sliceName: EDI transactions
+      uuid: dd08e549-cedc-459e-8e62-a8dfc7a83bb6
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-PLTUVMPQ:
+    children: []
+    id: CHART-PLTUVMPQ
+    meta:
+      chartId: 200
+      height: 50
+      sliceName: Flow completeness
+      uuid: 036aaa1f-9e0a-4a52-bc30-adeef344e18a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-TIW5N1AF:
+    children: []
+    id: CHART-TIW5N1AF
+    meta:
+      chartId: 181
+      height: 50
+      sliceName: SLA compliance (gauge)
+      uuid: 7888c719-4fc7-4933-8e92-0dd39ba24973
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-UAPZ658P:
+    children: []
+    id: CHART-UAPZ658P
+    meta:
+      chartId: 194
+      height: 50
+      sliceName: Exception workbench
+      uuid: 24cc01e4-badf-4d4e-94e9-fcee448ad24c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-N1UOF4X9:
+    children: []
+    id: CHART-N1UOF4X9
+    meta:
+      chartId: 198
+      height: 50
+      sliceName: Shipment volume by partner
+      uuid: 71f3de83-0be7-43fb-a6de-81439e42f79a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MVDTTISZ:
+    children: []
+    id: CHART-MVDTTISZ
+    meta:
+      chartId: 180
+      height: 50
+      sliceName: Avg partner health
+      uuid: efd2f9f1-4aac-4b10-9aac-ad377e44c244
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IDUXFWQY:
+    children: []
+    id: CHART-IDUXFWQY
+    meta:
+      chartId: 161
+      height: 50
+      sliceName: 'LOB: Message by status'
+      uuid: 0cdc06c3-e0e8-4221-a638-acd6da5ea9e5
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-Q6B082GY:
+    children: []
+    id: CHART-Q6B082GY
+    meta:
+      chartId: 91
+      height: 50
+      sliceName: API transactions
+      uuid: 9258c5b0-a3bb-4a79-8193-f9d0c6706013
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-TEWXIP4R:
+    children: []
+    id: CHART-TEWXIP4R
+    meta:
+      chartId: 162
+      height: 50
+      sliceName: 'LOB: Processing trend'
+      uuid: e8795ec1-4771-469d-918d-ce901fa5650c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-HQI71HLN:
+    children: []
+    id: CHART-HQI71HLN
+    meta:
+      chartId: 203
+      height: 50
+      sliceName: Volume by hour
+      uuid: 243543e4-1b50-4502-b163-a5a273d8a1b7
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IDSQHOPP:
+    children: []
+    id: CHART-IDSQHOPP
+    meta:
+      chartId: 179
+      height: 50
+      sliceName: SLA compliance %
+      uuid: 5b2d99ec-a7bc-4857-aac8-340451b2c064
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-0ZRGWUL3:
+    children: []
+    id: CHART-0ZRGWUL3
+    meta:
+      chartId: 89
+      height: 50
+      sliceName: Total transactions
+      uuid: f7ca83c7-8ad8-4767-80b0-b442c5f762e4
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-Y98XSOYP:
+    children: []
+    id: CHART-Y98XSOYP
+    meta:
+      chartId: 178
+      height: 50
+      sliceName: Critical anomalies
+      uuid: bb6755f5-e773-4c77-b927-4fa1ccff3093
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-DGVCUG5W:
+    children: []
+    id: CHART-DGVCUG5W
+    meta:
+      chartId: 192
+      height: 50
+      sliceName: Anomalies by status
+      uuid: 9814977d-4d58-4bdd-a326-5f3ac82fd8e8
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-59IEQ51Z:
+    children: []
+    id: CHART-59IEQ51Z
+    meta:
+      chartId: 106
+      height: 50
+      sliceName: Transaction status (lookup)
+      uuid: 853d7513-3bbe-4ae7-989d-648f7f0c8bd9
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-YH0NY6UY:
+    children: []
+    id: CHART-YH0NY6UY
     meta:
       chartId: 160
       height: 50
@@ -5544,7 +4202,1337 @@ position:
     parents:
     - ROOT_ID
     - GRID_ID
-    - ROW-N-FU51XMWM
+    - ROW-N-U4Z4KFKT
+  CHART-OVAEY48M:
+    children: []
+    id: CHART-OVAEY48M
+    meta:
+      chartId: 177
+      height: 50
+      sliceName: Total anomalies
+      uuid: e0595a1e-9da3-4da4-92a4-583f03f43c39
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-055KRMXR:
+    children: []
+    id: CHART-055KRMXR
+    meta:
+      chartId: 87
+      height: 50
+      sliceName: Exceptions by reason
+      uuid: e4f86dfa-f224-450d-b85c-d554f69a8e9c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-XMH94A6W:
+    children: []
+    id: CHART-XMH94A6W
+    meta:
+      chartId: 96
+      height: 50
+      sliceName: Volume by message type
+      uuid: f64619b5-990e-4dc3-b653-4870ab31e68c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-JXI6SUUJ:
+    children: []
+    id: CHART-JXI6SUUJ
+    meta:
+      chartId: 163
+      height: 50
+      sliceName: 'LOB: Message by type'
+      uuid: ebe329e7-314a-45b6-a0ec-7082d95cb1d7
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-V2GDFO2E:
+    children: []
+    id: CHART-V2GDFO2E
+    meta:
+      chartId: 199
+      height: 50
+      sliceName: EDI funnel
+      uuid: 0208298b-afe6-4f9f-9b83-8ea32e50bbba
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-K6B6FOG4:
+    children: []
+    id: CHART-K6B6FOG4
+    meta:
+      chartId: 176
+      height: 50
+      sliceName: Active partners
+      uuid: 3ea6691b-c5ed-4122-b312-c1e81f816132
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-6VTZE6E6:
+    children: []
+    id: CHART-6VTZE6E6
+    meta:
+      chartId: 81
+      height: 50
+      sliceName: Landed, not picked up
+      uuid: 6ae7aef3-9246-4b38-a03a-b9c828cefc42
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IJ1RMGPZ:
+    children: []
+    id: CHART-IJ1RMGPZ
+    meta:
+      chartId: 139
+      height: 50
+      sliceName: Status distribution
+      uuid: a7285fd7-299b-4165-b619-a3a2a484d705
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-QQQF98TA:
+    children: []
+    id: CHART-QQQF98TA
+    meta:
+      chartId: 100
+      height: 50
+      sliceName: Volume by LOB
+      uuid: 368a27da-b8c5-4bde-bc24-e4add7719250
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-HHHIAPST:
+    children: []
+    id: CHART-HHHIAPST
+    meta:
+      chartId: 175
+      height: 50
+      sliceName: Total shipments
+      uuid: 5ca03456-12d2-480a-8d65-86672b621331
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-8480OCDR:
+    children: []
+    id: CHART-8480OCDR
+    meta:
+      chartId: 115
+      height: 50
+      sliceName: Top partners by exceptions
+      uuid: 0eef835c-dcbb-4ea3-ad00-d6ee6e10623b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-W21OMXBN:
+    children: []
+    id: CHART-W21OMXBN
+    meta:
+      chartId: 79
+      height: 50
+      sliceName: Dead / degraded connections
+      uuid: b11fe9b1-3b9e-4f3b-a04d-f73262263725
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-I17LUM3P:
+    children: []
+    id: CHART-I17LUM3P
+    meta:
+      chartId: 80
+      height: 50
+      sliceName: Channel health
+      uuid: aed5d24b-797e-4df5-be6b-f8d9e3e4780e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-908TKRC4:
+    children: []
+    id: CHART-908TKRC4
+    meta:
+      chartId: 118
+      height: 50
+      sliceName: Volume by protocol
+      uuid: c753cfa1-5a41-4d14-8675-10fb31dc9bff
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-E4JHIU42:
+    children: []
+    id: CHART-E4JHIU42
+    meta:
+      chartId: 119
+      height: 50
+      sliceName: Compliance by rule
+      uuid: 00d2953a-b07c-4ffa-a062-340a923fb988
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-812QOEYN:
+    children: []
+    id: CHART-812QOEYN
+    meta:
+      chartId: 101
+      height: 50
+      sliceName: Incoming vs outgoing files (24h)
+      uuid: 507a6f8f-7e81-4f50-bdf5-5598b18de934
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-7O1L2N54:
+    children: []
+    id: CHART-7O1L2N54
+    meta:
+      chartId: 76
+      height: 50
+      sliceName: Stale / silent monitors
+      uuid: d5800166-9833-4ad7-9154-8046515a7708
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-EW8XWZ7C:
+    children: []
+    id: CHART-EW8XWZ7C
+    meta:
+      chartId: 173
+      height: 50
+      sliceName: 'LOB: Exception by reason'
+      uuid: 4df77d64-a516-4822-8ee1-5c0c544afe76
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-WH11WVK8:
+    children: []
+    id: CHART-WH11WVK8
+    meta:
+      chartId: 117
+      height: 50
+      sliceName: Monthly volume (export)
+      uuid: a32065b4-e78e-4c54-926d-e1bd225c441a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-A39K5JI7:
+    children: []
+    id: CHART-A39K5JI7
+    meta:
+      chartId: 174
+      height: 50
+      sliceName: 'LOB: Exception queue'
+      uuid: 60666e70-a9cc-42a7-b861-79ca54ce2e20
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-V1G7HLFW:
+    children: []
+    id: CHART-V1G7HLFW
+    meta:
+      chartId: 95
+      height: 50
+      sliceName: Inbound vs outbound
+      uuid: 6b4ab711-9325-4d7c-8ebe-7ebd924316d8
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-KZZBAO35:
+    children: []
+    id: CHART-KZZBAO35
+    meta:
+      chartId: 111
+      height: 50
+      sliceName: FA tracking
+      uuid: ae1bd9f5-447c-4f90-958f-0c093015d1e9
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IURFXX43:
+    children: []
+    id: CHART-IURFXX43
+    meta:
+      chartId: 141
+      height: 50
+      sliceName: Transaction events (drill by ref)
+      uuid: 48307a8a-e6f0-4292-8cff-a70ebfb61ed1
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-F5A8VWJS:
+    children: []
+    id: CHART-F5A8VWJS
+    meta:
+      chartId: 172
+      height: 50
+      sliceName: 'LOB: Resubmitted'
+      uuid: ca4aa142-2022-4bc2-aea0-85471dbcb2d8
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-INJT6KYU:
+    children: []
+    id: CHART-INJT6KYU
+    meta:
+      chartId: 143
+      height: 50
+      sliceName: 'Overview: Transactions'
+      uuid: 9b0d30cc-43b0-4a24-a9eb-6c7e54e2c52b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-G3NKCAR1:
+    children: []
+    id: CHART-G3NKCAR1
+    meta:
+      chartId: 129
+      height: 50
+      sliceName: Volume by family
+      uuid: fb175af9-f530-4986-88f4-c3cbabe38718
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MUF53G5H:
+    children: []
+    id: CHART-MUF53G5H
+    meta:
+      chartId: 206
+      height: 50
+      sliceName: Delivery performance mix
+      uuid: 46353bf4-9bbc-4c14-8009-d4698913ddbb
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-QQVJH5NZ:
+    children: []
+    id: CHART-QQVJH5NZ
+    meta:
+      chartId: 105
+      height: 50
+      sliceName: Replays today
+      uuid: f24c7b46-bf83-412b-8721-3eb874c9944f
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-LODW3D8Y:
+    children: []
+    id: CHART-LODW3D8Y
+    meta:
+      chartId: 170
+      height: 50
+      sliceName: 'LOB: Traffic report (partner x day)'
+      uuid: 82068dd7-7720-49b1-8ef5-36a6c8fac8a8
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-1GGDXUXH:
+    children: []
+    id: CHART-1GGDXUXH
+    meta:
+      chartId: 113
+      height: 50
+      sliceName: '% Met by partner'
+      uuid: bf9c0f2a-fe34-45d3-a693-8ea5ca75d4f4
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-UR7ZXZLT:
+    children: []
+    id: CHART-UR7ZXZLT
+    meta:
+      chartId: 158
+      height: 50
+      sliceName: 'LOB: Failure'
+      uuid: 64d66241-a962-4907-8842-0a5fdb22c2aa
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-JIJACHV7:
+    children: []
+    id: CHART-JIJACHV7
+    meta:
+      chartId: 116
+      height: 50
+      sliceName: Change vs prior period
+      uuid: 9516136f-31ec-4780-9e46-30a19151609c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-58BA2RV7:
+    children: []
+    id: CHART-58BA2RV7
+    meta:
+      chartId: 193
+      height: 50
+      sliceName: Business impact trend
+      uuid: f2455a00-55b3-4168-9f94-70db02bf1152
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-DO41NUJK:
+    children: []
+    id: CHART-DO41NUJK
+    meta:
+      chartId: 208
+      height: 50
+      sliceName: Volume actual vs expected
+      uuid: 99016ebc-6869-40ae-884c-f8ffb4d150cf
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-2IXOU7SC:
+    children: []
+    id: CHART-2IXOU7SC
+    meta:
+      chartId: 132
+      height: 50
+      sliceName: EDI vs API by type
+      uuid: ebe4b481-c0fd-4fcd-add9-a0e903a699e5
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-1SFGAR3Q:
+    children: []
+    id: CHART-1SFGAR3Q
+    meta:
+      chartId: 130
+      height: 50
+      sliceName: Exceptions by family
+      uuid: 16f321df-5a3e-4f0c-9f5a-cfde02b8bca7
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-DW2868S3:
+    children: []
+    id: CHART-DW2868S3
+    meta:
+      chartId: 128
+      height: 50
+      sliceName: Document value (period)
+      uuid: 448cacd2-acf4-4e4b-afa9-eeaed227c175
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-14PPL7CG:
+    children: []
+    id: CHART-14PPL7CG
+    meta:
+      chartId: 207
+      height: 50
+      sliceName: Delay severity
+      uuid: e4f7ca38-7abd-4196-8a3f-e276439f2c66
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-EPM0TYJT:
+    children: []
+    id: CHART-EPM0TYJT
+    meta:
+      chartId: 83
+      height: 50
+      sliceName: Cert / key expiry
+      uuid: 418dff48-e89f-4160-99eb-5fc3978749d9
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-RO8D91KQ:
+    children: []
+    id: CHART-RO8D91KQ
+    meta:
+      chartId: 167
+      height: 50
+      sliceName: 'LOB: Outgoing data'
+      uuid: 592adacf-0de7-46f4-9951-0d22973f3d8b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-J5T9APJS:
+    children: []
+    id: CHART-J5T9APJS
+    meta:
+      chartId: 148
+      height: 50
+      sliceName: 'Overview: Missing feeds'
+      uuid: b042c9f7-033a-4cb2-9870-969dc11364df
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-6L0RTVLR:
+    children: []
+    id: CHART-6L0RTVLR
+    meta:
+      chartId: 123
+      height: 50
+      sliceName: Partner vs platform
+      uuid: c7d0fb1f-470e-4bb6-a5c9-64ac73edf270
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-30QWJ5BR:
+    children: []
+    id: CHART-30QWJ5BR
+    meta:
+      chartId: 107
+      height: 50
+      sliceName: Step history
+      uuid: ddc85806-becd-4528-b622-d974897f2e07
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-BZXLAZT1:
+    children: []
+    id: CHART-BZXLAZT1
+    meta:
+      chartId: 110
+      height: 50
+      sliceName: Rejected acks
+      uuid: 176713dd-a3e6-4a6a-96ed-9f1dc0e7ac45
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-U4IO0BF0:
+    children: []
+    id: CHART-U4IO0BF0
+    meta:
+      chartId: 205
+      height: 50
+      sliceName: Shipment status distribution
+      uuid: ff010808-86d8-4140-89cb-5ffbb0b1c352
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-W451OAGA:
+    children: []
+    id: CHART-W451OAGA
+    meta:
+      chartId: 94
+      height: 50
+      sliceName: EDI vs API split
+      uuid: 8e72617d-1ab4-42fd-9b51-b51a51a8da02
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-AAOO1JBC:
+    children: []
+    id: CHART-AAOO1JBC
+    meta:
+      chartId: 171
+      height: 50
+      sliceName: 'LOB: Open exceptions'
+      uuid: 210c823e-7ac1-4ed4-b41f-ce580836d694
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-PMDXIYNA:
+    children: []
+    id: CHART-PMDXIYNA
+    meta:
+      chartId: 209
+      height: 50
+      sliceName: Status aging worklist
+      uuid: e6ff3b1e-fe58-4d18-ade7-6773203c1ac7
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-NI3G2GDU:
+    children: []
+    id: CHART-NI3G2GDU
+    meta:
+      chartId: 97
+      height: 50
+      sliceName: Throughput over time
+      uuid: edc2b866-abd2-4140-9a1b-2ddfcb3ab8ba
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-UU0RWRL7:
+    children: []
+    id: CHART-UU0RWRL7
+    meta:
+      chartId: 102
+      height: 50
+      sliceName: File explorer
+      uuid: 100b865a-1560-4f42-8212-02119c3c545c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-1KJRR6JB:
+    children: []
+    id: CHART-1KJRR6JB
+    meta:
+      chartId: 168
+      height: 50
+      sliceName: 'LOB: Ack data'
+      uuid: 212b76fc-463a-4e14-8ac0-852ba7114636
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-141VPJOL:
+    children: []
+    id: CHART-141VPJOL
+    meta:
+      chartId: 93
+      height: 50
+      sliceName: Data volume (kchar)
+      uuid: 41da1510-6fb2-4d2e-a489-7e280956c7e9
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-B2MQ21AT:
+    children: []
+    id: CHART-B2MQ21AT
+    meta:
+      chartId: 157
+      height: 50
+      sliceName: 'LOB: Success'
+      uuid: e3d73698-875a-4d6c-b246-c02cad798729
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-YOSD7SMQ:
+    children: []
+    id: CHART-YOSD7SMQ
+    meta:
+      chartId: 191
+      height: 50
+      sliceName: Anomaly trend (daily)
+      uuid: d806b1b7-3f05-4920-9c2c-f4953d2c6b49
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-POV719FW:
+    children: []
+    id: CHART-POV719FW
+    meta:
+      chartId: 135
+      height: 50
+      sliceName: Live transactions
+      uuid: 95cc6b03-f3b9-47c7-afde-ab2362ff292b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-3NBZCYPS:
+    children: []
+    id: CHART-3NBZCYPS
+    meta:
+      chartId: 88
+      height: 50
+      sliceName: Exception queue
+      uuid: f2c44fd2-598f-4845-a699-1f5b67bb1981
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-ZL2MV0ON:
+    children: []
+    id: CHART-ZL2MV0ON
+    meta:
+      chartId: 120
+      height: 50
+      sliceName: Responses due soon (at-risk)
+      uuid: 7695af02-2028-4d04-bc7c-22da18603c5e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-F3PE550D:
+    children: []
+    id: CHART-F3PE550D
+    meta:
+      chartId: 126
+      height: 50
+      sliceName: Resolution KB (per exception)
+      uuid: 69d9072c-0c26-4b29-81d7-6e8288760596
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-DD085JLX:
+    children: []
+    id: CHART-DD085JLX
+    meta:
+      chartId: 190
+      height: 50
+      sliceName: Anomalies by type
+      uuid: d6bc4e38-36c4-4f50-ad5f-355d8c084a2d
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-LX9SVLMN:
+    children: []
+    id: CHART-LX9SVLMN
+    meta:
+      chartId: 142
+      height: 50
+      sliceName: Overall compliance %
+      uuid: 2097d765-810b-4da7-8d71-a59c513056e6
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-54XD01YT:
+    children: []
+    id: CHART-54XD01YT
+    meta:
+      chartId: 124
+      height: 50
+      sliceName: Re-failed replays
+      uuid: 00e8de84-7ce1-4722-bc30-8d44d2828063
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-0G63HBY3:
+    children: []
+    id: CHART-0G63HBY3
+    meta:
+      chartId: 108
+      height: 50
+      sliceName: Replayed messages
+      uuid: 0955795e-2f53-450d-8592-07353994ec4f
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-OG58VIYX:
+    children: []
+    id: CHART-OG58VIYX
+    meta:
+      chartId: 131
+      height: 50
+      sliceName: Document-type grid
+      uuid: 7428a490-6864-4aeb-9138-2db0bc21e31e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-J6GGX173:
+    children: []
+    id: CHART-J6GGX173
+    meta:
+      chartId: 169
+      height: 50
+      sliceName: 'LOB: Traffic trend'
+      uuid: 7d8f9723-29f0-405d-8f59-12bc69a1017e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-E6AT85Y6:
+    children: []
+    id: CHART-E6AT85Y6
+    meta:
+      chartId: 112
+      height: 50
+      sliceName: Partner SLA scorecard
+      uuid: 1df02c22-a3de-4154-9534-0eb0ede7be4e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-XZTH3038:
+    children: []
+    id: CHART-XZTH3038
+    meta:
+      chartId: 164
+      height: 50
+      sliceName: 'LOB: Count by message type'
+      uuid: c5b87945-e0ba-42c2-a9c7-caff7682c5ff
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-URTW2JZH:
+    children: []
+    id: CHART-URTW2JZH
+    meta:
+      chartId: 189
+      height: 50
+      sliceName: Business impact $
+      uuid: 0c8d4447-cdae-460c-a8f0-efa7e0df417a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MSUTJ1VW:
+    children: []
+    id: CHART-MSUTJ1VW
+    meta:
+      chartId: 138
+      height: 50
+      sliceName: Replayed (all-time)
+      uuid: dd167d19-d698-4c5b-9eeb-e4f724f48fdf
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-JDWA95F0:
+    children: []
+    id: CHART-JDWA95F0
+    meta:
+      chartId: 165
+      height: 50
+      sliceName: 'LOB: Details'
+      uuid: 6c0e82e9-c488-4d64-a2ec-0b60bbff1f04
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-G8SX09A6:
+    children: []
+    id: CHART-G8SX09A6
+    meta:
+      chartId: 82
+      height: 50
+      sliceName: Stuck / aging transactions
+      uuid: 8059f8dd-ef14-4630-a73a-822d158f6463
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-YGXPKCDS:
+    children: []
+    id: CHART-YGXPKCDS
+    meta:
+      chartId: 156
+      height: 50
+      sliceName: 'LOB: Total messages received'
+      uuid: f7f4a855-3644-4bba-8d79-4cbbbc42aa3c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-ARTIAC2P:
+    children: []
+    id: CHART-ARTIAC2P
+    meta:
+      chartId: 134
+      height: 50
+      sliceName: Throughput by family
+      uuid: 4f7a7c64-3756-4eb2-82b3-0a0eca1fa894
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-SHCGZ975:
+    children: []
+    id: CHART-SHCGZ975
+    meta:
+      chartId: 86
+      height: 50
+      sliceName: Duplicates suppressed
+      uuid: 473f2adb-96d0-4c81-a6c7-d140a4bc47d0
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-50YTIY8K:
+    children: []
+    id: CHART-50YTIY8K
+    meta:
+      chartId: 188
+      height: 50
+      sliceName: Open anomalies
+      uuid: d3e08a90-4f92-4cb7-8c51-475145c2eea0
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-LEWWU8ZY:
+    children: []
+    id: CHART-LEWWU8ZY
+    meta:
+      chartId: 133
+      height: 50
+      sliceName: Top partners (filter by type)
+      uuid: 48d13779-243d-4798-b625-6d8d2034cb24
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-820OV7EX:
+    children: []
+    id: CHART-820OV7EX
+    meta:
+      chartId: 104
+      height: 50
+      sliceName: Rejected at receipt (pre-parse)
+      uuid: e0999d72-b754-45e5-8fd2-6643e7931fa9
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MRQ8IUTZ:
+    children: []
+    id: CHART-MRQ8IUTZ
+    meta:
+      chartId: 121
+      height: 50
+      sliceName: Breaches (missed)
+      uuid: 428208cb-4479-4f39-8a48-f7f3b59ea8bb
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-KVX6K5EU:
+    children: []
+    id: CHART-KVX6K5EU
+    meta:
+      chartId: 204
+      height: 50
+      sliceName: SLA performance trend
+      uuid: e8df8072-657e-4bd0-88c9-7a802cccfd44
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MQA9P7VE:
+    children: []
+    id: CHART-MQA9P7VE
+    meta:
+      chartId: 187
+      height: 50
+      sliceName: Critical (count)
+      uuid: 70b50e3c-3a84-4200-8301-f33d4b791533
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-E9E37WI3:
+    children: []
+    id: CHART-E9E37WI3
+    meta:
+      chartId: 109
+      height: 50
+      sliceName: Missing acks
+      uuid: 7bc85d2a-26b0-45fb-97c9-d8e66430d97c
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-A1OCGDRG:
+    children: []
+    id: CHART-A1OCGDRG
+    meta:
+      chartId: 114
+      height: 50
+      sliceName: Top partners by volume
+      uuid: 717a3c34-5299-4040-bb32-d1882f0a6f30
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-8TQ42JQS:
+    children: []
+    id: CHART-8TQ42JQS
+    meta:
+      chartId: 92
+      height: 50
+      sliceName: Auto-processed %
+      uuid: 9c58f256-ed7e-45af-b331-4dc30e9b9b15
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-SQK7X7OO:
+    children: []
+    id: CHART-SQK7X7OO
+    meta:
+      chartId: 186
+      height: 50
+      sliceName: Anomalies (total)
+      uuid: f164ceef-3d81-4a42-a30a-cdabc3b76dc2
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-8P1DOP79:
+    children: []
+    id: CHART-8P1DOP79
+    meta:
+      chartId: 125
+      height: 50
+      sliceName: Duplicate sources
+      uuid: 6d3b6180-9e61-49c9-ad17-8e9570b07776
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-IX22TDO1:
+    children: []
+    id: CHART-IX22TDO1
+    meta:
+      chartId: 140
+      height: 50
+      sliceName: All transactions
+      uuid: a1fe8d3c-49c3-4361-af50-de2f67ad5b3f
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-MZ6N4184:
+    children: []
+    id: CHART-MZ6N4184
+    meta:
+      chartId: 103
+      height: 50
+      sliceName: Files missing transactions
+      uuid: 9ac37efe-c1be-4ac6-8896-1e2d9487741b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-QAR4YLVB:
+    children: []
+    id: CHART-QAR4YLVB
+    meta:
+      chartId: 78
+      height: 50
+      sliceName: Missing expected feeds
+      uuid: b4c4f91a-d830-49a2-b945-f2dc20ff20b7
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-W3F4D6WP:
+    children: []
+    id: CHART-W3F4D6WP
+    meta:
+      chartId: 98
+      height: 50
+      sliceName: Message-type volumetric grid
+      uuid: 99741745-ac26-43de-8001-1fa6a562f0cb
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-W5NACO2J:
+    children: []
+    id: CHART-W5NACO2J
+    meta:
+      chartId: 149
+      height: 50
+      sliceName: 'Overview: Stale monitors'
+      uuid: 13c4c9b8-ee04-4b57-9d00-fb24e980b1af
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-QHGQ182A:
+    children: []
+    id: CHART-QHGQ182A
+    meta:
+      chartId: 136
+      height: 50
+      sliceName: In-flight (not terminal)
+      uuid: 6d342ad2-4a8c-4a97-a45f-ffca94dd16bf
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-7F65TOIC:
+    children: []
+    id: CHART-7F65TOIC
+    meta:
+      chartId: 150
+      height: 50
+      sliceName: 'Overview: At-risk responses'
+      uuid: a4945b52-b61e-4b31-80b8-f0bc7dd0527a
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-HPDKCG7U:
+    children: []
+    id: CHART-HPDKCG7U
+    meta:
+      chartId: 185
+      height: 50
+      sliceName: SLA compliance trend
+      uuid: e405091d-5d3d-4a5e-ac2a-3a4793842193
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-W1GMSY85:
+    children: []
+    id: CHART-W1GMSY85
+    meta:
+      chartId: 84
+      height: 50
+      sliceName: Failed (period)
+      uuid: 044ef1a3-b752-47d8-88a9-8eedd6bab8ea
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-RISXWD3W:
+    children: []
+    id: CHART-RISXWD3W
+    meta:
+      chartId: 195
+      height: 50
+      sliceName: Partner health scorecard
+      uuid: 6830421d-dc38-40da-be0d-673450fa701e
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
+  CHART-HW6QRI52:
+    children: []
+    id: CHART-HW6QRI52
+    meta:
+      chartId: 147
+      height: 50
+      sliceName: 'Overview: Hung pipelines'
+      uuid: d1364ea3-b7a2-4fcb-96d8-d88fa30ebe2b
+      width: 4
+    type: CHART
+    parents:
+    - ROOT_ID
+    - GRID_ID
+    - ROW-N-U4Z4KFKT
 metadata:
   native_filter_configuration:
   - id: NATIVE_FILTER-time-range
@@ -5690,6 +5678,10 @@ metadata:
     - 177
     - 176
     - 175
+  - id: NATIVE_FILTER_DIVIDER-0
+    type: DIVIDER
+    title: Shipments (EDI Anomaly world)
+    description: ''
   - id: NATIVE_FILTER-partner_id
     name: Partner (shipments)
     filterType: filter_select
@@ -6286,6 +6278,10 @@ metadata:
     - 177
     - 176
     - 175
+  - id: NATIVE_FILTER_DIVIDER-1
+    type: DIVIDER
+    title: Transactions (Cockpit world)
+    description: ''
   - id: NATIVE_FILTER-partner
     name: Partner (transactions)
     filterType: filter_select
@@ -7200,6 +7196,9 @@ metadata:
     api: '#8b5cf6'
   shared_label_colors: {}
   color_scheme_domain: []
+  timed_refresh_immune_slices: []
+  expanded_slices: {}
+  map_label_colors: {}
 theme_uuid: null
 version: 1.0.0
 tags: []

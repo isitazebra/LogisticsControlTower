@@ -1,0 +1,37 @@
+slice_name: SLA performance trend
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_line
+params:
+  datasource: 82__table
+  viz_type: echarts_timeseries_line
+  x_axis: shipment_date
+  time_grain_sqla: P1D
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: AVG(sla_pct)
+    label: sla
+    hasCustomLabel: true
+  row_limit: 10000
+  time_range: No filter
+  y_axis_format: .1f
+query_context: '{"datasource": {"id": 82, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"},
+  "applied_time_extras": {}, "annotation_layers": [], "url_params": {}, "custom_params":
+  {}, "custom_form_data": {}, "row_limit": 10000, "orderby": [[{"expressionType":
+  "SQL", "sqlExpression": "AVG(sla_pct)", "label": "sla", "hasCustomLabel": true},
+  false]], "columns": [{"timeGrain": "P1D", "columnType": "BASE_AXIS", "sqlExpression":
+  "shipment_date", "label": "shipment_date", "expressionType": "SQL"}], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "AVG(sla_pct)", "label": "sla", "hasCustomLabel":
+  true}], "series_columns": []}], "form_data": {"datasource": "82__table", "viz_type":
+  "echarts_timeseries_line", "x_axis": "shipment_date", "time_grain_sqla": "P1D",
+  "groupby": [], "metrics": [{"expressionType": "SQL", "sqlExpression": "AVG(sla_pct)",
+  "label": "sla", "hasCustomLabel": true}], "row_limit": 10000, "time_range": "No
+  filter", "y_axis_format": ".1f"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: e8df8072-657e-4bd0-88c9-7a802cccfd44
+version: 1.0.0
+dataset_uuid: b7f4973b-4952-4265-8eb6-c8a0de1a5584
+tags: []

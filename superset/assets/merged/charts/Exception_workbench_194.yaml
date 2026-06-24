@@ -1,0 +1,44 @@
+slice_name: Exception workbench
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 71__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - detected_date
+  - partner_name
+  - shipment_id
+  - anomaly_type
+  - severity
+  - anomaly_status
+  - business_impact_amount
+  - root_cause_category
+  - recommended_action
+  order_by_cols:
+  - '["detected_date", false]'
+  row_limit: 200
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    business_impact_amount:
+      d3NumberFormat: $,.0f
+query_context: '{"datasource": {"id": 71, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 200, "orderby": [["detected_date", false]], "columns": ["detected_date",
+  "partner_name", "shipment_id", "anomaly_type", "severity", "anomaly_status", "business_impact_amount",
+  "root_cause_category", "recommended_action"], "metrics": []}], "form_data": {"datasource":
+  "71__table", "viz_type": "table", "query_mode": "raw", "all_columns": ["detected_date",
+  "partner_name", "shipment_id", "anomaly_type", "severity", "anomaly_status", "business_impact_amount",
+  "root_cause_category", "recommended_action"], "order_by_cols": ["[\"detected_date\",
+  false]"], "row_limit": 200, "server_page_length": 25, "time_range": "No filter",
+  "column_config": {"business_impact_amount": {"d3NumberFormat": "$,.0f"}}}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 24cc01e4-badf-4d4e-94e9-fcee448ad24c
+version: 1.0.0
+dataset_uuid: 1d60b982-bdac-4ebb-bff7-58c0b65fff39
+tags: []

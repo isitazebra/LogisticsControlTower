@@ -1,0 +1,56 @@
+slice_name: Partner health scorecard
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 72__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner_name
+  - shipment_count
+  - anomaly_count
+  - critical_anomalies
+  - sla_compliance_pct
+  - health_score
+  - partner_risk_status
+  order_by_cols:
+  - '["health_score", true]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    shipment_count:
+      d3NumberFormat: ',.0f'
+      showCellBars: true
+    sla_compliance_pct:
+      d3NumberFormat: .1f
+      showCellBars: true
+    health_score:
+      d3NumberFormat: .1f
+      showCellBars: true
+  conditional_formatting:
+  - column: health_score
+    operator: <
+    targetValue: 70
+    colorScheme: '#e04355'
+query_context: '{"datasource": {"id": 72, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["health_score", true]], "columns": ["partner_name",
+  "shipment_count", "anomaly_count", "critical_anomalies", "sla_compliance_pct", "health_score",
+  "partner_risk_status"], "metrics": []}], "form_data": {"datasource": "72__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["partner_name", "shipment_count",
+  "anomaly_count", "critical_anomalies", "sla_compliance_pct", "health_score", "partner_risk_status"],
+  "order_by_cols": ["[\"health_score\", true]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter", "column_config": {"shipment_count": {"d3NumberFormat":
+  ",.0f", "showCellBars": true}, "sla_compliance_pct": {"d3NumberFormat": ".1f", "showCellBars":
+  true}, "health_score": {"d3NumberFormat": ".1f", "showCellBars": true}}, "conditional_formatting":
+  [{"column": "health_score", "operator": "<", "targetValue": 70, "colorScheme": "#e04355"}]},
+  "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 6830421d-dc38-40da-be0d-673450fa701e
+version: 1.0.0
+dataset_uuid: faac0ac0-6e54-4210-9283-d59db12de2e1
+tags: []

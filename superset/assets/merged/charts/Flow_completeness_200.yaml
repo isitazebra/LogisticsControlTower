@@ -1,0 +1,41 @@
+slice_name: Flow completeness
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 75__table
+  viz_type: pie
+  groupby:
+  - edi_flow_status
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: n
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  innerRadius: 45
+  donut: true
+  label_type: key_percent
+  show_labels: true
+  labels_outside: true
+  number_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 75, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "COUNT(*)",
+  "label": "n", "hasCustomLabel": true}, false]], "columns": ["edi_flow_status"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "n",
+  "hasCustomLabel": true}]}], "form_data": {"datasource": "75__table", "viz_type":
+  "pie", "groupby": ["edi_flow_status"], "metric": {"expressionType": "SQL", "sqlExpression":
+  "COUNT(*)", "label": "n", "hasCustomLabel": true}, "row_limit": 100, "time_range":
+  "No filter", "show_legend": true, "innerRadius": 45, "donut": true, "label_type":
+  "key_percent", "show_labels": true, "labels_outside": true, "number_format": "SMART_NUMBER"},
+  "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 036aaa1f-9e0a-4a52-bc30-adeef344e18a
+version: 1.0.0
+dataset_uuid: bdaeb03a-166a-44c7-b3d5-5b5ff82ce124
+tags: []

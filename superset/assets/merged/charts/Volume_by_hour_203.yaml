@@ -1,0 +1,37 @@
+slice_name: Volume by hour
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 78__table
+  viz_type: echarts_timeseries_bar
+  x_axis: transaction_hour
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(transaction_count)
+    label: txns
+    hasCustomLabel: true
+  row_limit: 24
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 78, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 24, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(transaction_count)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["transaction_hour"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(transaction_count)",
+  "label": "txns", "hasCustomLabel": true}], "series_columns": []}], "form_data":
+  {"datasource": "78__table", "viz_type": "echarts_timeseries_bar", "x_axis": "transaction_hour",
+  "groupby": [], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(transaction_count)",
+  "label": "txns", "hasCustomLabel": true}], "row_limit": 24, "time_range": "No filter",
+  "x_axis_sort_asc": false, "x_axis_sort_series": "name", "order_desc": true}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 243543e4-1b50-4502-b163-a5a273d8a1b7
+version: 1.0.0
+dataset_uuid: 71d95ea8-75f7-4251-8e95-a44e245b9653
+tags: []

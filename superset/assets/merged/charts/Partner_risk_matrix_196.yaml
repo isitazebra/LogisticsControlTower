@@ -1,0 +1,53 @@
+slice_name: Partner risk matrix
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 73__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner_name
+  - shipment_volume
+  - anomaly_count
+  - severe_anomaly_count
+  - anomaly_rate_pct
+  - shipment_value
+  - health_score
+  order_by_cols:
+  - '["anomaly_rate_pct", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    shipment_volume:
+      d3NumberFormat: ',.0f'
+      showCellBars: true
+    anomaly_rate_pct:
+      d3NumberFormat: .1f
+      showCellBars: true
+    shipment_value:
+      d3NumberFormat: $,.0f
+    health_score:
+      d3NumberFormat: .1f
+      showCellBars: true
+query_context: '{"datasource": {"id": 73, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["anomaly_rate_pct", false]], "columns": ["partner_name",
+  "shipment_volume", "anomaly_count", "severe_anomaly_count", "anomaly_rate_pct",
+  "shipment_value", "health_score"], "metrics": []}], "form_data": {"datasource":
+  "73__table", "viz_type": "table", "query_mode": "raw", "all_columns": ["partner_name",
+  "shipment_volume", "anomaly_count", "severe_anomaly_count", "anomaly_rate_pct",
+  "shipment_value", "health_score"], "order_by_cols": ["[\"anomaly_rate_pct\", false]"],
+  "row_limit": 100, "server_page_length": 25, "time_range": "No filter", "column_config":
+  {"shipment_volume": {"d3NumberFormat": ",.0f", "showCellBars": true}, "anomaly_rate_pct":
+  {"d3NumberFormat": ".1f", "showCellBars": true}, "shipment_value": {"d3NumberFormat":
+  "$,.0f"}, "health_score": {"d3NumberFormat": ".1f", "showCellBars": true}}}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: cb3db86d-7e91-456f-9d32-1d4a74845f73
+version: 1.0.0
+dataset_uuid: 9104475b-b4c5-4b95-9583-f8e56cffc3e5
+tags: []
