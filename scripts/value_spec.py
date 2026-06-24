@@ -100,6 +100,11 @@ NEW_CHARTS = [
     dict(slice="Success", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="processed clean",
          metric=("ok", "SUM(txn_count)-SUM(failed_count)-SUM(rejected_count)")),
+    # Unique internal name: a plain "Auto-processed %" chart (id=92) is shared by
+    # dashboards 10/13, so keep this Home copy separate and display via override.
+    dict(slice="Home · Auto-processed %", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", number_format=".1f", subheader="straight-through",
+         metric=("auto", "100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))")),
     # "Exceptions" collides with mp_demo chart id=348 (dash 12) — keep a unique
     # internal name and display "Exceptions" via sliceNameOverride in LAYOUT.
     dict(slice="Home · Exceptions", tab=T_HOME, dataset="vw_rollup", **KPI,
@@ -214,18 +219,19 @@ KH, CH, TH, BH = 30, 50, 60, 56   # KPI / chart / tall-table / table heights
 
 LAYOUT = [
     (T_HOME, [
-        # Row 1: headline outcomes.
-        ("Total messages", 4, KH), ("Success", 4, KH),
-        ("Home · Exceptions", 4, KH, "Exceptions"),
+        # Row 1: headline health.
+        ("Total messages", 3, KH), ("Success", 3, KH),
+        ("Home · Auto-processed %", 3, KH, "Auto-processed %"),
+        ("Home · Exceptions", 3, KH, "Exceptions"),
         # Row 2: doc-type families.
         ("Orders (850)", 4, KH), ("Invoices (810)", 4, KH), ("Notices / ASN", 4, KH),
-        # Volume row.
-        ("Message volume trend", 6, CH),
-        ("Volume by message type", 3, CH), ("EDI vs API split", 3, CH),
-        # Exceptions row.
-        ("Exceptions Trend", 6, CH),
-        ("Home · Exceptions by reason", 3, CH, "Exceptions by reason"),
-        ("Exceptions by partner", 3, CH),
+        # Volume: wide trend + protocol split pie.
+        ("Message volume trend", 8, CH), ("EDI vs API split", 4, CH),
+        # Exceptions: wide trend + reason pie.
+        ("Exceptions Trend", 8, CH),
+        ("Home · Exceptions by reason", 4, CH, "Exceptions by reason"),
+        # Breakdown bars get full breathing room (were squeezed at width 3).
+        ("Volume by message type", 6, CH), ("Exceptions by partner", 6, CH),
     ]),
     (T_SHIP, [   # Shipment Integration 360 — cockpit world (public.vw_shipment_*)
         ("Shipments in scope", 3, KH), ("Choreography complete", 3, KH),
@@ -236,10 +242,11 @@ LAYOUT = [
         ("Shipment integration worklist", 12, BH),
         ("Shipment message set", 6, TH), ("Shipment status journey", 6, TH),
     ]),
-    (T_TXN, [
-        ("LOB: Details", 12, TH),
-        ("LOB: Incoming data", 6, CH), ("LOB: Outgoing data", 6, CH),
-        ("LOB: Ack data", 12, BH),
+    (T_TXN, [   # LOB: prefix dropped via sliceNameOverride (charts shared w/ cockpit)
+        ("LOB: Details", 12, TH, "Details"),
+        ("LOB: Incoming data", 6, CH, "Incoming data"),
+        ("LOB: Outgoing data", 6, CH, "Outgoing data"),
+        ("LOB: Ack data", 12, BH, "Ack data"),
     ]),
     (T_ISSUE, [
         ("Failed (period)", 4, KH), ("Rejected (period)", 4, KH), ("Duplicates suppressed", 4, KH),
