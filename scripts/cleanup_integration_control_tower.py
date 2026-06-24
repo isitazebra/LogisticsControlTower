@@ -18,8 +18,8 @@ import json
 from preset_client import client
 
 DASH_ID = 12
-NEW_TITLE = "Integration Control Tower"
-NEW_SLUG = "integration-control-tower"
+NEW_TITLE = "Integration Value Cockpit"
+NEW_SLUG = "integration-value-cockpit"
 LOB_DS_TABLE = "vw_shipment_integration_summary"   # source of transport_mode options
 LOB_COL = "transport_mode"
 FILTER_ID = "NATIVE_FILTER-transport-mode-lob"
