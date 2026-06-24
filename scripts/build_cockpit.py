@@ -34,6 +34,17 @@ def qc(ds_id, form_data, query):
 
 # --- per-kind config builders: return (viz_type, params, query_context) -----
 
+def _bignum_style(params, c):
+    """Opt-in big-number styling (font sizing + teal color_picker) so reused KPIs
+    can match the Integration Value Cockpit look. Only applied if specified."""
+    if c.get("header_font_size") is not None:
+        params["header_font_size"] = c["header_font_size"]
+    if c.get("subheader_font_size") is not None:
+        params["subheader_font_size"] = c["subheader_font_size"]
+    if c.get("color_picker") is not None:
+        params["color_picker"] = c["color_picker"]
+
+
 def build(kind, ds_id, c):
     ds = f"{ds_id}__table"
     NO_TIME = "No filter"
@@ -81,6 +92,7 @@ def build(kind, ds_id, c):
                       "subheader": c.get("subheader", ""), "time_range": NO_TIME,
                       "granularity_sqla": tcol, "time_grain_sqla": "P1D", "compare_lag": "",
                       "y_axis_format": c.get("number_format", "SMART_NUMBER")}
+            _bignum_style(params, c)
             q = base_query({"columns": [], "metrics": [met], "is_timeseries": True,
                             "granularity": tcol, "row_limit": 10000,
                             "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"}})
@@ -88,12 +100,7 @@ def build(kind, ds_id, c):
         params = {"datasource": ds, "viz_type": "big_number_total", "metric": met,
                   "subheader": c.get("subheader", ""), "time_range": NO_TIME,
                   "y_axis_format": c.get("number_format", "SMART_NUMBER")}
-        # optional, opt-in font sizing so long KPI titles/subheaders stay legible
-        # inside narrow tiles (fractions of tile height; only applied if specified).
-        if c.get("header_font_size") is not None:
-            params["header_font_size"] = c["header_font_size"]
-        if c.get("subheader_font_size") is not None:
-            params["subheader_font_size"] = c["subheader_font_size"]
+        _bignum_style(params, c)
         q = base_query({"columns": [], "metrics": [met], "row_limit": 1})
         return "big_number_total", params, qc(ds_id, params, q)
 

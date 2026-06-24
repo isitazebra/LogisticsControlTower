@@ -44,8 +44,18 @@ T_PART = "Partner Insights"
 NEW_DS = {
     "vw_rollup_edi": dict(sql="SELECT * FROM txn_rollup_hourly WHERE protocol='edi'", dttm="bucket"),
     "vw_rollup_api": dict(sql="SELECT * FROM txn_rollup_hourly WHERE protocol='api'", dttm="bucket"),
+    # Cockpit-world shipment choreography (ported from mp_demo into public via
+    # sql/11; partners remapped onto the cockpit set). Powers the Shipment view.
+    "vw_shipment_integration": dict(sql="SELECT * FROM vw_shipment_integration", dttm="shipment_date"),
+    "vw_shipment_messages": dict(sql="SELECT * FROM vw_shipment_messages", dttm="transaction_timestamp"),
+    "vw_shipment_journey": dict(sql="SELECT * FROM vw_shipment_journey", dttm="status_timestamp"),
 }
 DATASETS = {**C.DATASETS, **NEW_DS}
+
+# Teal KPI styling lifted from the Integration Value Cockpit (Control Tower):
+# teal #007A87 big numbers, sized so titles/subheaders stay legible in tiles.
+KPI = dict(header_font_size=0.4, subheader_font_size=0.15,
+           color_picker={"r": 0, "g": 122, "b": 135, "a": 1})
 
 
 # ---------------------------------------------------------------------------
@@ -62,17 +72,12 @@ def _pick(slice_name, tab):
 
 
 REUSED = [
-    # Home
-    ("Overview: Transactions", T_HOME), ("Overview: Auto-processed %", T_HOME),
-    ("Overview: Open exceptions", T_HOME), ("Overview: In-flight", T_HOME),
-    ("Overview: EDI vs API", T_HOME), ("Overview: Volume by family", T_HOME),
-    ("LOB: Message by status", T_HOME), ("Volume by message type", T_HOME),
-    ("Throughput over time", T_HOME),
-    # Shipment view (LOB = logistics lines of business)
-    ("LOB: Total messages received", T_SHIP), ("LOB: Success", T_SHIP),
-    ("LOB: Failure", T_SHIP), ("LOB: Message by partner", T_SHIP),
-    ("LOB: Message by type", T_SHIP), ("Volume by LOB", T_SHIP),
-    ("LOB: Processing trend", T_SHIP),
+    # Home — clean, prefix-free cockpit charts reused as supporting visuals
+    # (the Control-Tower KPI row + trends are net-new below to avoid hijacking
+    # the mp_demo charts that dashboards 12/13 still use as a fallback).
+    ("EDI vs API split", T_HOME), ("Volume by family", T_HOME),
+    ("Volume by message type", T_HOME),
+    # Shipment view: built net-new on the cockpit-world shipment views (below).
     # Transaction view (Minimal "Details")
     ("LOB: Details", T_TXN), ("LOB: Incoming data", T_TXN),
     ("LOB: Outgoing data", T_TXN), ("LOB: Ack data", T_TXN),
@@ -88,13 +93,80 @@ REUSED = [
 ]
 
 NEW_CHARTS = [
+    # ===== Home — Control-Tower KPIs (cockpit world, teal, no prefix) =====
+    # Doc-type families: Orders=850 PO, Invoices=810, Notices/ASN=856.
+    dict(slice="Messages processed", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", metric=("vol", "SUM(txn_count)"), subheader="total messages"),
+    dict(slice="Orders (850)", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="purchase orders",
+         metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='850')")),
+    dict(slice="Invoices (810)", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="invoices",
+         metric=("inv", "SUM(txn_count) FILTER (WHERE doc_type='810')")),
+    dict(slice="Notices / ASN", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="ship notices (856)",
+         metric=("asn", "SUM(txn_count) FILTER (WHERE doc_type='856')")),
+    dict(slice="Open issues", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="failed + rejected",
+         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
+    dict(slice="Message volume trend", tab=T_HOME, dataset="vw_rollup",
+         kind="ts", x="bucket", chart="line", metric=("txns", "SUM(txn_count)")),
+    dict(slice="Open issues trend", tab=T_HOME, dataset="vw_rollup",
+         kind="ts", x="bucket", chart="line",
+         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
+    dict(slice="Issues by reason", tab=T_HOME, dataset="q3_exceptions_by_reason",
+         kind="pie", groupby="reason_category", metric=("occ", "SUM(occurrences)")),
+    dict(slice="Partners with open issues", tab=T_HOME, dataset="vw_rollup",
+         kind="bar", dim="partner", row_limit=15,
+         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
+
+    # ===== Shipment view — Shipment Integration 360 (cockpit world) =====
+    # Faithful port of dash-12's Shipment 360, re-sourced onto public.vw_shipment_*.
+    dict(slice="Shipments in scope", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+         kind="bignum", metric=("ships", "COUNT(*)"), subheader="shipments in integration scope"),
+    dict(slice="Choreography complete", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+         kind="bignum", number_format=".1f", subheader="all expected messages present",
+         metric=("pct", "100.0*AVG(choreography_complete::int)")),
+    dict(slice="ACK coverage", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+         kind="bignum", number_format=".1f", subheader="ACKs received vs required",
+         metric=("ack", "100.0*SUM(ack_received_cnt)/NULLIF(SUM(ack_required_cnt),0)")),
+    dict(slice="Response-SLA met", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+         kind="bignum", number_format=".1f", subheader="204->990 within partner target",
+         metric=("sla", "100.0*SUM(response_sla_met::int)/NULLIF(SUM(CASE WHEN cnt_204>0 AND cnt_990>0 THEN 1 ELSE 0 END),0)")),
+    dict(slice="Shipments w/ flow anomalies", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+         kind="bignum", subheader="integration anomalies detected",
+         metric=("anom", "SUM(CASE WHEN anomaly_count>0 THEN 1 ELSE 0 END)")),
+    dict(slice="Choreography mix", tab=T_SHIP, dataset="vw_shipment_integration",
+         kind="pie", groupby="choreography_status", metric=("ships", "COUNT(*)")),
+    dict(slice="Response latency by partner", tab=T_SHIP, dataset="vw_shipment_integration",
+         kind="bar", dim="partner", metric=("avg_min", "AVG(response_minutes)")),
+    dict(slice="Shipment message mix", tab=T_SHIP, dataset="vw_shipment_messages",
+         kind="bar", dim="doc_type", metric=("msgs", "COUNT(*)"), row_limit=30),
+    dict(slice="Shipment integration worklist", tab=T_SHIP, dataset="vw_shipment_integration",
+         kind="raw", row_limit=200,
+         cols=["shipment_id", "partner", "transport_mode", "total_messages",
+               "choreography_status", "response_minutes", "expected_204_990_minutes",
+               "ack_pending", "error_cnt", "anomaly_count", "critical_anomaly_count",
+               "business_impact_amount", "shipment_status"],
+         order=[("anomaly_count", False), ("business_impact_amount", False)]),
+    dict(slice="Shipment message set", tab=T_SHIP, dataset="vw_shipment_messages",
+         kind="raw", row_limit=300,
+         cols=["shipment_id", "doc_type", "transaction_timestamp", "processing_status",
+               "ack_required", "ack_received", "error_code", "control_number"],
+         order=[("transaction_timestamp", True)]),
+    dict(slice="Shipment status journey", tab=T_SHIP, dataset="vw_shipment_journey",
+         kind="raw", row_limit=300,
+         cols=["shipment_id", "status_sequence", "status_code", "status_timestamp",
+               "city", "partner"],
+         order=[("status_sequence", True)]),
+
     # ===== EDI view (protocol-scoped rollup) =====
-    dict(slice="EDI · Transactions", tab=T_EDI, dataset="vw_rollup_edi",
+    dict(slice="EDI · Transactions", tab=T_EDI, dataset="vw_rollup_edi", **KPI,
          kind="bignum", metric=("edi", "SUM(txn_count)"), subheader="EDI messages"),
-    dict(slice="EDI · Auto-processed %", tab=T_EDI, dataset="vw_rollup_edi",
+    dict(slice="EDI · Auto-processed %", tab=T_EDI, dataset="vw_rollup_edi", **KPI,
          kind="bignum", number_format=".1f", subheader="straight-through",
          metric=("auto", "100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))")),
-    dict(slice="EDI · Exceptions", tab=T_EDI, dataset="vw_rollup_edi",
+    dict(slice="EDI · Exceptions", tab=T_EDI, dataset="vw_rollup_edi", **KPI,
          kind="bignum", metric=("exc", "SUM(failed_count)+SUM(rejected_count)"),
          subheader="failed + rejected"),
     dict(slice="EDI · Volume by partner", tab=T_EDI, dataset="vw_rollup_edi",
@@ -104,12 +176,12 @@ NEW_CHARTS = [
     dict(slice="EDI · Throughput", tab=T_EDI, dataset="vw_rollup_edi",
          kind="timebar", metric=("txns", "SUM(txn_count)"), series="direction"),
     # ===== API view (protocol-scoped rollup) =====
-    dict(slice="API · Transactions", tab=T_API, dataset="vw_rollup_api",
+    dict(slice="API · Transactions", tab=T_API, dataset="vw_rollup_api", **KPI,
          kind="bignum", metric=("api", "SUM(txn_count)"), subheader="API calls"),
-    dict(slice="API · Auto-processed %", tab=T_API, dataset="vw_rollup_api",
+    dict(slice="API · Auto-processed %", tab=T_API, dataset="vw_rollup_api", **KPI,
          kind="bignum", number_format=".1f", subheader="straight-through",
          metric=("auto", "100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))")),
-    dict(slice="API · Errors", tab=T_API, dataset="vw_rollup_api",
+    dict(slice="API · Errors", tab=T_API, dataset="vw_rollup_api", **KPI,
          kind="bignum", metric=("exc", "SUM(failed_count)+SUM(rejected_count)"),
          subheader="failed + rejected"),
     dict(slice="API · Volume by partner", tab=T_API, dataset="vw_rollup_api",
@@ -134,16 +206,20 @@ KH, CH, TH, BH = 30, 50, 60, 56   # KPI / chart / tall-table / table heights
 
 LAYOUT = [
     (T_HOME, [
-        ("Overview: Transactions", 3, KH), ("Overview: Auto-processed %", 3, KH),
-        ("Overview: Open exceptions", 3, KH), ("Overview: In-flight", 3, KH),
-        ("Overview: EDI vs API", 4, CH), ("Overview: Volume by family", 4, CH),
-        ("LOB: Message by status", 4, CH),
-        ("Volume by message type", 6, CH), ("Throughput over time", 6, CH),
+        ("Messages processed", 3, KH), ("Orders (850)", 3, KH),
+        ("Invoices (810)", 2, KH), ("Notices / ASN", 2, KH), ("Open issues", 2, KH),
+        ("Message volume trend", 6, CH), ("Open issues trend", 6, CH),
+        ("EDI vs API split", 4, CH), ("Volume by family", 4, CH), ("Issues by reason", 4, CH),
+        ("Volume by message type", 6, CH), ("Partners with open issues", 6, CH),
     ]),
-    (T_SHIP, [
-        ("LOB: Total messages received", 4, KH), ("LOB: Success", 4, KH), ("LOB: Failure", 4, KH),
-        ("LOB: Message by partner", 4, CH), ("LOB: Message by type", 4, CH), ("Volume by LOB", 4, CH),
-        ("LOB: Processing trend", 12, CH),
+    (T_SHIP, [   # Shipment Integration 360 — cockpit world (public.vw_shipment_*)
+        ("Shipments in scope", 3, KH), ("Choreography complete", 3, KH),
+        ("ACK coverage", 2, KH), ("Response-SLA met", 2, KH),
+        ("Shipments w/ flow anomalies", 2, KH),
+        ("Choreography mix", 4, CH), ("Response latency by partner", 4, CH),
+        ("Shipment message mix", 4, CH),
+        ("Shipment integration worklist", 12, BH),
+        ("Shipment message set", 6, TH), ("Shipment status journey", 6, TH),
     ]),
     (T_TXN, [
         ("LOB: Details", 12, TH),
