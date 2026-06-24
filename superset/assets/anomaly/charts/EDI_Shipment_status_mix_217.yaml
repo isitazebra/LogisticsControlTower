@@ -1,0 +1,42 @@
+slice_name: "EDI \xB7 Shipment status mix"
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 70__table
+  viz_type: pie
+  groupby:
+  - current_status
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(shipment_count)
+    label: shipments
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  show_legend: true
+  innerRadius: 45
+  donut: true
+  label_type: key_percent
+  show_labels: true
+  labels_outside: true
+  number_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 70, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(shipment_count)",
+  "label": "shipments", "hasCustomLabel": true}, false]], "columns": ["current_status"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(shipment_count)", "label":
+  "shipments", "hasCustomLabel": true}]}], "form_data": {"datasource": "70__table",
+  "viz_type": "pie", "groupby": ["current_status"], "metric": {"expressionType": "SQL",
+  "sqlExpression": "SUM(shipment_count)", "label": "shipments", "hasCustomLabel":
+  true}, "row_limit": 100, "time_range": "No filter", "show_legend": true, "innerRadius":
+  45, "donut": true, "label_type": "key_percent", "show_labels": true, "labels_outside":
+  true, "number_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 39e4687c-21da-4402-bef2-9b901c3b0f14
+version: 1.0.0
+dataset_uuid: ece3bf05-9628-41a2-9cb8-480c0af69c89
+tags: []

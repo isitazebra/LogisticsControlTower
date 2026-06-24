@@ -1,0 +1,31 @@
+slice_name: "EDI \xB7 Total anomalies"
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 66__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: MAX(total_anomalies)
+    label: anomalies
+    hasCustomLabel: true
+  subheader: anomalies
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 66, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "MAX(total_anomalies)", "label": "anomalies", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "66__table", "viz_type": "big_number_total",
+  "metric": {"expressionType": "SQL", "sqlExpression": "MAX(total_anomalies)", "label":
+  "anomalies", "hasCustomLabel": true}, "subheader": "anomalies", "time_range": "No
+  filter", "y_axis_format": "SMART_NUMBER"}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: d0d35bf2-267b-4e1e-b58c-7c067f150c90
+version: 1.0.0
+dataset_uuid: 15601a36-717e-4ebc-85cf-61c145ccdea1
+tags: []
