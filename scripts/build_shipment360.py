@@ -65,8 +65,10 @@ CHARTS = [
                "business_impact_amount", "shipment_status"],
          order=[("anomaly_count", False), ("business_impact_amount", False)], row_limit=200),
     # per-shipment drill (receives cross-filter on shipment_id)
+    # direction is intentionally omitted: this feed carries a single carrier-facing
+    # leg, so a per-message direction is not meaningful integration signal here.
     dict(slice="Message set (selected shipment)", dataset="detail", kind="raw", w=6, h=60,
-         cols=["shipment_id", "transaction_type", "transaction_direction",
+         cols=["shipment_id", "transaction_type",
                "transaction_timestamp", "processing_status", "ack_required",
                "ack_received", "error_code", "control_number"],
          order=[("transaction_timestamp", True)], row_limit=300),
