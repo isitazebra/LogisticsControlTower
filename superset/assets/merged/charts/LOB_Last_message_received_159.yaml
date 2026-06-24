@@ -1,0 +1,37 @@
+slice_name: 'LOB: Last message received'
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 59__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - lob
+  - last_received
+  - live_refs
+  order_by_cols:
+  - '["last_received", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    live_refs:
+      d3NumberFormat: ',.0f'
+      showCellBars: true
+query_context: '{"datasource": {"id": 59, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["last_received", false]], "columns": ["lob",
+  "last_received", "live_refs"], "metrics": []}], "form_data": {"datasource": "59__table",
+  "viz_type": "table", "query_mode": "raw", "all_columns": ["lob", "last_received",
+  "live_refs"], "order_by_cols": ["[\"last_received\", false]"], "row_limit": 100,
+  "server_page_length": 25, "time_range": "No filter", "column_config": {"live_refs":
+  {"d3NumberFormat": ",.0f", "showCellBars": true}}}, "result_format": "json", "result_type":
+  "full"}'
+cache_timeout: null
+uuid: 3c36edb2-cde6-454f-9ae2-b02c1ea3a367
+version: 1.0.0
+dataset_uuid: 645f4273-2e18-4827-abea-d7b260388a1d
+tags: []

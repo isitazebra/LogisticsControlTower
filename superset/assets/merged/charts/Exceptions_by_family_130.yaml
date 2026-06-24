@@ -1,0 +1,37 @@
+slice_name: Exceptions by family
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 52__table
+  viz_type: echarts_timeseries_bar
+  x_axis: family
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(failed)+SUM(rejected)
+    label: exceptions
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 52, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(failed)+SUM(rejected)",
+  "label": "exceptions", "hasCustomLabel": true}, false]], "columns": ["family"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(failed)+SUM(rejected)",
+  "label": "exceptions", "hasCustomLabel": true}], "series_columns": []}], "form_data":
+  {"datasource": "52__table", "viz_type": "echarts_timeseries_bar", "x_axis": "family",
+  "groupby": [], "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(failed)+SUM(rejected)",
+  "label": "exceptions", "hasCustomLabel": true}], "row_limit": 100, "time_range":
+  "No filter", "x_axis_sort_asc": false, "x_axis_sort_series": "name", "order_desc":
+  true}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 16f321df-5a3e-4f0c-9f5a-cfde02b8bca7
+version: 1.0.0
+dataset_uuid: da71d66e-6336-478e-8ebd-af65e5042f94
+tags: []

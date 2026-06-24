@@ -1,0 +1,37 @@
+slice_name: "EDI \xB7 SLA compliance trend"
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_line
+params:
+  datasource: 67__table
+  viz_type: echarts_timeseries_line
+  x_axis: metric_date
+  time_grain_sqla: P1D
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: MAX(sla_compliance_pct)
+    label: sla_pct
+    hasCustomLabel: true
+  row_limit: 10000
+  time_range: No filter
+  y_axis_format: .1f
+query_context: '{"datasource": {"id": 67, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"},
+  "applied_time_extras": {}, "annotation_layers": [], "url_params": {}, "custom_params":
+  {}, "custom_form_data": {}, "row_limit": 10000, "orderby": [[{"expressionType":
+  "SQL", "sqlExpression": "MAX(sla_compliance_pct)", "label": "sla_pct", "hasCustomLabel":
+  true}, false]], "columns": [{"timeGrain": "P1D", "columnType": "BASE_AXIS", "sqlExpression":
+  "metric_date", "label": "metric_date", "expressionType": "SQL"}], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "MAX(sla_compliance_pct)", "label": "sla_pct", "hasCustomLabel":
+  true}], "series_columns": []}], "form_data": {"datasource": "67__table", "viz_type":
+  "echarts_timeseries_line", "x_axis": "metric_date", "time_grain_sqla": "P1D", "groupby":
+  [], "metrics": [{"expressionType": "SQL", "sqlExpression": "MAX(sla_compliance_pct)",
+  "label": "sla_pct", "hasCustomLabel": true}], "row_limit": 10000, "time_range":
+  "No filter", "y_axis_format": ".1f"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: e405091d-5d3d-4a5e-ac2a-3a4793842193
+version: 1.0.0
+dataset_uuid: e0d0e6ad-8f00-40ac-97ac-64d3fc8c119e
+tags: []

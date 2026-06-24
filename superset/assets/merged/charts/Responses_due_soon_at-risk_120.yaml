@@ -1,0 +1,34 @@
+slice_name: Responses due soon (at-risk)
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 45__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - name
+  - partner
+  - business_ref
+  - trigger_at
+  - threshold_minutes
+  order_by_cols:
+  - '["trigger_at", false]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 45, "type": "table"}, "force": false, "queries":
+  [{"filters": [{"col": "sla_state", "op": "==", "val": "at_risk"}], "extras": {"having":
+  "", "where": ""}, "applied_time_extras": {}, "annotation_layers": [], "url_params":
+  {}, "custom_params": {}, "custom_form_data": {}, "row_limit": 100, "orderby": [["trigger_at",
+  false]], "columns": ["name", "partner", "business_ref", "trigger_at", "threshold_minutes"],
+  "metrics": []}], "form_data": {"datasource": "45__table", "viz_type": "table", "query_mode":
+  "raw", "all_columns": ["name", "partner", "business_ref", "trigger_at", "threshold_minutes"],
+  "order_by_cols": ["[\"trigger_at\", false]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 7695af02-2028-4d04-bc7c-22da18603c5e
+version: 1.0.0
+dataset_uuid: f6f3d650-f430-4d5c-8642-59a11d7f1c70
+tags: []

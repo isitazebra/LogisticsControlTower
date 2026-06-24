@@ -1,0 +1,30 @@
+slice_name: Document value (period)
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 51__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(value_usd)
+    label: value
+    hasCustomLabel: true
+  subheader: $ across all types
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 51, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM(value_usd)", "label": "value", "hasCustomLabel": true}]}],
+  "form_data": {"datasource": "51__table", "viz_type": "big_number_total", "metric":
+  {"expressionType": "SQL", "sqlExpression": "SUM(value_usd)", "label": "value", "hasCustomLabel":
+  true}, "subheader": "$ across all types", "time_range": "No filter", "y_axis_format":
+  "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 448cacd2-acf4-4e4b-afa9-eeaed227c175
+version: 1.0.0
+dataset_uuid: eff3e74b-1c05-48f1-867a-9591c25a5243
+tags: []

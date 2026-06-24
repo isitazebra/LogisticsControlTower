@@ -1,0 +1,35 @@
+slice_name: Data volume (kchar)
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number
+params:
+  datasource: 22__table
+  viz_type: big_number
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM(kchar_sum)
+    label: kchar
+    hasCustomLabel: true
+  subheader: kilochars
+  time_range: No filter
+  granularity_sqla: bucket
+  time_grain_sqla: P1D
+  compare_lag: ''
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 22, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": "", "time_grain_sqla": "P1D"},
+  "applied_time_extras": {}, "annotation_layers": [], "url_params": {}, "custom_params":
+  {}, "custom_form_data": {}, "row_limit": 10000, "orderby": [], "columns": [], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "SUM(kchar_sum)", "label": "kchar",
+  "hasCustomLabel": true}], "is_timeseries": true, "granularity": "bucket"}], "form_data":
+  {"datasource": "22__table", "viz_type": "big_number", "metric": {"expressionType":
+  "SQL", "sqlExpression": "SUM(kchar_sum)", "label": "kchar", "hasCustomLabel": true},
+  "subheader": "kilochars", "time_range": "No filter", "granularity_sqla": "bucket",
+  "time_grain_sqla": "P1D", "compare_lag": "", "y_axis_format": "SMART_NUMBER"}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 41da1510-6fb2-4d2e-a489-7e280956c7e9
+version: 1.0.0
+dataset_uuid: 508a1b2a-c7f0-4040-974c-7373d1d85a80
+tags: []

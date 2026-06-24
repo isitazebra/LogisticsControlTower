@@ -1,0 +1,164 @@
+table_name: q10_sla_pairs
+main_dttm_col: trigger_at
+currency_code_column: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: 120
+catalog: neondb
+schema: public
+sql: "\n        SELECT r.rule_id, r.name, t.partner, t.business_ref, t.event_time\
+  \ AS trigger_at,\n          resp.event_time AS response_at,\n          round(extract(epoch\
+  \ FROM (resp.event_time - t.event_time))/60) AS elapsed_min,\n          r.threshold_minutes,\n\
+  \          CASE\n            WHEN resp.event_time IS NOT NULL\n                \
+  \ AND extract(epoch FROM (resp.event_time-t.event_time))/60 <= r.threshold_minutes\
+  \ THEN 'met'\n            WHEN resp.event_time IS NOT NULL THEN 'missed'\n     \
+  \       WHEN now()-t.event_time > make_interval(mins=>r.threshold_minutes)     \
+  \       THEN 'missed'\n            WHEN now()-t.event_time > make_interval(mins=>(r.threshold_minutes*0.8)::int)\
+  \ THEN 'at_risk'\n            ELSE 'pending' END AS sla_state\n        FROM sla_rules\
+  \ r\n        JOIN txn_events t ON t.doc_type=r.trigger_doc_type AND t.direction=r.trigger_direction\n\
+  \          AND (r.partner IS NULL OR t.partner=r.partner) AND t.environment=r.environment\n\
+  \        LEFT JOIN LATERAL (\n          SELECT event_time FROM txn_events x\n  \
+  \        WHERE x.doc_type=r.response_doc_type AND x.direction=r.response_direction\n\
+  \            AND x.business_ref=t.business_ref AND x.event_time >= t.event_time\n\
+  \          ORDER BY x.event_time LIMIT 1) resp ON true\n        WHERE r.trigger_doc_type\
+  \ IS NOT NULL AND t.business_ref LIKE 'LOAD%'"
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: f6f3d650-f430-4d5c-8642-59a11d7f1c70
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: elapsed_min
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: DECIMAL
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: response_at
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: DATETIMETZ
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: trigger_at
+  verbose_name: null
+  is_dttm: true
+  is_active: true
+  type: DATETIMETZ
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: threshold_minutes
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: rule_id
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: INTEGER
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: sla_state
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: business_ref
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: name
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: partner
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 14f8230d-88d6-4c7c-b670-0d2f21d9f39f

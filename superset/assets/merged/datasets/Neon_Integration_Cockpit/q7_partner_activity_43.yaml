@@ -1,0 +1,90 @@
+table_name: q7_partner_activity
+main_dttm_col: null
+currency_code_column: null
+description: null
+default_endpoint: null
+offset: 0
+cache_timeout: 120
+catalog: neondb
+schema: public
+sql: "\n        WITH cur AS (SELECT partner, sum(txn_count) v, sum(failed_count+rejected_count)\
+  \ e\n                     FROM txn_rollup_hourly WHERE bucket >= now()-interval\
+  \ '7 days' GROUP BY partner),\n             prv AS (SELECT partner, sum(txn_count)\
+  \ v FROM txn_rollup_hourly\n                     WHERE bucket >= now()-interval\
+  \ '14 days' AND bucket < now()-interval '7 days' GROUP BY partner)\n        SELECT\
+  \ cur.partner, cur.v AS volume, cur.e AS exceptions,\n               round(100.0*(cur.v-prv.v)/nullif(prv.v,0))\
+  \ AS pct_change\n        FROM cur LEFT JOIN prv USING (partner) ORDER BY cur.v DESC"
+params: null
+template_params: null
+filter_select_enabled: true
+fetch_values_predicate: null
+extra: null
+normalize_columns: false
+always_filter_main_dttm: false
+folders: null
+uuid: 32e83534-5c5a-4332-b29e-921dc4ed0168
+metrics:
+- metric_name: count
+  verbose_name: COUNT(*)
+  metric_type: count
+  expression: COUNT(*)
+  description: null
+  d3format: null
+  currency: null
+  extra: null
+  warning_text: null
+columns:
+- column_name: pct_change
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: DECIMAL
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: exceptions
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: DECIMAL
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: volume
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: DECIMAL
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+- column_name: partner
+  verbose_name: null
+  is_dttm: false
+  is_active: true
+  type: STRING
+  advanced_data_type: null
+  groupby: true
+  filterable: true
+  expression: null
+  description: null
+  python_date_format: null
+  datetime_format: null
+  extra: null
+version: 1.0.0
+database_uuid: 14f8230d-88d6-4c7c-b670-0d2f21d9f39f

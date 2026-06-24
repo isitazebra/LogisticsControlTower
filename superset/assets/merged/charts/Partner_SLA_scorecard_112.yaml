@@ -1,0 +1,55 @@
+slice_name: Partner SLA scorecard
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 42__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - partner
+  - total
+  - met
+  - missed
+  - pct_met
+  - avg_min
+  - max_min
+  - penalty_usd
+  order_by_cols:
+  - '["pct_met", true]'
+  row_limit: 100
+  server_page_length: 25
+  time_range: No filter
+  column_config:
+    total:
+      d3NumberFormat: ',.0f'
+      showCellBars: true
+    pct_met:
+      d3NumberFormat: .1f
+      showCellBars: true
+    penalty_usd:
+      d3NumberFormat: $,.0f
+  conditional_formatting:
+  - column: pct_met
+    operator: <
+    targetValue: 95
+    colorScheme: '#fcc419'
+query_context: '{"datasource": {"id": 42, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [["pct_met", true]], "columns": ["partner", "total",
+  "met", "missed", "pct_met", "avg_min", "max_min", "penalty_usd"], "metrics": []}],
+  "form_data": {"datasource": "42__table", "viz_type": "table", "query_mode": "raw",
+  "all_columns": ["partner", "total", "met", "missed", "pct_met", "avg_min", "max_min",
+  "penalty_usd"], "order_by_cols": ["[\"pct_met\", true]"], "row_limit": 100, "server_page_length":
+  25, "time_range": "No filter", "column_config": {"total": {"d3NumberFormat": ",.0f",
+  "showCellBars": true}, "pct_met": {"d3NumberFormat": ".1f", "showCellBars": true},
+  "penalty_usd": {"d3NumberFormat": "$,.0f"}}, "conditional_formatting": [{"column":
+  "pct_met", "operator": "<", "targetValue": 95, "colorScheme": "#fcc419"}]}, "result_format":
+  "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 1df02c22-a3de-4154-9534-0eb0ede7be4e
+version: 1.0.0
+dataset_uuid: 26b113ae-461a-47a6-bbd4-166fee7c95a8
+tags: []

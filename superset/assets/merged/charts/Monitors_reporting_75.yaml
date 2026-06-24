@@ -1,0 +1,31 @@
+slice_name: Monitors reporting
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 25__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: SUM((NOT is_stale)::int)
+    label: reporting
+    hasCustomLabel: true
+  subheader: monitors not silent
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 25, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "SUM((NOT is_stale)::int)", "label": "reporting", "hasCustomLabel":
+  true}]}], "form_data": {"datasource": "25__table", "viz_type": "big_number_total",
+  "metric": {"expressionType": "SQL", "sqlExpression": "SUM((NOT is_stale)::int)",
+  "label": "reporting", "hasCustomLabel": true}, "subheader": "monitors not silent",
+  "time_range": "No filter", "y_axis_format": "SMART_NUMBER"}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: 9b71872c-a0fc-48e6-8309-57dd94eb504c
+version: 1.0.0
+dataset_uuid: 9f2e1e1f-0739-4067-af2a-c4d4556e7120
+tags: []

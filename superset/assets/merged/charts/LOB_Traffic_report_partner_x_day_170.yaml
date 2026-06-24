@@ -1,0 +1,41 @@
+slice_name: 'LOB: Traffic report (partner x day)'
+description: null
+certified_by: null
+certification_details: null
+viz_type: pivot_table_v2
+params:
+  datasource: 65__table
+  viz_type: pivot_table_v2
+  groupbyRows:
+  - partner
+  groupbyColumns:
+  - day
+  metrics:
+  - expressionType: SQL
+    sqlExpression: SUM(txn_count)
+    label: txns
+    hasCustomLabel: true
+  aggregateFunction: Sum
+  rowTotals: true
+  colTotals: true
+  row_limit: 1000
+  time_range: No filter
+  valueFormat: SMART_NUMBER
+  metricsLayout: COLUMNS
+query_context: '{"datasource": {"id": 65, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1000, "orderby": [[{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)",
+  "label": "txns", "hasCustomLabel": true}, false]], "columns": ["partner", "day"],
+  "metrics": [{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)", "label":
+  "txns", "hasCustomLabel": true}]}], "form_data": {"datasource": "65__table", "viz_type":
+  "pivot_table_v2", "groupbyRows": ["partner"], "groupbyColumns": ["day"], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "SUM(txn_count)", "label": "txns", "hasCustomLabel":
+  true}], "aggregateFunction": "Sum", "rowTotals": true, "colTotals": true, "row_limit":
+  1000, "time_range": "No filter", "valueFormat": "SMART_NUMBER", "metricsLayout":
+  "COLUMNS"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 82068dd7-7720-49b1-8ef5-36a6c8fac8a8
+version: 1.0.0
+dataset_uuid: 0541ac15-c67b-4323-a621-d3aa84c293a5
+tags: []

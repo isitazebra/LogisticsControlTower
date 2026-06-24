@@ -1,0 +1,30 @@
+slice_name: 'LOB: Open exceptions'
+description: null
+certified_by: null
+certification_details: null
+viz_type: big_number_total
+params:
+  datasource: 64__table
+  viz_type: big_number_total
+  metric:
+    expressionType: SQL
+    sqlExpression: COUNT(*)
+    label: open
+    hasCustomLabel: true
+  subheader: failed + rejected
+  time_range: No filter
+  y_axis_format: SMART_NUMBER
+query_context: '{"datasource": {"id": 64, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 1, "orderby": [], "columns": [], "metrics": [{"expressionType":
+  "SQL", "sqlExpression": "COUNT(*)", "label": "open", "hasCustomLabel": true}]}],
+  "form_data": {"datasource": "64__table", "viz_type": "big_number_total", "metric":
+  {"expressionType": "SQL", "sqlExpression": "COUNT(*)", "label": "open", "hasCustomLabel":
+  true}, "subheader": "failed + rejected", "time_range": "No filter", "y_axis_format":
+  "SMART_NUMBER"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 210c823e-7ac1-4ed4-b41f-ce580836d694
+version: 1.0.0
+dataset_uuid: 2e5442f8-0c5b-4262-8b9f-2dd4a2469110
+tags: []

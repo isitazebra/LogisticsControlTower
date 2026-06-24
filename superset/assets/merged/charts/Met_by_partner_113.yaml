@@ -1,0 +1,37 @@
+slice_name: '% Met by partner'
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 42__table
+  viz_type: echarts_timeseries_bar
+  x_axis: partner
+  groupby: []
+  metrics:
+  - expressionType: SQL
+    sqlExpression: MAX(pct_met)
+    label: pct_met
+    hasCustomLabel: true
+  row_limit: 100
+  time_range: No filter
+  x_axis_sort_asc: false
+  x_axis_sort_series: name
+  order_desc: true
+query_context: '{"datasource": {"id": 42, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 100, "orderby": [[{"expressionType": "SQL", "sqlExpression": "MAX(pct_met)",
+  "label": "pct_met", "hasCustomLabel": true}, false]], "columns": ["partner"], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "MAX(pct_met)", "label": "pct_met",
+  "hasCustomLabel": true}], "series_columns": []}], "form_data": {"datasource": "42__table",
+  "viz_type": "echarts_timeseries_bar", "x_axis": "partner", "groupby": [], "metrics":
+  [{"expressionType": "SQL", "sqlExpression": "MAX(pct_met)", "label": "pct_met",
+  "hasCustomLabel": true}], "row_limit": 100, "time_range": "No filter", "x_axis_sort_asc":
+  false, "x_axis_sort_series": "name", "order_desc": true}, "result_format": "json",
+  "result_type": "full"}'
+cache_timeout: null
+uuid: bf9c0f2a-fe34-45d3-a693-8ea5ca75d4f4
+version: 1.0.0
+dataset_uuid: 26b113ae-461a-47a6-bbd4-166fee7c95a8
+tags: []

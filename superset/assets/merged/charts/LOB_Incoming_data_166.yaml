@@ -1,0 +1,34 @@
+slice_name: 'LOB: Incoming data'
+description: null
+certified_by: null
+certification_details: null
+viz_type: table
+params:
+  datasource: 61__table
+  viz_type: table
+  query_mode: raw
+  all_columns:
+  - event_time
+  - business_ref
+  - doc_type
+  - status
+  - payload
+  order_by_cols:
+  - '["event_time", false]'
+  row_limit: 50
+  server_page_length: 25
+  time_range: No filter
+query_context: '{"datasource": {"id": 61, "type": "table"}, "force": false, "queries":
+  [{"filters": [], "extras": {"having": "", "where": ""}, "applied_time_extras": {},
+  "annotation_layers": [], "url_params": {}, "custom_params": {}, "custom_form_data":
+  {}, "row_limit": 50, "orderby": [["event_time", false]], "columns": ["event_time",
+  "business_ref", "doc_type", "status", "payload"], "metrics": []}], "form_data":
+  {"datasource": "61__table", "viz_type": "table", "query_mode": "raw", "all_columns":
+  ["event_time", "business_ref", "doc_type", "status", "payload"], "order_by_cols":
+  ["[\"event_time\", false]"], "row_limit": 50, "server_page_length": 25, "time_range":
+  "No filter"}, "result_format": "json", "result_type": "full"}'
+cache_timeout: null
+uuid: 706c8912-a7bb-4f16-87d6-06c7b6ee4e91
+version: 1.0.0
+dataset_uuid: 06fbf60d-1b08-46b3-8683-dc452bc95c18
+tags: []
