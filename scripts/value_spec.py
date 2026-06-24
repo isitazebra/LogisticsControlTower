@@ -49,6 +49,12 @@ NEW_DS = {
     "vw_shipment_integration": dict(sql="SELECT * FROM vw_shipment_integration", dttm="shipment_date"),
     "vw_shipment_messages": dict(sql="SELECT * FROM vw_shipment_messages", dttm="transaction_timestamp"),
     "vw_shipment_journey": dict(sql="SELECT * FROM vw_shipment_journey", dttm="status_timestamp"),
+    # SHARED transaction <-> shipment contract (sql/12). vw_txn_detail is the
+    # single transaction source feeding BOTH the Transaction view and the
+    # Shipment view; vw_txn_shipment is the per-shipment ROLLUP of those SAME
+    # rows. Aligned columns + one source -> the two tabs are consistent.
+    "vw_txn_detail": dict(sql="SELECT * FROM vw_txn_detail", dttm="event_time"),
+    "vw_txn_shipment": dict(sql="SELECT * FROM vw_txn_shipment", dttm="last_msg_ts"),
 }
 DATASETS = {**C.DATASETS, **NEW_DS}
 
@@ -76,10 +82,9 @@ REUSED = [
     # (the Control-Tower KPI row + trends are net-new below to avoid hijacking
     # the mp_demo charts that dashboards 12/13 still use as a fallback).
     ("EDI vs API split", T_HOME), ("Volume by message type", T_HOME),
-    # Shipment view: built net-new on the cockpit-world shipment views (below).
-    # Transaction view (Minimal "Details")
-    ("LOB: Details", T_TXN), ("LOB: Incoming data", T_TXN),
-    ("LOB: Outgoing data", T_TXN), ("LOB: Ack data", T_TXN),
+    # Shipment view + Transaction view: built net-new on the SHARED txn source
+    # (vw_txn_detail / vw_txn_shipment, sql/12) below — the old cockpit "LOB"
+    # (q_lob_*) tiles are dropped so both tabs read one source with aligned cols.
     # Issue details (exceptions while processing)
     ("Failed (period)", T_ISSUE), ("Rejected (period)", T_ISSUE),
     ("Duplicates suppressed", T_ISSUE), ("Exceptions by reason", T_ISSUE),
@@ -133,45 +138,79 @@ NEW_CHARTS = [
          kind="bar", dim="partner", row_limit=15,
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
 
-    # ===== Shipment view — Shipment Integration 360 (cockpit world) =====
-    # Faithful port of dash-12's Shipment 360, re-sourced onto public.vw_shipment_*.
-    dict(slice="Shipments in scope", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+    # ===== Shipment view — consolidation of the SHARED txn source =====
+    # Sourced on public.vw_txn_shipment (sql/12) = a per-shipment ROLLUP of the
+    # very same transaction rows the Transaction view shows (public.vw_txn_detail).
+    # The shipment worklist is therefore a grouping of the Transaction view data.
+    dict(slice="Shipments in scope", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
          kind="bignum", metric=("ships", "COUNT(*)"), subheader="shipments in integration scope"),
-    dict(slice="Choreography complete", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
-         kind="bignum", number_format=".1f", subheader="all expected messages present",
+    # "Choreography complete" -> displayed as "Flow complete %" via sliceNameOverride.
+    dict(slice="Choreography complete", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
+         kind="bignum", number_format=".1f", subheader="204 + 990 both present",
          metric=("pct", "100.0*AVG(choreography_complete::int)")),
-    dict(slice="ACK coverage", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
+    dict(slice="ACK coverage", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
          kind="bignum", number_format=".1f", subheader="ACKs received vs required",
          metric=("ack", "100.0*SUM(ack_received_cnt)/NULLIF(SUM(ack_required_cnt),0)")),
-    dict(slice="Response-SLA met", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
-         kind="bignum", number_format=".1f", subheader="204->990 within partner target",
-         metric=("sla", "100.0*SUM(response_sla_met::int)/NULLIF(SUM(CASE WHEN cnt_204>0 AND cnt_990>0 THEN 1 ELSE 0 END),0)")),
-    dict(slice="Shipments w/ flow anomalies", tab=T_SHIP, dataset="vw_shipment_integration", **KPI,
-         kind="bignum", subheader="integration anomalies detected",
-         metric=("anom", "SUM(CASE WHEN anomaly_count>0 THEN 1 ELSE 0 END)")),
-    dict(slice="Choreography mix", tab=T_SHIP, dataset="vw_shipment_integration",
+    dict(slice="Response-SLA met", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
+         kind="bignum", number_format=".1f", subheader="flows with no exception",
+         metric=("sla", "100.0*SUM((has_exception=0)::int)/NULLIF(COUNT(*),0)")),
+    dict(slice="Shipments w/ flow anomalies", tab=T_SHIP, dataset="vw_txn_shipment", **KPI,
+         kind="bignum", subheader="exceptions / incomplete flows",
+         metric=("anom", "SUM(CASE WHEN has_exception>0 OR NOT choreography_complete THEN 1 ELSE 0 END)")),
+    dict(slice="Choreography mix", tab=T_SHIP, dataset="vw_txn_shipment",
          kind="pie", groupby="choreography_status", metric=("ships", "COUNT(*)")),
-    dict(slice="Response latency by partner", tab=T_SHIP, dataset="vw_shipment_integration",
-         kind="bar", dim="partner", metric=("avg_min", "AVG(response_minutes)")),
-    dict(slice="Shipment message mix", tab=T_SHIP, dataset="vw_shipment_messages",
+    dict(slice="Shipment message mix", tab=T_SHIP, dataset="vw_txn_detail",
          kind="bar", dim="doc_type", metric=("msgs", "COUNT(*)"), row_limit=30),
-    dict(slice="Shipment integration worklist", tab=T_SHIP, dataset="vw_shipment_integration",
+    # Worklist = the shipment consolidation. Columns mirror the Transaction view's
+    # detail (partner / transport_mode / doc-type rollups / status / ack / error).
+    # UNIQUE internal name: the old "Shipment integration worklist" (id=398) is
+    # SHARED with dashboard 12 (still on public.vw_shipment_integration). Naming a
+    # new chart identically would hijack/repoint it, so we use a "Shipment · "
+    # prefix here and display the friendly title via sliceNameOverride in LAYOUT.
+    dict(slice="Shipment · Integration worklist", tab=T_SHIP, dataset="vw_txn_shipment",
          kind="raw", row_limit=200,
          cols=["shipment_id", "partner", "transport_mode", "total_messages",
-               "choreography_status", "response_minutes", "expected_204_990_minutes",
-               "ack_pending", "error_cnt", "anomaly_count", "critical_anomaly_count",
-               "business_impact_amount", "shipment_status"],
-         order=[("anomaly_count", False), ("business_impact_amount", False)]),
-    dict(slice="Shipment message set", tab=T_SHIP, dataset="vw_shipment_messages",
+               "distinct_doc_types", "choreography_status", "ack_pending",
+               "error_cnt", "rejected_cnt", "duplicate_cnt", "has_exception",
+               "last_msg_ts"],
+         order=[("has_exception", False), ("error_cnt", False)]),
+    # Drill-down message set: EMPTY until a specific shipment is chosen. Achieved
+    # with a REQUIRED native dashboard filter on shipment_id (no default value),
+    # declared in SHIP_DRILLDOWN_FILTER below and scoped to ONLY this chart. A
+    # required select filter with enableEmptyFilter=true returns zero rows until
+    # the user picks a shipment_id, which is exactly the desired drill behavior.
+    # Same columns as the Transaction-view detail (vw_txn_detail) for consistency.
+    dict(slice="Shipment message set", tab=T_SHIP, dataset="vw_txn_detail",
          kind="raw", row_limit=300,
-         cols=["shipment_id", "doc_type", "transaction_timestamp", "processing_status",
-               "ack_required", "ack_received", "error_code", "control_number"],
-         order=[("transaction_timestamp", True)]),
-    dict(slice="Shipment status journey", tab=T_SHIP, dataset="vw_shipment_journey",
-         kind="raw", row_limit=300,
-         cols=["shipment_id", "status_sequence", "status_code", "status_timestamp",
-               "city", "partner"],
-         order=[("status_sequence", True)]),
+         cols=["shipment_id", "business_ref", "doc_type", "direction", "event_time",
+               "status", "ack_required", "ack_received", "error_code", "control_number"],
+         order=[("event_time", True)]),
+
+    # ===== Transaction view — the SHARED txn-detail source (vw_txn_detail) =====
+    # Same rows the Shipment view consolidates; aligned columns. Replaces the old
+    # cockpit "LOB" (q_lob_*) tiles so both tabs read ONE source. Unique internal
+    # slice names ("Txn · ") + sliceNameOverride friendly titles avoid hijacking
+    # the shared cockpit LOB charts (dashboards 10/12/13 still use them).
+    dict(slice="Txn · Details", tab=T_TXN, dataset="vw_txn_detail", kind="raw",
+         cols=["shipment_id", "business_ref", "partner", "doc_type", "direction",
+               "event_time", "status", "ack_required", "ack_received",
+               "error_code", "control_number"],
+         order=[("event_time", False)], row_limit=200),
+    dict(slice="Txn · Incoming data", tab=T_TXN, dataset="vw_txn_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type", "status",
+               "control_number"],
+         filters=[("direction", "==", "inbound")],
+         order=[("event_time", False)], row_limit=50),
+    dict(slice="Txn · Outgoing data", tab=T_TXN, dataset="vw_txn_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type", "status",
+               "control_number"],
+         filters=[("direction", "==", "outbound")],
+         order=[("event_time", False)], row_limit=50),
+    dict(slice="Txn · Ack data", tab=T_TXN, dataset="vw_txn_detail", kind="raw",
+         cols=["event_time", "business_ref", "shipment_id", "doc_type",
+               "control_number", "ack_required", "ack_received", "ack_timestamp"],
+         filters=[("doc_type", "==", "997")],
+         order=[("event_time", False)], row_limit=50),
 
     # ===== EDI view (protocol-scoped rollup) =====
     dict(slice="EDI · Transactions", tab=T_EDI, dataset="vw_rollup_edi", **KPI,
@@ -233,20 +272,22 @@ LAYOUT = [
         # Breakdown bars get full breathing room (were squeezed at width 3).
         ("Volume by message type", 6, CH), ("Exceptions by partner", 6, CH),
     ]),
-    (T_SHIP, [   # Shipment Integration 360 — cockpit world (public.vw_shipment_*)
-        ("Shipments in scope", 3, KH), ("Choreography complete", 3, KH),
-        ("ACK coverage", 2, KH), ("Response-SLA met", 2, KH),
-        ("Shipments w/ flow anomalies", 2, KH),
-        ("Choreography mix", 4, CH), ("Response latency by partner", 4, CH),
-        ("Shipment message mix", 4, CH),
-        ("Shipment integration worklist", 12, BH),
-        ("Shipment message set", 6, TH), ("Shipment status journey", 6, TH),
+    (T_SHIP, [   # Shipment consolidation of the SHARED txn source (public.vw_txn_shipment)
+        # KPI row 1: scale + flow completeness (split into 2 rows for legibility).
+        ("Shipments in scope", 6, KH),
+        ("Choreography complete", 6, KH, "Flow complete %"),
+        # KPI row 2: integration health.
+        ("ACK coverage", 4, KH), ("Response-SLA met", 4, KH),
+        ("Shipments w/ flow anomalies", 4, KH),
+        ("Choreography mix", 6, CH), ("Shipment message mix", 6, CH),
+        ("Shipment · Integration worklist", 12, BH, "Shipment integration worklist"),
+        ("Shipment message set", 12, TH),
     ]),
-    (T_TXN, [   # LOB: prefix dropped via sliceNameOverride (charts shared w/ cockpit)
-        ("LOB: Details", 12, TH, "Details"),
-        ("LOB: Incoming data", 6, CH, "Incoming data"),
-        ("LOB: Outgoing data", 6, CH, "Outgoing data"),
-        ("LOB: Ack data", 12, BH, "Ack data"),
+    (T_TXN, [   # SHARED txn detail (public.vw_txn_detail) — same rows the Shipment view rolls up
+        ("Txn · Details", 12, TH, "Details"),
+        ("Txn · Incoming data", 6, CH, "Incoming data"),
+        ("Txn · Outgoing data", 6, CH, "Outgoing data"),
+        ("Txn · Ack data", 12, BH, "Ack data"),
     ]),
     (T_ISSUE, [
         ("Failed (period)", 4, KH), ("Rejected (period)", 4, KH), ("Duplicates suppressed", 4, KH),
@@ -293,3 +334,27 @@ NATIVE_FILTERS = [
     ("Channel", "channel"),
     ("Doc type", "doc_type"),
 ]
+
+# Task 5 — drill-down "Shipment message set": EMPTY until a shipment is chosen.
+# Declared here so the build engine can emit a REQUIRED native filter on
+# shipment_id, targeting the shared txn-detail dataset, scoped to ONLY the
+# "Shipment message set" chart. A required select filter with
+# enableEmptyFilter=true returns zero rows until the user selects a shipment_id
+# -> exactly the desired drill behavior, no faked/empty static WHERE.
+#
+# NOTE FOR ORCHESTRATOR: build_value.native_filters() currently emits only
+# dashboard-wide (all-charts) select filters with enableEmptyFilter=False against
+# the rollup dataset. To honor this entry it must additionally emit a filter that:
+#   * filterType "filter_select", targets column shipment_id on dataset
+#     get_dataset_id(sc, dataset),
+#   * controlValues.enableEmptyFilter=True (required, so empty by default),
+#   * controlValues.multiSelect=False, defaultToFirstItem=False,
+#   * defaultDataMask.filterState={} (no default value),
+#   * chartsInScope=[<id of slice>], scope.excluded=[<all other chart ids>]
+#     (or scope.rootPath to the Shipment-view tab) so it ONLY affects this chart.
+# This is a build_value.py change (orchestrator-owned); the contract is declared
+# below. The chart itself stays empty until the filter supplies a shipment_id.
+SHIP_DRILLDOWN_FILTER = dict(
+    name="Shipment (drill-down)", column="shipment_id",
+    dataset="vw_txn_detail", slice="Shipment message set", required=True,
+)

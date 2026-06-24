@@ -103,7 +103,7 @@ def build_position(chart_ids):
     return pos
 
 
-def native_filters(rollup_ds, chart_ids):
+def native_filters(sc, rollup_ds, chart_ids):
     all_charts = list(dict.fromkeys(chart_ids.values()))
     cfgs = [{
         "id": "NATIVE_FILTER-time-range", "name": "Time range",
@@ -122,6 +122,27 @@ def native_filters(rollup_ds, chart_ids):
             "defaultDataMask": {"filterState": {}},
             "cascadeParentIds": [], "scope": {"rootPath": ["ROOT_ID"], "excluded": []},
             "type": "NATIVE_FILTER", "chartsInScope": all_charts,
+        })
+    # Task 5 — chart-scoped REQUIRED drill-down so "Shipment message set" stays
+    # EMPTY until a shipment_id is chosen. enableEmptyFilter=True makes it
+    # required (no value -> the chart asks for a selection instead of dumping all
+    # 414k rows). Scoped to ONLY that one chart via chartsInScope + scope.excluded.
+    f = getattr(V, "SHIP_DRILLDOWN_FILTER", None)
+    if f and f["slice"] in chart_ids:
+        detail_ds = get_dataset_id(sc, f["dataset"])
+        target_cid = chart_ids[f["slice"]]
+        others = [c for c in all_charts if c != target_cid]
+        cfgs.append({
+            "id": "NATIVE_FILTER-ship-drilldown", "name": f["name"],
+            "filterType": "filter_select",
+            "targets": [{"column": {"name": f["column"]}, "datasetId": detail_ds}],
+            "controlValues": {"multiSelect": False,
+                              "enableEmptyFilter": bool(f.get("required", True)),
+                              "defaultToFirstItem": False, "searchAllOptions": True,
+                              "inverseSelection": False},
+            "defaultDataMask": {"filterState": {}},
+            "cascadeParentIds": [], "scope": {"rootPath": ["ROOT_ID"], "excluded": others},
+            "type": "NATIVE_FILTER", "chartsInScope": [target_cid],
         })
     return cfgs
 
@@ -165,7 +186,7 @@ def main():
     rollup_ds = get_dataset_id(sc, "vw_rollup")
     position = build_position(chart_ids)
     metadata = {
-        "native_filter_configuration": native_filters(rollup_ds, chart_ids),
+        "native_filter_configuration": native_filters(sc, rollup_ds, chart_ids),
         "cross_filters_enabled": True, "refresh_frequency": 60,
         "color_scheme": "supersetColors", "label_colors": STATUS_COLORS,
         "shared_label_colors": {}, "color_scheme_domain": [],
