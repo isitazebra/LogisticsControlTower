@@ -42,7 +42,8 @@ def resolve_chart_ids(sc, ensured):
     by_name = {c["slice_name"]: c["id"] for c in sc.get_charts()}
     ids, missing = {}, []
     for _tab, rows in V.LAYOUT:
-        for slice_name, _w, _h in rows:
+        for entry in rows:
+            slice_name = entry[0]
             if slice_name in ensured:
                 ids[slice_name] = ensured[slice_name]
             elif slice_name in by_name:
@@ -69,7 +70,7 @@ def build_position(chart_ids):
         # pack into rows
         rows, cur, curw = [], [], 0
         for entry in rows_spec:
-            slice_name, w, h = entry
+            w = entry[1]
             if curw + w > 12 and cur:
                 rows.append(cur); cur, curw = [], 0
             cur.append(entry); curw += w
@@ -78,13 +79,18 @@ def build_position(chart_ids):
         for ri, row in enumerate(rows):
             rid = f"ROW-V{ti}-{ri}"
             child_ids = []
-            for slice_name, w, h in row:
+            for entry in row:
+                # entry = (slice, w, h) or (slice, w, h, display_title_override)
+                slice_name, w, h = entry[0], entry[1], entry[2]
+                override = entry[3] if len(entry) > 3 else None
                 cid = chart_ids[slice_name]
                 comp_id = f"CHART-V{ti}-{cid}"
+                meta = {"chartId": cid, "width": w, "height": h,
+                        "sliceName": slice_name, "uuid": uid(f"chart-{ti}-{cid}")}
+                if override:
+                    meta["sliceNameOverride"] = override
                 pos[comp_id] = {"type": "CHART", "id": comp_id, "children": [],
-                                "meta": {"chartId": cid, "width": w, "height": h,
-                                         "sliceName": slice_name, "uuid": uid(f"chart-{ti}-{cid}")},
-                                "parents": parents_tab + [rid]}
+                                "meta": meta, "parents": parents_tab + [rid]}
                 child_ids.append(comp_id)
             pos[rid] = {"type": "ROW", "id": rid, "children": child_ids,
                         "meta": {"background": "BACKGROUND_TRANSPARENT"},

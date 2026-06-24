@@ -31,7 +31,7 @@ SLUG = "integration-command-center"
 T_HOME = "Home"
 T_SHIP = "Shipment view"
 T_TXN  = "Transaction view"
-T_ISSUE = "Issue details"
+T_ISSUE = "Exceptions"
 T_ANOM = "Anomalies"
 T_EDI  = "EDI view"
 T_API  = "API view"
@@ -75,8 +75,7 @@ REUSED = [
     # Home — clean, prefix-free cockpit charts reused as supporting visuals
     # (the Control-Tower KPI row + trends are net-new below to avoid hijacking
     # the mp_demo charts that dashboards 12/13 still use as a fallback).
-    ("EDI vs API split", T_HOME), ("Volume by family", T_HOME),
-    ("Volume by message type", T_HOME),
+    ("EDI vs API split", T_HOME), ("Volume by message type", T_HOME),
     # Shipment view: built net-new on the cockpit-world shipment views (below).
     # Transaction view (Minimal "Details")
     ("LOB: Details", T_TXN), ("LOB: Incoming data", T_TXN),
@@ -95,8 +94,18 @@ REUSED = [
 NEW_CHARTS = [
     # ===== Home — Control-Tower KPIs (cockpit world, teal, no prefix) =====
     # Doc-type families: Orders=850 PO, Invoices=810, Notices/ASN=856.
-    dict(slice="Messages processed", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", metric=("vol", "SUM(txn_count)"), subheader="total messages"),
+    # Row 1 KPIs: Total messages / Success / Exceptions (failed+rejected).
+    dict(slice="Total messages", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", metric=("vol", "SUM(txn_count)"), subheader="messages processed"),
+    dict(slice="Success", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="processed clean",
+         metric=("ok", "SUM(txn_count)-SUM(failed_count)-SUM(rejected_count)")),
+    # "Exceptions" collides with mp_demo chart id=348 (dash 12) — keep a unique
+    # internal name and display "Exceptions" via sliceNameOverride in LAYOUT.
+    dict(slice="Home · Exceptions", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="failed + rejected",
+         metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
+    # Row 2 KPIs: doc-type families.
     dict(slice="Orders (850)", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="purchase orders",
          metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='850')")),
@@ -106,19 +115,18 @@ NEW_CHARTS = [
     dict(slice="Notices / ASN", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="ship notices (856)",
          metric=("asn", "SUM(txn_count) FILTER (WHERE doc_type='856')")),
-    dict(slice="Open issues", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="failed + rejected",
-         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
     dict(slice="Message volume trend", tab=T_HOME, dataset="vw_rollup",
          kind="ts", x="bucket", chart="line", metric=("txns", "SUM(txn_count)")),
-    dict(slice="Open issues trend", tab=T_HOME, dataset="vw_rollup",
+    dict(slice="Exceptions Trend", tab=T_HOME, dataset="vw_rollup",
          kind="ts", x="bucket", chart="line",
-         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
-    dict(slice="Issues by reason", tab=T_HOME, dataset="q3_exceptions_by_reason",
+         metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
+    # "Exceptions by reason" already exists (reused on the Exceptions tab) — give
+    # the Home pie a unique internal name + sliceNameOverride to avoid a collapse.
+    dict(slice="Home · Exceptions by reason", tab=T_HOME, dataset="q3_exceptions_by_reason",
          kind="pie", groupby="reason_category", metric=("occ", "SUM(occurrences)")),
-    dict(slice="Partners with open issues", tab=T_HOME, dataset="vw_rollup",
+    dict(slice="Exceptions by partner", tab=T_HOME, dataset="vw_rollup",
          kind="bar", dim="partner", row_limit=15,
-         metric=("issues", "SUM(failed_count)+SUM(rejected_count)")),
+         metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
 
     # ===== Shipment view — Shipment Integration 360 (cockpit world) =====
     # Faithful port of dash-12's Shipment 360, re-sourced onto public.vw_shipment_*.
@@ -181,7 +189,7 @@ NEW_CHARTS = [
     dict(slice="API · Auto-processed %", tab=T_API, dataset="vw_rollup_api", **KPI,
          kind="bignum", number_format=".1f", subheader="straight-through",
          metric=("auto", "100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))")),
-    dict(slice="API · Errors", tab=T_API, dataset="vw_rollup_api", **KPI,
+    dict(slice="API · Exceptions", tab=T_API, dataset="vw_rollup_api", **KPI,
          kind="bignum", metric=("exc", "SUM(failed_count)+SUM(rejected_count)"),
          subheader="failed + rejected"),
     dict(slice="API · Volume by partner", tab=T_API, dataset="vw_rollup_api",
@@ -206,11 +214,18 @@ KH, CH, TH, BH = 30, 50, 60, 56   # KPI / chart / tall-table / table heights
 
 LAYOUT = [
     (T_HOME, [
-        ("Messages processed", 3, KH), ("Orders (850)", 3, KH),
-        ("Invoices (810)", 2, KH), ("Notices / ASN", 2, KH), ("Open issues", 2, KH),
-        ("Message volume trend", 6, CH), ("Open issues trend", 6, CH),
-        ("EDI vs API split", 4, CH), ("Volume by family", 4, CH), ("Issues by reason", 4, CH),
-        ("Volume by message type", 6, CH), ("Partners with open issues", 6, CH),
+        # Row 1: headline outcomes.
+        ("Total messages", 4, KH), ("Success", 4, KH),
+        ("Home · Exceptions", 4, KH, "Exceptions"),
+        # Row 2: doc-type families.
+        ("Orders (850)", 4, KH), ("Invoices (810)", 4, KH), ("Notices / ASN", 4, KH),
+        # Volume row.
+        ("Message volume trend", 6, CH),
+        ("Volume by message type", 3, CH), ("EDI vs API split", 3, CH),
+        # Exceptions row.
+        ("Exceptions Trend", 6, CH),
+        ("Home · Exceptions by reason", 3, CH, "Exceptions by reason"),
+        ("Exceptions by partner", 3, CH),
     ]),
     (T_SHIP, [   # Shipment Integration 360 — cockpit world (public.vw_shipment_*)
         ("Shipments in scope", 3, KH), ("Choreography complete", 3, KH),
@@ -248,7 +263,7 @@ LAYOUT = [
         ("FA tracking", 6, BH), ("File explorer", 6, BH),
     ]),
     (T_API, [
-        ("API · Transactions", 4, KH), ("API · Auto-processed %", 4, KH), ("API · Errors", 4, KH),
+        ("API · Transactions", 4, KH), ("API · Auto-processed %", 4, KH), ("API · Exceptions", 4, KH),
         ("API · Volume by partner", 6, CH), ("API · Volume by message type", 6, CH),
         ("API · Throughput", 8, CH), ("API · Status mix", 4, CH),
     ]),
