@@ -46,11 +46,6 @@ T_PART = "Partner Insights"
 NEW_DS = {
     "vw_rollup_edi": dict(sql="SELECT * FROM txn_rollup_hourly WHERE protocol='edi'", dttm="bucket"),
     "vw_rollup_api": dict(sql="SELECT * FROM txn_rollup_hourly WHERE protocol='api'", dttm="bucket"),
-    # Cockpit-world shipment choreography (ported from mp_demo into public via
-    # sql/11; partners remapped onto the cockpit set). Powers the Shipment view.
-    "vw_shipment_integration": dict(sql="SELECT * FROM vw_shipment_integration", dttm="shipment_date"),
-    "vw_shipment_messages": dict(sql="SELECT * FROM vw_shipment_messages", dttm="transaction_timestamp"),
-    "vw_shipment_journey": dict(sql="SELECT * FROM vw_shipment_journey", dttm="status_timestamp"),
     # SINGLE DATA WORLD (sql/14): the Shipment + Transaction tabs read the SAME
     # transactions as every other tab (public.txn_events, cockpit contract).
     # vw_shipment_detail is the single message source feeding BOTH tabs;
@@ -105,8 +100,9 @@ REUSED = [
     ("Cert / key expiry", T_CHAN),
     # EDI view (reused: ack + file are inherently EDI)
     ("FA tracking", T_EDI), ("File explorer", T_EDI),
-    # Partner Insights (SLA folded in)
-    ("Partner SLA scorecard", T_PART), ("% Met by partner", T_PART),
+    # NOTE: the legacy cockpit-world "Partner SLA scorecard" / "% Met by partner"
+    # tiles (dataset vw_partner_sla over the dropped txn_current) are gone — dash
+    # 15 uses the reconciled Q17 "Partner 360 scorecard" (vw_partner_360) instead.
 ]
 
 NEW_CHARTS = [
@@ -384,7 +380,6 @@ LAYOUT = [
         ("Volume by partner", 4, CH), ("Exception rate by partner %", 4, CH),
         ("Dollars at risk by partner", 4, CH),
         ("Partner 360 scorecard", 12, TH),
-        ("Partner SLA scorecard", 7, BH), ("% Met by partner", 5, CH),
     ]),
 ]
 

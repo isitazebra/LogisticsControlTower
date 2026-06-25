@@ -91,11 +91,11 @@ _PAIR_ROWS = [
     ("Pair SLA · Breach worklist", 12, BH, "Pair-SLA breach worklist"),
 ]
 
-# The Logistics clone owns the SLA story end-to-end (order grain + pairwise), so
-# drop the legacy cockpit-world Partner-SLA tiles that don't reconcile with this
-# math. Removed from THIS dashboard's layout only; the chart objects survive
-# (dash 14 / 10 / 12 / 13 keep them) and are explicitly unlinked from dash 15 in
-# build_value_sla post-build.
+# The Logistics clone owns the SLA story end-to-end (order grain + pairwise),
+# using the reconciled Q17 "Partner 360 scorecard". The legacy cockpit-world
+# Partner-SLA tiles have since been removed from value_spec entirely (their
+# vw_partner_sla dataset read the dropped txn_current). This stays as a
+# defensive no-op so any stray re-introduction never lands on dash 15.
 STALE_SLICES = {"Partner SLA scorecard", "% Met by partner"}
 
 LAYOUT = []
