@@ -32,6 +32,7 @@ T_HOME = "Home"
 T_SHIP = "Shipment view"
 T_TXN  = "Transaction view"
 T_ISSUE = "Exceptions"
+T_SLA  = "SLA"              # On-time delivery vs. SLA breaches (single data world)
 T_CHAN = "Channel Health"   # Arrival & channel/endpoint health (Q1 cockpit, reused)
 T_ANOM = "Anomalies"
 T_EDI  = "EDI view"
@@ -110,8 +111,8 @@ REUSED = [
 
 NEW_CHARTS = [
     # ===== Home — Control-Tower KPIs (cockpit world, teal, no prefix) =====
-    # Order lifecycle (the only three message types in the world):
-    #   Order = 990 confirmation, Order updates = 214, Invoice = 210.
+    # Order lifecycle (the only four message types in the world):
+    #   Order = 204, Order confirmation = 990, Order updates = 214, Invoice = 210.
     # Each KPI uses a unique "Home · " internal name + sliceNameOverride so the
     # build never hijacks identically-named charts on dashboards 10/12/13.
     # Row 1 KPIs: Total messages / Success / Exceptions (failed+rejected).
@@ -130,10 +131,13 @@ NEW_CHARTS = [
     dict(slice="Home · Exceptions", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="failed + rejected",
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
-    # Row 2 KPIs: the order lifecycle — order, order updates, invoice.
+    # Row 2 KPIs: the order lifecycle — order, confirmation, updates, invoice.
     dict(slice="Home · Order", tab=T_HOME, dataset="vw_rollup", **KPI,
+         kind="bignum", subheader="orders (204)",
+         metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='204')")),
+    dict(slice="Home · Order confirmation", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="order confirmations (990)",
-         metric=("orders", "SUM(txn_count) FILTER (WHERE doc_type='990')")),
+         metric=("conf", "SUM(txn_count) FILTER (WHERE doc_type='990')")),
     dict(slice="Home · Order updates", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="order updates (214)",
          metric=("upd", "SUM(txn_count) FILTER (WHERE doc_type='214')")),
@@ -217,6 +221,36 @@ NEW_CHARTS = [
          filters=[("doc_type", "==", "210")],
          order=[("event_time", False)], row_limit=50),
 
+    # ===== SLA view — on-time delivery vs. breaches (single data world) =====
+    # Order grain on public.vw_shipment for the headline + worklist; message grain
+    # on the rollup (breached_count) for the trend/partner bars. Both use the SAME
+    # breach test (sla_due_at < now() AND NOT terminal), so they reconcile.
+    dict(slice="SLA · On-time %", tab=T_SLA, dataset="vw_shipment", **KPI,
+         kind="bignum", number_format=".1f", subheader="orders within SLA",
+         metric=("ontime", "100.0*AVG((NOT sla_breached)::int)")),
+    dict(slice="SLA · Breached orders", tab=T_SLA, dataset="vw_shipment", **KPI,
+         kind="bignum", subheader="overdue, not closed",
+         metric=("br", "SUM(sla_breached::int)")),
+    dict(slice="SLA · Orders in scope", tab=T_SLA, dataset="vw_shipment", **KPI,
+         kind="bignum", subheader="orders measured", metric=("n", "COUNT(*)")),
+    dict(slice="SLA · $ at risk", tab=T_SLA, dataset="vw_shipment", **KPI,
+         kind="bignum", number_format="$,.0f", subheader="order value on breached orders",
+         metric=("risk", "SUM(CASE WHEN sla_breached THEN value_usd ELSE 0 END)")),
+    dict(slice="SLA · Breach trend", tab=T_SLA, dataset="vw_rollup",
+         kind="ts", x="bucket", chart="line",
+         metric=("br", "SUM(breached_count)")),
+    dict(slice="SLA · Breaches by partner", tab=T_SLA, dataset="vw_rollup",
+         kind="bar", dim="partner", row_limit=15, metric=("br", "SUM(breached_count)")),
+    dict(slice="SLA · Breaches by LOB", tab=T_SLA, dataset="vw_rollup",
+         kind="bar", dim="lob", row_limit=15, metric=("br", "SUM(breached_count)")),
+    # At-risk worklist: the breached orders, newest first.
+    dict(slice="SLA · At-risk orders", tab=T_SLA, dataset="vw_shipment",
+         kind="raw", row_limit=200,
+         cols=["shipment_id", "partner", "lob", "completeness_status",
+               "update_count", "exception_cnt", "value_usd", "last_msg_ts"],
+         filters=[("sla_breached", "==", True)],
+         order=[("last_msg_ts", False)]),
+
     # ===== EDI view (protocol-scoped rollup) =====
     dict(slice="EDI · Transactions", tab=T_EDI, dataset="vw_rollup_edi", **KPI,
          kind="bignum", metric=("edi", "SUM(txn_count)"), subheader="EDI messages"),
@@ -267,10 +301,11 @@ LAYOUT = [
         ("Total messages", 3, KH), ("Success", 3, KH),
         ("Home · Auto-processed %", 3, KH, "Auto-processed %"),
         ("Home · Exceptions", 3, KH, "Exceptions"),
-        # Row 2: the order lifecycle.
-        ("Home · Order", 4, KH, "Order"),
-        ("Home · Order updates", 4, KH, "Order updates"),
-        ("Home · Invoice", 4, KH, "Invoice"),
+        # Row 2: the order lifecycle (204 -> 990 -> 214 -> 210).
+        ("Home · Order", 3, KH, "Order"),
+        ("Home · Order confirmation", 3, KH, "Order confirmation"),
+        ("Home · Order updates", 3, KH, "Order updates"),
+        ("Home · Invoice", 3, KH, "Invoice"),
         # Volume: wide trend + protocol split pie.
         ("Message volume trend", 8, CH), ("EDI vs API split", 4, CH),
         # Exceptions: wide trend + reason pie.
@@ -300,6 +335,16 @@ LAYOUT = [
         ("Exceptions by reason", 6, CH), ("Partner vs platform", 6, CH),
         ("Exception queue", 12, BH),
         ("Failure signatures", 12, CH),
+    ]),
+    (T_SLA, [   # On-time delivery vs. SLA breaches (public.vw_shipment + rollup)
+        ("SLA · On-time %", 3, KH, "On-time %"),
+        ("SLA · Breached orders", 3, KH, "Breached orders"),
+        ("SLA · Orders in scope", 3, KH, "Orders in scope"),
+        ("SLA · $ at risk", 3, KH, "$ at risk"),
+        ("SLA · Breach trend", 12, CH, "Breach trend"),
+        ("SLA · Breaches by partner", 6, CH, "Breaches by partner"),
+        ("SLA · Breaches by LOB", 6, CH, "Breaches by LOB"),
+        ("SLA · At-risk orders", 12, BH, "At-risk orders"),
     ]),
     (T_CHAN, [   # Arrival & channel health (Q1 cockpit, reused in place)
         # Top: scope KPI + the silent-monitor catch.

@@ -3,20 +3,25 @@
 -- SHIPMENT = ORDER world.  One transaction population for every tab.
 --
 -- Per the data contract (gen_shipment_world.py): each ORDER (shipment_id =
--- ORD-NNNNNN, one interchange_id) has a clean lifecycle and only three
+-- ORD-NNNNNN, one interchange_id) has a clean lifecycle and only four
 -- message types:
---   990  order confirmation   (exactly one, opens the order)
---   214  order update         (one or more)
---   210  invoice              (exactly one; absent while the order is open)
+--   204  order / load tender   (exactly one, opens the order)
+--   990  order confirmation    (exactly one)
+--   214  order update          (one or more)
+--   210  invoice               (exactly one; absent while the order is open)
 --
--- All dimensions are constant within an order and value_usd lives on the 210
--- invoice, so totals/splits reconcile: sum(value_usd) == total order value,
--- total messages == #990 + #214 + #210, and #orders == #990.
+-- All dimensions are constant within an order and value_usd lives on the 204
+-- order, so totals/splits reconcile: sum(value_usd) == total order value,
+-- total messages == #204 + #990 + #214 + #210, and #orders == #204 == #990.
 --
 -- Completeness contract (lifecycle-based):
 --   complete     := invoice (210) issued AND zero failed/rejected messages
 --   in progress  := no invoice yet AND zero failed/rejected
 --   exceptions   := one or more failed/rejected messages
+--
+-- SLA: sla_breached := the order has a message that is overdue and not terminal
+-- (sla_due_at < now() AND NOT terminal) -- the same test the rollup aggregates
+-- into breached_count, so the Shipment view and the SLA tab agree.
 -- ===========================================================================
 
 DROP VIEW IF EXISTS public.vw_consignment;
@@ -37,8 +42,10 @@ SELECT
     max(event_time)                                         AS last_msg_ts,
     count(*)                                                AS total_messages,
     count(*) FILTER (WHERE doc_type = '214')                AS update_count,
+    bool_or(doc_type = '204')                               AS has_order,
     bool_or(doc_type = '990')                               AS has_confirmation,
     bool_or(doc_type = '210')                               AS has_invoice,
+    bool_or(sla_due_at < now() AND NOT terminal)            AS sla_breached,
     count(*) FILTER (WHERE status IN ('failed','rejected')) AS exception_cnt,
     count(*) FILTER (WHERE status = 'duplicate')            AS duplicate_cnt,
     count(*) FILTER (WHERE status = 'ok')                   AS ok_cnt,

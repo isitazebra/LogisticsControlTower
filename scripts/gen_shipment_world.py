@@ -3,23 +3,32 @@
 # ===========================================================================
 # Regenerate public.txn_events as a REAL shipment / order world.
 #
-# Per user contract (2026-06-24): "All the data needs to be on shipments,
-# which is essentially an order. Each order will have a 990 order confirmation,
-# order update 214 (multiple) and finally 210 (invoice). NO need for any other
-# message types. The total, splits, etc. all need to add up."
+# Per user contract (2026-06-24): "essentially an order ... Order is 204, 990 is
+# order confirmation, order update 214 (multiple), finally 210 (invoice). Add
+# 204,990,214,210. The total, splits, etc. all need to add up."  + surface SLA.
 #
 # Model:  shipment_id = ORD-NNNNNN  (one order == one interchange_id)
-#   * exactly one  990  (order confirmation)            -> direction 'out'
+#   * exactly one  204  (order / load tender)           -> direction 'out'
+#   * exactly one  990  (order confirmation)            -> direction 'in'
 #   * 1..5         214  (order updates, multiple)        -> direction 'in'
 #   * exactly one  210  (invoice)  [omitted if open]     -> direction 'in'
 #
 # All dimensions (partner, lob, channel, protocol, environment) are CONSTANT
 # within an order -- that is the core fix vs. the old random interchange.
-# value_usd lives on the 210 invoice only, so order value == sum(value_usd).
+# value_usd lives on the 204 order, so order value == sum(value_usd) across
+# every order (open or closed).
+#
+# SLA: a breach == a message overdue and not terminal (sla_due_at < now() AND
+# NOT terminal, the sql/02 rollup contract). Two INDEPENDENT breach sources so
+# SLA is its own signal, not a clone of exceptions:
+#   * exception orders            -> the failed/rejected message stays open
+#   * breached-open orders (~7%)  -> healthy order, no invoice, last update overdue
+# Healthy in-progress orders (~8%) keep their last update terminal/within-SLA so
+# they do NOT breach.
 #
 # Reconciliation guarantees by construction:
-#   total messages = #990 + #214 + #210
-#   #990 == #210(closed) == closed-order count ;  #orders == #990
+#   total messages = #204 + #990 + #214 + #210
+#   #204 == #990 == order count ;  #210 == closed-order count
 #
 # Idempotent: TRUNCATEs txn_events (autocommit, reclaims partition storage)
 # then bulk-inserts, then rebuilds txn_rollup_hourly via the sql/02 contract.
@@ -31,6 +40,16 @@ import db
 from psycopg2.extras import execute_values
 
 random.seed(42)
+# INDEPENDENT stream for the 204->990 confirmation latency only. Drawing it from
+# its own generator (NOT the main `random`) keeps the main draw sequence -- and
+# therefore every dimension, value_usd, status and SLA-breach decision -- byte
+# for byte identical to the previous world. The ONLY thing that moves is each
+# 990's event_time, which shifts a few minutes-to-hours after its 204 so the
+# clone's 204->990 pair-SLA has a real latency distribution to track. 990 stays
+# terminal/ok, so the now()-based breach test is unaffected and the Integration
+# Command Center (dash 14) renders the same numbers.
+rng_conf = random.Random(99)
+CONF_MU, CONF_SIGMA = 3.4, 1.0   # lognormal minutes: ~30min median, tail to hrs
 
 PARTNERS = ["Hapag", "Kroger", "Werner", "DHL", "Flextronics", "Maersk", "Target"]
 LOBS = ["wh", "customs", "air", "ocean", "home", "ground", "po"]
@@ -46,9 +65,11 @@ END = dt.datetime(2026, 6, 23, 6, tzinfo=dt.timezone.utc)
 SPAN = (END - START).total_seconds()
 
 N_ORDERS = 60000
-P_EXCEPTION = 0.09   # order carries one failed/rejected message
-P_OPEN = 0.15        # order still in progress: 990 + 214s, no invoice yet
-P_DUP_214 = 0.01     # a 214 update lands as a duplicate
+P_EXCEPTION = 0.09       # order carries one failed/rejected message (also breaches SLA)
+P_BREACHED_OPEN = 0.07   # healthy order, no invoice, last update overdue -> SLA breach
+P_HEALTHY_OPEN = 0.08    # in progress, no invoice, within SLA (does NOT breach)
+P_DUP_214 = 0.01         # a 214 update lands as a duplicate
+NOW = dt.datetime(2026, 6, 24, tzinfo=dt.timezone.utc)  # matches dashboard "today"
 
 COLS = [
     "event_time", "interchange_id", "business_ref", "environment", "lob", "partner",
@@ -74,12 +95,17 @@ def build_rows():
 
         roll = random.random()
         has_exc = roll < P_EXCEPTION
-        is_open = (not has_exc) and roll < P_EXCEPTION + P_OPEN
+        breached_open = (not has_exc) and roll < P_EXCEPTION + P_BREACHED_OPEN
+        healthy_open = (not has_exc and not breached_open) \
+            and roll < P_EXCEPTION + P_BREACHED_OPEN + P_HEALTHY_OPEN
+        is_open = breached_open or healthy_open   # no invoice issued yet
 
-        # lifecycle: 990 -> n_updates*214 -> (210 unless open)
+        # lifecycle: 204 order -> 990 confirmation -> n*214 updates -> (210 unless open)
         n_upd = random.randint(1, 5)
         t0 = START + dt.timedelta(seconds=random.random() * SPAN * 0.80)
-        msgs = [("990", 0.0, "out")]
+        # confirmation lands conf_secs after the order (independent RNG, see top)
+        conf_secs = rng_conf.lognormvariate(CONF_MU, CONF_SIGMA) * 60.0
+        msgs = [("204", 0.0, "out"), ("990", conf_secs, "in")]
         off = 0.0
         for _ in range(n_upd):
             off += random.random() * 36 * 3600          # up to 1.5d between updates
@@ -89,6 +115,7 @@ def build_rows():
             msgs.append(("210", off, "in"))
 
         exc_idx = random.randrange(len(msgs)) if has_exc else -1
+        last_idx = len(msgs) - 1
 
         for j, (doc, secs, direction) in enumerate(msgs):
             et = t0 + dt.timedelta(seconds=secs)
@@ -101,13 +128,24 @@ def build_rows():
                 status, reason = "duplicate", "duplicate_interchange"
             else:
                 status, reason = "ok", None
-            is_invoice = doc == "210"
-            terminal = status in ("ok", "duplicate")           # open/failed stay non-terminal
+
+            terminal = status in ("ok", "duplicate")      # failed/rejected stay open -> breach
             sla_due = et + dt.timedelta(hours=random.choice([4, 8, 24]))
+            # SLA breach engineering, independent of exceptions:
+            if breached_open and j == last_idx:
+                # healthy order whose last update blew its window and never closed
+                terminal = False
+                sla_due = et + dt.timedelta(hours=2)      # historical et -> sla_due < NOW
+            elif healthy_open and j == last_idx:
+                # in progress but on track: closed-for-now and within SLA
+                terminal = True
+                sla_due = NOW + dt.timedelta(days=2)
+
+            is_order = doc == "204"
             rows.append((
                 et, sid, f"{sid}-{doc}-{j}", env, lob, partner, channel, protocol,
                 direction, doc, "acked", status, reason, terminal, sla_due,
-                order_value if is_invoice else 0, round(random.uniform(5, 40), 1),
+                order_value if is_order else 0, round(random.uniform(5, 40), 1),
                 None, False, 0, f"CN{cn:09d}", None,
             ))
             cn += 1

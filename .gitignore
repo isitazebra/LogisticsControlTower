@@ -19,3 +19,7 @@ __pycache__/
 
 # Build artifacts
 scripts/_render_result.txt
+
+# Local DB dumps (large; not source)
+*.dump
+*.dump.zip
