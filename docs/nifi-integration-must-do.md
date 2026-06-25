@@ -10,7 +10,7 @@ NiFi is the **producer**; Postgres (Neon) is the **interface**; Superset/Preset 
 
 ```
 NiFi (later)                         Postgres (the contract)            Superset/Preset (demo today)
-  data pipelines  ──inline writes──▶ txn_files / txn_events / txn_current ◀── datasets → charts
+  data pipelines  ──inline writes──▶ txn_files / txn_events ◀──────────── datasets → charts
   reporting tasks ──signals───────▶ ops_endpoint_health, ops_pipeline_health,
   monitor flows                      ops_expected_feeds, ops_monitor_heartbeat
   (DEMO: seed script writes all of the above instead)
@@ -61,9 +61,9 @@ WHERE interchange_id=:icid;
 
 ---
 
-## 3. Per-transaction writes (`txn_events` + `txn_current`)
+## 3. Per-transaction writes (`txn_events` only)
 
-Write **one `txn_events` row per stage transition** (received → validated → translated → transformed → delivered → acked) and **upsert `txn_current`** on every event. Use `PutDatabaseRecord` with a `DBCPConnectionPool` to Neon.
+Write **one `txn_events` row per stage transition** (received → validated → translated → transformed → delivered → acked). Use `PutDatabaseRecord` with a `DBCPConnectionPool` to Neon. **There is no separate current-state table:** each transaction's latest row *is* its current state, so "current/open" is just a filter on `txn_events` (`WHERE terminal=false`), and per-shipment rollups are the `vw_shipment*` views — all derived, never written.
 
 Status & reason mapping (set on the FlowFile by relationship):
 | NiFi outcome | `status` | `reason_category` |
@@ -77,7 +77,7 @@ Status & reason mapping (set on the FlowFile by relationship):
 
 Other inline fields: `kchar` = `${fileSize}` / 1000; `value_usd` parsed from the document if present; `sla_due_at` = event time + the partner/doc SLA (parameter or lookup); `terminal` = true on acked/delivered/failed-final; the **replay/reprocess flow** sets `replayed=true`, `replayed_at`, and increments `replay_count`.
 
-(`txn_current` upsert SQL is in the build pack §0.2; `txn_files` link via `interchange_id` on each child row.)
+(`txn_files` link via `interchange_id` on each child row.)
 
 ---
 

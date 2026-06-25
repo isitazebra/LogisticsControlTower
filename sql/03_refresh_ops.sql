@@ -42,14 +42,14 @@ BEGIN
   UPDATE ops_expected_feeds SET expected_next_at=now()+interval '1 day', last_seen_at=now()-interval '20 min'
     WHERE partner='Maersk' AND doc_type='214';
 
-  -- Stuck flow stays stuck (not terminal, aged > 20 min).
-  UPDATE txn_current SET last_event_at=now()-interval '45 min', terminal=false, current_stage='transform'
-    WHERE business_ref='LOAD-STUCK-001';
+  -- NOTE: txn_current was dropped (current state == the single txn_events row).
+  -- The stuck / at-risk transaction edge-cases are now expressed directly on
+  -- txn_events. The old LOAD-* re-stamps targeted a retired seed world and are
+  -- removed; the stuck signal for the ARRIVAL tab comes from vw_stuck_transactions
+  -- (NOT terminal AND aged) over txn_events, no re-stamp required.
 
-  -- At-risk 204: 25 min into a 30-min SLA -> Q10 'at_risk' (clock running, not breached).
+  -- At-risk: 25 min into a 30-min SLA -> Q10 'at_risk' (clock running, not breached).
   UPDATE txn_events SET event_time=now()-interval '25 min', sla_due_at=now()+interval '5 min'
-    WHERE business_ref='LOAD-ATRISK-204';
-  UPDATE txn_current SET last_event_at=now()-interval '25 min', sla_due_at=now()+interval '5 min'
     WHERE business_ref='LOAD-ATRISK-204';
 END;
 $$ LANGUAGE plpgsql;

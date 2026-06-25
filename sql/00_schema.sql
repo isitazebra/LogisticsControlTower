@@ -5,7 +5,7 @@
 --
 -- Design rules encoded here (see docs/cockpit-product-brief §6):
 --   * txn_events is partitioned by event_time so drill queries hit one partition.
---   * Aggregate charts read txn_rollup_hourly / txn_current, never raw events.
+--   * Aggregate charts read txn_rollup_hourly / vw_shipment*, never raw events.
 --   * Indexes target the access paths, not every column.
 -- ============================================================================
 
@@ -118,31 +118,13 @@ CREATE TABLE IF NOT EXISTS txn_rollup_hourly (
 );
 
 -- ----------------------------------------------------------------------------
--- CURRENT STATE  (one row per live ref; powers Q1 stuck, Q4 lookup, Q6 SLA)
+-- CURRENT STATE  -- removed. In this model every transaction is a single
+-- immutable row in txn_events (1 event per business_ref), so "current state"
+-- IS the row. There is no event history to project, hence no separate
+-- txn_current table. Anything that needs current state filters txn_events
+-- directly (e.g. open == terminal=false); per-shipment rollups are the
+-- vw_shipment* views. NiFi writes txn_events ONLY.
 -- ----------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS txn_current (
-  business_ref    text PRIMARY KEY,
-  environment     text,
-  lob             text,
-  partner         text,
-  channel         text,
-  protocol        text,
-  doc_type        text,
-  current_stage   text,
-  current_status  text,
-  first_event_at  timestamptz,
-  last_event_at   timestamptz,
-  terminal_at     timestamptz,
-  sla_due_at      timestamptz,
-  value_usd       numeric,
-  terminal        boolean DEFAULT false,
-  replayed        boolean DEFAULT false,
-  replayed_at     timestamptz,
-  replay_count    int DEFAULT 0
-);
--- partial index for the hot stuck-scan (NOT terminal), plus a partner path.
-CREATE INDEX IF NOT EXISTS ix_cur_open    ON txn_current (last_event_at) WHERE terminal = false;
-CREATE INDEX IF NOT EXISTS ix_cur_partner ON txn_current (partner, terminal);
 
 -- ----------------------------------------------------------------------------
 -- OPERATIONAL TABLES  (small; written by NiFi monitor jobs / seeded for demo)

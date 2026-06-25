@@ -38,18 +38,21 @@ DATASETS = {
         FROM ops_monitor_heartbeat
         WHERE (now()-last_run_at) > make_interval(secs => expected_interval_sec)"""),
 
+    # Repointed off the dropped txn_current onto txn_events (current state == the
+    # single row per business_ref). Aliases keep the chart-facing column names
+    # (current_stage / last_event_at) stable so no chart config needs touching.
     "vw_stuck_transactions": dict(sql="""
-        SELECT business_ref, lob, partner, channel, doc_type, current_stage, environment,
-               last_event_at, round(extract(epoch FROM (now()-last_event_at))/60) AS age_min, value_usd
-        FROM txn_current
-        WHERE NOT terminal AND now()-last_event_at > interval '20 minutes'"""),
+        SELECT business_ref, lob, partner, channel, doc_type, stage AS current_stage, environment,
+               event_time AS last_event_at, round(extract(epoch FROM (now()-event_time))/60) AS age_min, value_usd
+        FROM txn_events
+        WHERE NOT terminal AND now()-event_time > interval '20 minutes'"""),
 
     "vw_landed_not_picked": dict(sql="""
-        SELECT business_ref, lob, partner, channel, doc_type, environment, last_event_at,
-               round(extract(epoch FROM (now()-last_event_at))/60) AS age_min
-        FROM txn_current
-        WHERE NOT terminal AND current_stage='received'
-          AND now()-last_event_at > interval '10 minutes'"""),
+        SELECT business_ref, lob, partner, channel, doc_type, environment, event_time AS last_event_at,
+               round(extract(epoch FROM (now()-event_time))/60) AS age_min
+        FROM txn_events
+        WHERE NOT terminal AND stage='received'
+          AND now()-event_time > interval '10 minutes'"""),
 
     "vw_channel_health": dict(sql="""
         SELECT channel, endpoint, partner, environment, status, last_ok_at, cert_expires_at

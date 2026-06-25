@@ -4,7 +4,7 @@
 -- rate, open/breaching, $-at-risk (penalty exposure on current exceptions),
 -- last-seen, onboarding tier/status, and the Q15 anomaly flag.
 --
--- Inputs: txn_current (live state), txn_rollup_hourly (SLA), ref_partner_penalty
+-- Inputs: txn_events (current state == the row; 1 event per txn), txn_rollup_hourly (SLA), ref_partner_penalty
 -- ($ exposure), ref_partner_profile (onboarding config, seeded below), and
 -- vw_partner_anomaly (anomaly flag -> requires sql/09 applied first).
 --
@@ -36,12 +36,12 @@ CREATE VIEW public.vw_partner_360 AS
 WITH cur AS (
   SELECT environment, partner,
          COUNT(*)                                                   AS refs,
-         COUNT(*) FILTER (WHERE current_status IN ('failed','rejected')) AS exceptions,
-         COUNT(*) FILTER (WHERE current_status = 'duplicate')       AS duplicates,
+         COUNT(*) FILTER (WHERE status IN ('failed','rejected'))    AS exceptions,
+         COUNT(*) FILTER (WHERE status = 'duplicate')               AS duplicates,
          COUNT(*) FILTER (WHERE NOT terminal)                       AS open_refs,
          COUNT(*) FILTER (WHERE sla_due_at < now() AND NOT terminal) AS breaching,
-         MAX(last_event_at)                                         AS last_seen
-  FROM public.txn_current GROUP BY 1,2),
+         MAX(event_time)                                            AS last_seen
+  FROM public.txn_events GROUP BY 1,2),
 sla AS (
   SELECT environment, partner,
          SUM(txn_count)     AS txns,
@@ -49,10 +49,10 @@ sla AS (
   FROM public.txn_rollup_hourly GROUP BY 1,2),
 risk AS (   -- penalty exposure on current exceptions, by doc_type
   SELECT c.environment, c.partner, SUM(pp.penalty_usd) AS dollars_at_risk
-  FROM public.txn_current c
+  FROM public.txn_events c
   JOIN public.ref_partner_penalty pp
     ON pp.partner = c.partner AND pp.doc_type = c.doc_type
-  WHERE c.current_status IN ('failed','rejected')
+  WHERE c.status IN ('failed','rejected')
   GROUP BY 1,2)
 SELECT
   cur.environment, cur.partner,
