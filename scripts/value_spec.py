@@ -96,7 +96,7 @@ REUSED = [
     # Channel Health — Q1 arrival / channel / endpoint monitors from the original
     # Integration Visibility Cockpit. Reused in place (link-appended), so the
     # original cockpit dashboard keeps them too. All on the single world: monitor
-    # tables (monitor_heartbeat / endpoint_health / expected_feeds / pipeline_health)
+    # tables (ops_monitor_heartbeat / ops_endpoint_health / ops_expected_feeds / ops_pipeline_health)
     # + txn_current, same partner names + channels as the rest of the dashboard.
     ("Monitors reporting", T_CHAN), ("Stale / silent monitors", T_CHAN),
     ("Channel health", T_CHAN), ("Dead / degraded connections", T_CHAN),
@@ -151,7 +151,7 @@ NEW_CHARTS = [
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
     # "Exceptions by reason" already exists (reused on the Exceptions tab) — give
     # the Home pie a unique internal name + sliceNameOverride to avoid a collapse.
-    dict(slice="Home · Exceptions by reason", tab=T_HOME, dataset="q3_exceptions_by_reason",
+    dict(slice="Home · Exceptions by reason", tab=T_HOME, dataset="vw_exceptions_by_reason",
          kind="pie", groupby="reason_category", metric=("occ", "SUM(occurrences)")),
     dict(slice="Exceptions by partner", tab=T_HOME, dataset="vw_rollup",
          kind="bar", dim="partner", row_limit=15,

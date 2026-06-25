@@ -10,23 +10,23 @@ RECIPIENT = "narayan.hd@gmail.com"   # account owner; edit in Preset to change
 
 ALERTS = [
     dict(name="Hung pipeline", crontab="*/5 * * * *", chart="Hung pipelines",
-         sql="SELECT count(*) FROM pipeline_health "
+         sql="SELECT count(*) FROM ops_pipeline_health "
              "WHERE state='running' AND (queue_depth>0 OR mq_depth>0) AND consume_rate=0",
          desc="A pipeline is running but consuming nothing (the retailer-204 signature)."),
     dict(name="Missing feed", crontab="*/15 * * * *", chart="Missing expected feeds",
-         sql="SELECT count(*) FROM expected_feeds "
+         sql="SELECT count(*) FROM ops_expected_feeds "
              "WHERE now() > expected_next_at + make_interval(mins=>grace_minutes) "
              "AND (last_seen_at IS NULL OR last_seen_at < expected_next_at)",
          desc="An expected partner feed is overdue past its grace window."),
     dict(name="Channel down", crontab="*/5 * * * *", chart="Dead / degraded connections",
-         sql="SELECT count(*) FROM endpoint_health WHERE status <> 'up'",
+         sql="SELECT count(*) FROM ops_endpoint_health WHERE status <> 'up'",
          desc="An endpoint is down or degraded."),
     dict(name="Rejected message", crontab="*/15 * * * *", chart="Rejected (period)",
          sql="SELECT coalesce(sum(rejected_count),0) FROM txn_rollup_hourly "
              "WHERE bucket >= date_trunc('hour', now()) - interval '1 hour'",
          desc="Rejected messages in the last hour — closes today's no-alert-on-reject gap."),
     dict(name="Cert expiring", crontab="0 8 * * *", chart="Cert / key expiry",
-         sql="SELECT count(*) FROM endpoint_health WHERE cert_expires_at < now() + interval '7 days'",
+         sql="SELECT count(*) FROM ops_endpoint_health WHERE cert_expires_at < now() + interval '7 days'",
          desc="An endpoint cert/key expires within 7 days."),
     # Phase 5 (Q10): proactive — fires while the response clock is running, before breach.
     dict(name="At-risk response", crontab="*/5 * * * *", chart="Responses due soon (at-risk)",

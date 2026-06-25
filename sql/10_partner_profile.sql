@@ -4,9 +4,9 @@
 -- rate, open/breaching, $-at-risk (penalty exposure on current exceptions),
 -- last-seen, onboarding tier/status, and the Q15 anomaly flag.
 --
--- Inputs: txn_current (live state), txn_rollup_hourly (SLA), partner_penalty
--- ($ exposure), partner_profile (onboarding config, seeded below), and
--- q15_partner_anomaly (anomaly flag -> requires sql/09 applied first).
+-- Inputs: txn_current (live state), txn_rollup_hourly (SLA), ref_partner_penalty
+-- ($ exposure), ref_partner_profile (onboarding config, seeded below), and
+-- vw_partner_anomaly (anomaly flag -> requires sql/09 applied first).
 --
 -- Notes / honest scope:
 --  * ack-health is intentionally omitted here -- the cockpit feed has no ack
@@ -15,14 +15,14 @@
 --    security-config step, not a data artifact, and is tracked as follow-up.
 
 -- onboarding config (small deterministic seed, like doc_type_catalog) ---------
-CREATE TABLE IF NOT EXISTS public.partner_profile (
+CREATE TABLE IF NOT EXISTS public.ref_partner_profile (
   partner           text PRIMARY KEY,
   tier              text,         -- Strategic | Preferred | Standard
   onboarding_status text,         -- Live | Onboarding
   region            text
 );
-TRUNCATE public.partner_profile;
-INSERT INTO public.partner_profile (partner, tier, onboarding_status, region) VALUES
+TRUNCATE public.ref_partner_profile;
+INSERT INTO public.ref_partner_profile (partner, tier, onboarding_status, region) VALUES
   ('DHL',         'Strategic', 'Live',       'EMEA'),
   ('Maersk',      'Strategic', 'Live',       'EMEA'),
   ('Hapag',       'Preferred', 'Live',       'EMEA'),
@@ -31,8 +31,8 @@ INSERT INTO public.partner_profile (partner, tier, onboarding_status, region) VA
   ('Target',      'Strategic', 'Live',       'NA'),
   ('Flextronics', 'Standard',  'Onboarding', 'APAC');
 
-DROP VIEW IF EXISTS public.q17_partner_360 CASCADE;
-CREATE VIEW public.q17_partner_360 AS
+DROP VIEW IF EXISTS public.vw_partner_360 CASCADE;
+CREATE VIEW public.vw_partner_360 AS
 WITH cur AS (
   SELECT environment, partner,
          COUNT(*)                                                   AS refs,
@@ -50,7 +50,7 @@ sla AS (
 risk AS (   -- penalty exposure on current exceptions, by doc_type
   SELECT c.environment, c.partner, SUM(pp.penalty_usd) AS dollars_at_risk
   FROM public.txn_current c
-  JOIN public.partner_penalty pp
+  JOIN public.ref_partner_penalty pp
     ON pp.partner = c.partner AND pp.doc_type = c.doc_type
   WHERE c.current_status IN ('failed','rejected')
   GROUP BY 1,2)
@@ -71,6 +71,6 @@ SELECT
 FROM cur
 LEFT JOIN sla s             USING (environment, partner)
 LEFT JOIN risk r            USING (environment, partner)
-LEFT JOIN public.partner_profile pr ON pr.partner = cur.partner
-LEFT JOIN public.q15_partner_anomaly qa
+LEFT JOIN public.ref_partner_profile pr ON pr.partner = cur.partner
+LEFT JOIN public.vw_partner_anomaly qa
        ON qa.environment = cur.environment AND qa.partner = cur.partner;

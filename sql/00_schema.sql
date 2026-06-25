@@ -147,19 +147,19 @@ CREATE INDEX IF NOT EXISTS ix_cur_partner ON txn_current (partner, terminal);
 -- ----------------------------------------------------------------------------
 -- OPERATIONAL TABLES  (small; written by NiFi monitor jobs / seeded for demo)
 -- ----------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS endpoint_health (
+CREATE TABLE IF NOT EXISTS ops_endpoint_health (
   channel text, endpoint text, partner text, environment text,
   status text, last_ok_at timestamptz, cert_expires_at date
 );
-CREATE TABLE IF NOT EXISTS expected_feeds (
+CREATE TABLE IF NOT EXISTS ops_expected_feeds (
   partner text, doc_type text, channel text, environment text,
   expected_next_at timestamptz, grace_minutes int, last_seen_at timestamptz
 );
-CREATE TABLE IF NOT EXISTS monitor_heartbeat (
+CREATE TABLE IF NOT EXISTS ops_monitor_heartbeat (
   monitor_name text, channel text, environment text,
   last_run_at timestamptz, expected_interval_sec int
 );
-CREATE TABLE IF NOT EXISTS pipeline_health (
+CREATE TABLE IF NOT EXISTS ops_pipeline_health (
   pipeline text, environment text, state text,
   queue_depth bigint, mq_depth bigint, consume_rate numeric, last_consumed_at timestamptz
 );
@@ -191,6 +191,6 @@ CREATE TABLE IF NOT EXISTS diagnostic_rules (
 CREATE TABLE IF NOT EXISTS deploys (
   deployed_at timestamptz, component text, note text
 );
-CREATE TABLE IF NOT EXISTS partner_penalty (
+CREATE TABLE IF NOT EXISTS ref_partner_penalty (
   partner text, doc_type text, penalty_usd numeric
 );

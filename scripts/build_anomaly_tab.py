@@ -23,9 +23,9 @@ TAB_TITLE = "Predictive Anomaly"
 PFX = "ANOM"
 
 DS = {
-    "feed":    "q15_feed_anomaly",
-    "partner": "q15_partner_anomaly",
-    "daily":   "q15_feed_daily",
+    "feed":    "vw_feed_anomaly",
+    "partner": "vw_partner_anomaly",
+    "daily":   "vw_feed_daily",
 }
 
 KPI = dict(kind="bignum", w=3, h=22, header_font_size=0.3, subheader_font_size=0.125)

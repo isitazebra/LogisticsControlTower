@@ -14,64 +14,64 @@ DATASETS = {
     ),
 
     # ---- Q1 Arrival & Stuck -------------------------------------------------
-    "q1_missing_feeds": dict(sql="""
+    "vw_missing_feeds": dict(sql="""
         SELECT partner, doc_type, channel, environment, expected_next_at, last_seen_at,
                round(extract(epoch FROM (now()-expected_next_at))/60) AS mins_overdue
-        FROM expected_feeds
+        FROM ops_expected_feeds
         WHERE now() > expected_next_at + make_interval(mins => grace_minutes)
           AND (last_seen_at IS NULL OR last_seen_at < expected_next_at)"""),
 
-    "q1_hung_pipeline": dict(sql="""
+    "vw_hung_pipeline": dict(sql="""
         SELECT pipeline, environment, queue_depth, mq_depth, consume_rate, last_consumed_at
-        FROM pipeline_health
+        FROM ops_pipeline_health
         WHERE state='running' AND (queue_depth>0 OR mq_depth>0) AND consume_rate=0"""),
 
-    "q1_sweep_integrity": dict(sql="""
+    "vw_sweep_integrity": dict(sql="""
         SELECT monitor_name, channel, environment, last_run_at, expected_interval_sec,
                (now()-last_run_at) > make_interval(secs => expected_interval_sec) AS is_stale
-        FROM monitor_heartbeat"""),
+        FROM ops_monitor_heartbeat"""),
 
     # Same signal, pre-filtered to the silent monitors (sweep-integrity catch).
-    "q1_stale_monitors": dict(sql="""
+    "vw_stale_monitors": dict(sql="""
         SELECT monitor_name, channel, environment, last_run_at,
                round(extract(epoch FROM (now()-last_run_at))/60) AS mins_silent
-        FROM monitor_heartbeat
+        FROM ops_monitor_heartbeat
         WHERE (now()-last_run_at) > make_interval(secs => expected_interval_sec)"""),
 
-    "q1_stuck": dict(sql="""
+    "vw_stuck_transactions": dict(sql="""
         SELECT business_ref, lob, partner, channel, doc_type, current_stage, environment,
                last_event_at, round(extract(epoch FROM (now()-last_event_at))/60) AS age_min, value_usd
         FROM txn_current
         WHERE NOT terminal AND now()-last_event_at > interval '20 minutes'"""),
 
-    "q1_landed_not_picked": dict(sql="""
+    "vw_landed_not_picked": dict(sql="""
         SELECT business_ref, lob, partner, channel, doc_type, environment, last_event_at,
                round(extract(epoch FROM (now()-last_event_at))/60) AS age_min
         FROM txn_current
         WHERE NOT terminal AND current_stage='received'
           AND now()-last_event_at > interval '10 minutes'"""),
 
-    "q1_channel_health": dict(sql="""
+    "vw_channel_health": dict(sql="""
         SELECT channel, endpoint, partner, environment, status, last_ok_at, cert_expires_at
-        FROM endpoint_health"""),
+        FROM ops_endpoint_health"""),
 
-    "q1_endpoint_down": dict(sql="""
+    "vw_endpoint_down": dict(sql="""
         SELECT channel, endpoint, partner, environment, status, last_ok_at
-        FROM endpoint_health WHERE status <> 'up'"""),
+        FROM ops_endpoint_health WHERE status <> 'up'"""),
 
-    "q1_cert_expiry": dict(sql="""
+    "vw_cert_expiry": dict(sql="""
         SELECT channel, endpoint, partner, environment, cert_expires_at,
                (cert_expires_at - now()::date) AS days_left
-        FROM endpoint_health WHERE cert_expires_at < now()+interval '14 days'"""),
+        FROM ops_endpoint_health WHERE cert_expires_at < now()+interval '14 days'"""),
 
     # ---- Q3 Exceptions ------------------------------------------------------
-    "q3_exceptions_by_reason": dict(sql="""
+    "vw_exceptions_by_reason": dict(sql="""
         SELECT coalesce(reason_category,'unknown') AS reason_category,
                count(*) AS occurrences, sum(value_usd) AS value_exposed
         FROM txn_events WHERE status IN ('failed','rejected')
         GROUP BY 1 ORDER BY 2 DESC"""),
 
-    "q3_exception_queue": dict(sql="""
+    "vw_exception_queue": dict(sql="""
         SELECT event_time, business_ref, partner, doc_type, channel, environment, status,
                coalesce(reason_category,'unknown') AS reason_category, value_usd,
                round(extract(epoch FROM (now()-event_time))/60) AS age_min
@@ -79,7 +79,7 @@ DATASETS = {
         ORDER BY event_time DESC""", dttm="event_time"),
 
     # ---- Q4 Files + Lookup / Q8 Replay / Q5 Acks ----------------------------
-    "q4_files": dict(sql="""
+    "vw_files": dict(sql="""
         SELECT interchange_id, file_name, direction, partner, channel, protocol,
                received_at, completed_at, status, reason_category, declared_txn_count, kchar
         FROM txn_files""", dttm="received_at"),
@@ -111,7 +111,7 @@ DATASETS = {
         SELECT business_ref, partner, doc_type, replayed_at, replay_count, current_status
         FROM txn_current WHERE replayed = true""", dttm="replayed_at"),
 
-    "q5_acks": dict(sql="""
+    "vw_acks": dict(sql="""
         SELECT o.business_ref, o.partner, o.doc_type, o.event_time AS sent_at,
                a.event_time AS ack_at, a.status AS ack_status,
                CASE WHEN a.event_time IS NULL AND now() > o.sla_due_at THEN 'missing'
@@ -125,7 +125,7 @@ DATASETS = {
           AND o.business_ref LIKE 'ACK-%'""", dttm="sent_at"),
 
     # ---- Q6 Partner SLA / Q7 Activity / Q9 Usage ----------------------------
-    "q6_partner_sla": dict(sql="""
+    "vw_partner_sla": dict(sql="""
         SELECT c.partner,
           count(*) AS total,
           count(*) FILTER (WHERE terminal_at <= sla_due_at) AS met,
@@ -134,7 +134,7 @@ DATASETS = {
           round(avg(extract(epoch FROM (terminal_at-first_event_at))/60)) AS avg_min,
           round(max(extract(epoch FROM (terminal_at-first_event_at))/60)) AS max_min,
           coalesce(sum(p.penalty_usd) FILTER (WHERE terminal_at > sla_due_at),0) AS penalty_usd
-        FROM txn_current c LEFT JOIN partner_penalty p ON p.partner=c.partner
+        FROM txn_current c LEFT JOIN ref_partner_penalty p ON p.partner=c.partner
         GROUP BY c.partner"""),
 
     "q7_partner_activity": dict(sql="""
@@ -174,14 +174,14 @@ DATASETS = {
           ORDER BY x.event_time LIMIT 1) resp ON true
         WHERE r.trigger_doc_type IS NOT NULL AND t.business_ref LIKE 'LOAD%'""", dttm="trigger_at"),
 
-    "q11_signatures": dict(sql="""
+    "vw_failure_signatures": dict(sql="""
         SELECT reason_category, error_code, stage, partner,
           count(*) AS occurrences, min(event_time) AS onset, max(event_time) AS latest,
           count(DISTINCT business_ref) AS refs, sum(value_usd) AS value_exposed
         FROM txn_events WHERE status IN ('failed','rejected') AND reason_category IS NOT NULL
         GROUP BY 1,2,3,4 ORDER BY occurrences DESC"""),
 
-    "q11_attribution": dict(sql="""
+    "vw_failure_attribution": dict(sql="""
         -- Attribution follows the status/reason contract of sql/13: a 'rejected'
         -- message was refused by the receiving partner/their validation (theirs),
         -- and a bad_input_file is a partner-supplied bad file (theirs); a 'failed'
@@ -347,30 +347,30 @@ BARS = {"showCellBars": True}                            # data bar only
 
 CHARTS = [
     # ===== Q1 — Arrival & Channel Health =====
-    dict(slice="Monitors reporting", tab=T_ARRIVAL, dataset="q1_sweep_integrity",
+    dict(slice="Monitors reporting", tab=T_ARRIVAL, dataset="vw_sweep_integrity",
          kind="bignum", metric=("reporting", "SUM((NOT is_stale)::int)"),
          subheader="monitors not silent", w=3, h=40),
-    dict(slice="Stale / silent monitors", tab=T_ARRIVAL, dataset="q1_stale_monitors",
+    dict(slice="Stale / silent monitors", tab=T_ARRIVAL, dataset="vw_stale_monitors",
          kind="raw", cols=["monitor_name","channel","environment","last_run_at","mins_silent"],
          order=[("mins_silent", False)], w=3, h=40),
-    dict(slice="Hung pipelines", tab=T_ARRIVAL, dataset="q1_hung_pipeline",
+    dict(slice="Hung pipelines", tab=T_ARRIVAL, dataset="vw_hung_pipeline",
          kind="raw", cols=["pipeline","environment","queue_depth","mq_depth","consume_rate","last_consumed_at"],
          w=6, h=40),
-    dict(slice="Missing expected feeds", tab=T_ARRIVAL, dataset="q1_missing_feeds",
+    dict(slice="Missing expected feeds", tab=T_ARRIVAL, dataset="vw_missing_feeds",
          kind="raw", cols=["partner","doc_type","channel","environment","mins_overdue","last_seen_at"],
          order=[("mins_overdue", False)], w=6, h=42),
-    dict(slice="Dead / degraded connections", tab=T_ARRIVAL, dataset="q1_endpoint_down",
+    dict(slice="Dead / degraded connections", tab=T_ARRIVAL, dataset="vw_endpoint_down",
          kind="raw", cols=["channel","endpoint","partner","environment","status","last_ok_at"], w=6, h=42),
-    dict(slice="Channel health", tab=T_ARRIVAL, dataset="q1_channel_health",
+    dict(slice="Channel health", tab=T_ARRIVAL, dataset="vw_channel_health",
          kind="raw", cols=["channel","endpoint","partner","environment","status","last_ok_at","cert_expires_at"],
          w=6, h=44),
-    dict(slice="Landed, not picked up", tab=T_ARRIVAL, dataset="q1_landed_not_picked",
+    dict(slice="Landed, not picked up", tab=T_ARRIVAL, dataset="vw_landed_not_picked",
          kind="raw", cols=["business_ref","partner","channel","doc_type","environment","age_min"],
          order=[("age_min", False)], w=6, h=42),
-    dict(slice="Stuck / aging transactions", tab=T_ARRIVAL, dataset="q1_stuck",
+    dict(slice="Stuck / aging transactions", tab=T_ARRIVAL, dataset="vw_stuck_transactions",
          kind="raw", cols=["business_ref","partner","channel","doc_type","current_stage","age_min","value_usd"],
          order=[("age_min", False)], col_fmt={"age_min": BARS, "value_usd": CUR}, w=6, h=44),
-    dict(slice="Cert / key expiry", tab=T_ARRIVAL, dataset="q1_cert_expiry",
+    dict(slice="Cert / key expiry", tab=T_ARRIVAL, dataset="vw_cert_expiry",
          kind="raw", cols=["endpoint","partner","channel","environment","cert_expires_at","days_left"],
          order=[("days_left", True)], col_fmt={"days_left": BARS},
          heat=[{"column":"days_left","operator":"<","targetValue":7,"colorScheme":"#e04355"}], w=6, h=42),
@@ -384,10 +384,10 @@ CHARTS = [
     dict(slice="Duplicates suppressed", tab=T_EXC, dataset="vw_rollup",
          kind="bignum", metric=("duplicate","SUM(duplicate_count)"),
          subheader="counted, not alerted", w=4, h=40),
-    dict(slice="Exceptions by reason", tab=T_EXC, dataset="q3_exceptions_by_reason",
+    dict(slice="Exceptions by reason", tab=T_EXC, dataset="vw_exceptions_by_reason",
          kind="bar", dim="reason_category", metric=("occurrences","SUM(occurrences)"),
          row_limit=20, w=6, h=50),
-    dict(slice="Exception queue", tab=T_EXC, dataset="q3_exception_queue",
+    dict(slice="Exception queue", tab=T_EXC, dataset="vw_exception_queue",
          kind="raw",
          cols=["event_time","business_ref","partner","doc_type","status","reason_category","value_usd","age_min"],
          order=[("event_time", False)], row_limit=200,
@@ -428,7 +428,7 @@ CHARTS = [
     # ===== Q4 — Files =====
     dict(slice="Incoming vs outgoing files (24h)", tab=T_FILES, dataset="q4_file_feed",
          kind="bar", dim="direction", metric=("files","SUM(files)"), series="status", w=4, h=46),
-    dict(slice="File explorer", tab=T_FILES, dataset="q4_files", kind="raw",
+    dict(slice="File explorer", tab=T_FILES, dataset="vw_files", kind="raw",
          cols=["received_at","file_name","direction","partner","channel","status","declared_txn_count","kchar"],
          order=[("received_at", False)], row_limit=200, w=8, h=46),
     dict(slice="Files missing transactions", tab=T_FILES, dataset="q4_files_missing", kind="raw",
@@ -451,21 +451,21 @@ CHARTS = [
          order=[("replayed_at", False)], w=6, h=46),
 
     # ===== Q5 — Acknowledgments =====
-    dict(slice="Missing acks", tab=T_ACKS, dataset="q5_acks",
+    dict(slice="Missing acks", tab=T_ACKS, dataset="vw_acks",
          kind="bignum", metric=("missing","SUM((fa_state='missing')::int)"), subheader="no 997/CONTRL in window", w=3, h=38),
-    dict(slice="Rejected acks", tab=T_ACKS, dataset="q5_acks",
+    dict(slice="Rejected acks", tab=T_ACKS, dataset="vw_acks",
          kind="bignum", metric=("rejected","SUM((fa_state='rejected')::int)"), subheader="negative ack", w=3, h=38),
-    dict(slice="FA tracking", tab=T_ACKS, dataset="q5_acks", kind="raw",
+    dict(slice="FA tracking", tab=T_ACKS, dataset="vw_acks", kind="raw",
          cols=["sent_at","business_ref","partner","doc_type","ack_at","ack_status","fa_state"],
          order=[("sent_at", False)], w=6, h=44),
 
     # ===== Q6 SLA + Q7 activity =====
-    dict(slice="Partner SLA scorecard", tab=T_SLA, dataset="q6_partner_sla", kind="raw",
+    dict(slice="Partner SLA scorecard", tab=T_SLA, dataset="vw_partner_sla", kind="raw",
          cols=["partner","total","met","missed","pct_met","avg_min","max_min","penalty_usd"],
          order=[("pct_met", True)],
          col_fmt={"total": NUMB, "pct_met": PCTB, "penalty_usd": CUR},
          heat=[{"column":"pct_met","operator":"<","targetValue":95,"colorScheme":"#fcc419"}], w=7, h=46),
-    dict(slice="% Met by partner", tab=T_SLA, dataset="q6_partner_sla",
+    dict(slice="% Met by partner", tab=T_SLA, dataset="vw_partner_sla",
          kind="bar", dim="partner", metric=("pct_met","MAX(pct_met)"), w=5, h=46),
     dict(slice="Top partners by volume", tab=T_SLA, dataset="q7_partner_activity",
          kind="bar", dim="partner", metric=("volume","SUM(volume)"), w=4, h=44),
@@ -497,10 +497,10 @@ CHARTS = [
          filters=[("sla_state","==","missed")], order=[("trigger_at", False)], row_limit=200, w=12, h=46),
 
     # ===== Q11 — Diagnostics + Resolution KB =====
-    dict(slice="Failure signatures", tab=T_DIAG, dataset="q11_signatures", kind="raw",
+    dict(slice="Failure signatures", tab=T_DIAG, dataset="vw_failure_signatures", kind="raw",
          cols=["reason_category","error_code","stage","partner","occurrences","onset","refs","value_exposed"],
          order=[("occurrences", False)], w=8, h=46),
-    dict(slice="Partner vs platform", tab=T_DIAG, dataset="q11_attribution",
+    dict(slice="Partner vs platform", tab=T_DIAG, dataset="vw_failure_attribution",
          kind="pie", groupby="attribution", metric=("occurrences","SUM(occurrences)"), w=4, h=46),
     dict(slice="Re-failed replays", tab=T_DIAG, dataset="q11_replay_refail", kind="raw",
          cols=["business_ref","partner","doc_type","replay_count","current_status"], w=4, h=42),
@@ -562,11 +562,11 @@ CHARTS = [
          subheader="failed + rejected", w=3, h=40),
     dict(slice="Overview: In-flight", tab=T_OVERVIEW, dataset="q_all_txn",
          kind="bignum", metric=("inflight","SUM((NOT terminal)::int)"), subheader="still moving", w=3, h=40),
-    dict(slice="Overview: Hung pipelines", tab=T_OVERVIEW, dataset="q1_hung_pipeline",
+    dict(slice="Overview: Hung pipelines", tab=T_OVERVIEW, dataset="vw_hung_pipeline",
          kind="bignum", metric=("hung","COUNT(*)"), subheader="running, consuming nothing", w=3, h=36),
-    dict(slice="Overview: Missing feeds", tab=T_OVERVIEW, dataset="q1_missing_feeds",
+    dict(slice="Overview: Missing feeds", tab=T_OVERVIEW, dataset="vw_missing_feeds",
          kind="bignum", metric=("missing","COUNT(*)"), subheader="overdue past grace", w=3, h=36),
-    dict(slice="Overview: Stale monitors", tab=T_OVERVIEW, dataset="q1_stale_monitors",
+    dict(slice="Overview: Stale monitors", tab=T_OVERVIEW, dataset="vw_stale_monitors",
          kind="bignum", metric=("stale","COUNT(*)"), subheader="sweep silent", w=3, h=36),
     dict(slice="Overview: At-risk responses", tab=T_OVERVIEW, dataset="q10_sla_pairs",
          kind="bignum", metric=("atrisk","COUNT(*) FILTER (WHERE sla_state='at_risk')"),
@@ -575,11 +575,11 @@ CHARTS = [
          kind="pie", groupby="protocol", metric=("txns","SUM(txn_count)"), w=4, h=46),
     dict(slice="Overview: Volume by family", tab=T_OVERVIEW, dataset="q12_doctype_grid",
          kind="treemap", groupby=["family","doc_label"], metric=("txns","SUM(txns)"), w=4, h=46),
-    dict(slice="Overview: Exceptions by reason", tab=T_OVERVIEW, dataset="q3_exceptions_by_reason",
+    dict(slice="Overview: Exceptions by reason", tab=T_OVERVIEW, dataset="vw_exceptions_by_reason",
          kind="bar", dim="reason_category", metric=("occ","SUM(occurrences)"), row_limit=12, w=4, h=46),
-    dict(slice="Overview: Hung pipeline worklist", tab=T_OVERVIEW, dataset="q1_hung_pipeline",
+    dict(slice="Overview: Hung pipeline worklist", tab=T_OVERVIEW, dataset="vw_hung_pipeline",
          kind="raw", cols=["pipeline","environment","queue_depth","consume_rate","last_consumed_at"], w=6, h=42),
-    dict(slice="Overview: Missing feed worklist", tab=T_OVERVIEW, dataset="q1_missing_feeds",
+    dict(slice="Overview: Missing feed worklist", tab=T_OVERVIEW, dataset="vw_missing_feeds",
          kind="raw", cols=["partner","doc_type","channel","mins_overdue","last_seen_at"],
          order=[("mins_overdue", False)], col_fmt={"mins_overdue": BARS}, w=6, h=42),
 

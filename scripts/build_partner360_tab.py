@@ -3,7 +3,7 @@
 
 One shareable scorecard row per partner: volume, exception rate, SLA %,
 duplicate rate, open/breaching, $-at-risk, last-seen, onboarding tier/status,
-and the Q15 anomaly flag. Reads public.q17_partner_360 (sql/10).
+and the Q15 anomaly flag. Reads public.vw_partner_360 (sql/10).
 
 Cockpit world -> DB 3 ("Neon - Integration Cockpit"), schema public.
 Additive + idempotent (P360-prefixed nodes, charts matched by slice).
@@ -21,7 +21,7 @@ DASH_ID = 12
 TAB_TITLE = "Partner 360"
 PFX = "P360"
 
-DS = {"p360": "q17_partner_360"}
+DS = {"p360": "vw_partner_360"}
 
 KPI = dict(kind="bignum", w=3, h=22, header_font_size=0.3, subheader_font_size=0.125)
 CHARTS = [

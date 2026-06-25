@@ -10,20 +10,20 @@
 -- trailing 7 complete days. All days are full days, so a partial tail never
 -- fakes a drop. Source of truth stays txn_events; this only reads the rollup.
 
-DROP VIEW IF EXISTS public.q15_partner_anomaly        CASCADE;
-DROP VIEW IF EXISTS public.q15_feed_anomaly           CASCADE;
-DROP VIEW IF EXISTS public.q15_feed_daily             CASCADE;
-DROP VIEW IF EXISTS public.v_anomaly_asof             CASCADE;
+DROP VIEW IF EXISTS public.vw_partner_anomaly        CASCADE;
+DROP VIEW IF EXISTS public.vw_feed_anomaly           CASCADE;
+DROP VIEW IF EXISTS public.vw_feed_daily             CASCADE;
+DROP VIEW IF EXISTS public.vw_anomaly_asof             CASCADE;
 
 -- asof anchor (last complete day) -------------------------------------------
-CREATE VIEW public.v_anomaly_asof AS
+CREATE VIEW public.vw_anomaly_asof AS
 SELECT (SELECT max(date_trunc('day',bucket))::date
           FROM public.txn_rollup_hourly
          WHERE bucket < date_trunc('day',(SELECT max(bucket) FROM public.txn_rollup_hourly))
        ) AS asof_day;
 
 -- per partner.feed daily volume (+ error/breach context) --------------------
-CREATE VIEW public.q15_feed_daily AS
+CREATE VIEW public.vw_feed_daily AS
 SELECT environment, partner, doc_type,
        date_trunc('day',bucket)::date AS day,
        SUM(txn_count)                          AS txns,
@@ -36,26 +36,26 @@ GROUP BY 1,2,3,4;
 -- NOTE: a silent feed has NO rows on its quiet days (absence, not a zero row),
 -- so we divide by a FIXED window length (21 / 7 days), not COUNT(*) of present
 -- rows -- otherwise an averaged-over-present-days mean would hide the silence.
-CREATE VIEW public.q15_feed_anomaly AS
-WITH a AS (SELECT asof_day FROM public.v_anomaly_asof),
+CREATE VIEW public.vw_feed_anomaly AS
+WITH a AS (SELECT asof_day FROM public.vw_anomaly_asof),
 base AS (
   SELECT environment, partner, doc_type,
          SUM(txns)/21.0          AS base_mean,
          COALESCE(STDDEV_POP(txns),0) AS base_sd,
          COUNT(*)                AS base_days
-  FROM public.q15_feed_daily, a
+  FROM public.vw_feed_daily, a
   WHERE day BETWEEN a.asof_day - 27 AND a.asof_day - 7
   GROUP BY 1,2,3),
 cur AS (
   SELECT environment, partner, doc_type,
          SUM(txns)/7.0            AS cur_mean,
          SUM(txns)                AS cur_txns
-  FROM public.q15_feed_daily, a
+  FROM public.vw_feed_daily, a
   WHERE day BETWEEN a.asof_day - 6 AND a.asof_day
   GROUP BY 1,2,3),
 seen AS (   -- last day the feed had any volume, across all history
   SELECT environment, partner, doc_type, MAX(day) AS last_active_day
-  FROM public.q15_feed_daily WHERE txns > 0 GROUP BY 1,2,3)
+  FROM public.vw_feed_daily WHERE txns > 0 GROUP BY 1,2,3)
 SELECT
   b.environment, b.partner, b.doc_type,
   ROUND(b.base_mean,1)                              AS base_mean,
@@ -78,7 +78,7 @@ LEFT JOIN seen s USING (environment, partner, doc_type)
 WHERE b.base_mean >= 3;   -- ignore negligible feeds
 
 -- partner-level rollup of feed anomalies (one row per partner) --------------
-CREATE VIEW public.q15_partner_anomaly AS
+CREATE VIEW public.vw_partner_anomaly AS
 SELECT
   environment, partner,
   COUNT(*)                                          AS feeds,
@@ -95,5 +95,5 @@ SELECT
     WHEN COUNT(*) FILTER (WHERE status='Watch') > 0        THEN 'Watch'
     ELSE 'Normal'
   END AS status
-FROM public.q15_feed_anomaly
+FROM public.vw_feed_anomaly
 GROUP BY 1,2;

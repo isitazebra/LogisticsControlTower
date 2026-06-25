@@ -8,8 +8,8 @@
 
 -- 0. clean (idempotent for re-runs)
 TRUNCATE txn_events, txn_files, txn_current, txn_rollup_hourly,
-         endpoint_health, expected_feeds, monitor_heartbeat, pipeline_health,
-         sla_rules, diagnostic_rules, deploys, partner_penalty RESTART IDENTITY;
+         ops_endpoint_health, ops_expected_feeds, ops_monitor_heartbeat, ops_pipeline_health,
+         sla_rules, diagnostic_rules, deploys, ref_partner_penalty RESTART IDENTITY;
 
 -- ============================================================================
 -- 1. BULK VOLUME  (~300k rows: mostly healthy, small fail/reject/dup,
@@ -104,26 +104,26 @@ WHERE business_ref='HAWB-12482907';
 -- ============================================================================
 -- 5. OPERATIONAL TABLES (Q1) — the active-sweep signals
 -- ============================================================================
-INSERT INTO endpoint_health (channel, endpoint, partner, environment, status, last_ok_at, cert_expires_at) VALUES
+INSERT INTO ops_endpoint_health (channel, endpoint, partner, environment, status, last_ok_at, cert_expires_at) VALUES
  ('sftp','crocs-edi','Crocs','prod','down',      now()-interval '22 min', (now()+interval '5 day')::date),   -- down + cert 5d
  ('api','rxo-track','RXO','prod','degraded',     now()-interval '2 min',  (now()+interval '3 day')::date),   -- 401s + token 3d
  ('as2','maersk-as2','Maersk','prod','up',       now()-interval '20 sec', (now()+interval '11 day')::date),
  ('sftp','target-sftp','Target','prod','up',     now()-interval '15 sec', (now()+interval '120 day')::date),
  ('sftp','crocs-edi-uat','Crocs','uat','up',     now()-interval '30 sec', (now()+interval '90 day')::date);
 
-INSERT INTO expected_feeds (partner, doc_type, channel, environment, expected_next_at, grace_minutes, last_seen_at) VALUES
+INSERT INTO ops_expected_feeds (partner, doc_type, channel, environment, expected_next_at, grace_minutes, last_seen_at) VALUES
  ('Werner','204','sftp','prod', now()-interval '35 min', 15, now()-interval '95 min'),  -- MISSING
  ('Kroger','856','sftp','prod', now()-interval '2 hour', 30, now()-interval '26 hour'), -- MISSING
  ('Maersk','214','sftp','prod', now()+interval '40 min', 30, now()-interval '20 min');  -- healthy
 
-INSERT INTO monitor_heartbeat (monitor_name, channel, environment, last_run_at, expected_interval_sec) VALUES
+INSERT INTO ops_monitor_heartbeat (monitor_name, channel, environment, last_run_at, expected_interval_sec) VALUES
  ('van-liveness','van','prod', now()-interval '18 min', 300),   -- STALE -> sweep-integrity catch
  ('sftp-liveness','sftp','prod', now()-interval '20 sec', 300),
  ('as2-liveness','as2','prod', now()-interval '25 sec', 300),
  ('api-liveness','api','prod', now()-interval '15 sec', 300),
  ('mq-depth','mq','prod', now()-interval '10 sec', 120);
 
-INSERT INTO pipeline_health (pipeline, environment, state, queue_depth, mq_depth, consume_rate, last_consumed_at) VALUES
+INSERT INTO ops_pipeline_health (pipeline, environment, state, queue_depth, mq_depth, consume_rate, last_consumed_at) VALUES
  ('walgreens-tl','prod','running', 20, 20, 0,    now()-interval '40 min'),  -- HUNG (running, queue>0, rate 0)
  ('air-main','prod','running',     12, 0,  240,  now()),
  ('ocean-main','prod','running',    4, 0,  180,  now()),
@@ -147,7 +147,7 @@ INSERT INTO diagnostic_rules(partner, reason_category, error_code, likely_cause,
 INSERT INTO deploys(deployed_at, component, note) VALUES
  (now()-interval '42 min','walgreens-tl pipeline','weekend upgrade — correlate with hung pipeline');
 
-INSERT INTO partner_penalty(partner, doc_type, penalty_usd) VALUES
+INSERT INTO ref_partner_penalty(partner, doc_type, penalty_usd) VALUES
  ('Werner','204',250),('Maersk','856',400),('Kroger','856',300);
 
 -- ============================================================================
