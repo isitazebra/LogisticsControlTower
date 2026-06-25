@@ -11,8 +11,8 @@ NiFi is the **producer**; Postgres (Neon) is the **interface**; Superset/Preset 
 ```
 NiFi (later)                         Postgres (the contract)            Superset/Preset (demo today)
   data pipelines  ──inline writes──▶ txn_files / txn_events / txn_current ◀── datasets → charts
-  reporting tasks ──signals───────▶ endpoint_health, pipeline_health,
-  monitor flows                      expected_feeds, monitor_heartbeat
+  reporting tasks ──signals───────▶ ops_endpoint_health, ops_pipeline_health,
+  monitor flows                      ops_expected_feeds, ops_monitor_heartbeat
   (DEMO: seed script writes all of the above instead)
 ```
 
@@ -87,14 +87,14 @@ These power Q1 (arrival & stuck). Three reporting tasks plus a few small schedul
 
 | Table / signal | NiFi mechanism |
 |---|---|
-| `pipeline_health` (state, queue_depth, consume_rate, last_consumed_at) | `SiteToSiteStatusReportingTask` → input port → `PutDatabaseRecord`; **or** a scheduled `InvokeHTTP` to the NiFi REST status API. Gives queue depth + processing rate = the **hung-pipeline** signal (running + queue>0 + rate=0) |
-| `pipeline_health.mq_depth` | `ConsumeJMS`/MQ metrics, or a small flow querying IBM MQ depth |
-| `endpoint_health.status / last_ok_at` | `SiteToSiteBulletinReportingTask` (connection/auth bulletins) + a scheduled **liveness flow per endpoint** (`ListSFTP`/AS2 test/`InvokeHTTP` health) that writes `last_ok_at` on success, `status='down'` on bulletin |
-| `endpoint_health.cert_expires_at` | scheduled flow reading cert/key expiry per endpoint (or from a config registry) |
-| `expected_feeds.last_seen_at` | the inbound pipeline updates it on each arrival; `MonitorActivity` emits when a continuous feed goes silent |
-| `expected_feeds.expected_next_at`, `grace_minutes` | **config table** (cadence per partner/doc) — the one human-maintained artifact |
+| `ops_pipeline_health` (state, queue_depth, consume_rate, last_consumed_at) | `SiteToSiteStatusReportingTask` → input port → `PutDatabaseRecord`; **or** a scheduled `InvokeHTTP` to the NiFi REST status API. Gives queue depth + processing rate = the **hung-pipeline** signal (running + queue>0 + rate=0) |
+| `ops_pipeline_health.mq_depth` | `ConsumeJMS`/MQ metrics, or a small flow querying IBM MQ depth |
+| `ops_endpoint_health.status / last_ok_at` | `SiteToSiteBulletinReportingTask` (connection/auth bulletins) + a scheduled **liveness flow per endpoint** (`ListSFTP`/AS2 test/`InvokeHTTP` health) that writes `last_ok_at` on success, `status='down'` on bulletin |
+| `ops_endpoint_health.cert_expires_at` | scheduled flow reading cert/key expiry per endpoint (or from a config registry) |
+| `ops_expected_feeds.last_seen_at` | the inbound pipeline updates it on each arrival; `MonitorActivity` emits when a continuous feed goes silent |
+| `ops_expected_feeds.expected_next_at`, `grace_minutes` | **config table** (cadence per partner/doc) — the one human-maintained artifact |
 | listed-not-fetched (stuck at pickup) | `SiteToSiteProvenanceReportingTask` → correlate `RECEIVE`/list vs `FETCH`; a listed file with no fetch in N min |
-| `monitor_heartbeat.last_run_at` | **every monitor flow writes its own heartbeat each run** → powers sweep integrity (the watcher's watcher) |
+| `ops_monitor_heartbeat.last_run_at` | **every monitor flow writes its own heartbeat each run** → powers sweep integrity (the watcher's watcher) |
 | `duplicate` flag | `DetectDuplicate` on `control_number` via a `DistributedMapCache` |
 
 **Discipline:** parameterize monitors — one process-group template per monitor type (SFTP liveness, landing-zone reconcile…), instantiated per endpoint via **Parameter Contexts**. Don't hand-build a job per partner. Keep all monitors in their own process group so a monitor failure can't touch a data flow.
