@@ -54,22 +54,27 @@ Deferred: Q14/Q18/Q20/Q21.
 
 ```
 sql/
-  00_schema.sql          partitioned txn_events + files + rollup + current + ops/config tables
-  01_seed.sql            ~300k bulk rows + every acceptance-criteria edge case
-  02_rollup_refresh.sql  incremental rollup function + files-missing-txns reconciliation view
+  00_schema.sql          partitioned txn_events + files + rollup + ops tables + partner penalty
+  01_seed.sql            static operational signals (ops_*), file edge cases, partner penalty
+  02_rollup_refresh.sql  incremental rollup refresh function (steady-state)
   03_refresh_ops.sql     refresh_demo_ops() — re-crisp time-sensitive Q1/Q10 edge cases
-  04_phase35_seed.sql    targeted Phase 3-5 demo states (acks, SLA pairs, dup/fail clusters)
-  05_doc_type_catalog.sql doc_type -> business_family/label/SLA map (Q12 / Transaction Types)
-  06_payloads.sql        per-event message body for the LOB Details payload drill (Sprint R)
+  06_payloads.sql        per-event message body for the payload drill (Sprint R)
+  09_predictive_anomaly.sql  feed-anomaly + vw_partner_anomaly views
+  10_partner_profile.sql ref_partner_profile + vw_partner_360 scorecard
+  13_exception_reason_backfill.sql  spread NULL reason_category across realistic codes
+  14_consignment_views.sql  vw_shipment + vw_shipment_detail (the single shipment world)
+  16_sla_pairs.sql       vw_sla_pairs (204->990 / 204->214 / 204->210 response SLA)
+  (07/08 augment the separate edi_anomaly_dashboard_dataset reference schema)
 scripts/
   db.py                  tiny psql substitute (runs .sql / queries against Neon)
   preset_client.py       authenticated Superset client (reused by all build scripts)
   01_register_db.py      register Neon as a Preset database
-  cockpit_spec.py        declarative datasets + charts + dashboard spec
-  build_cockpit.py       create datasets/charts, render-verify each chart
-  build_dashboard.py     assemble tabbed dashboard + native filters + cross-filter
-  build_alerts.py        5 Phase-1 alerts (paused by default)
-  export_assets.py       export dashboard bundle -> superset/assets/*.yaml
+  gen_shipment_world.py  regenerate public.txn_events as the order world + rebuild rollup
+  cockpit_spec.py        shared spec library (retired cockpit) imported by value_spec
+  value_spec.py / value_spec_sla.py  dash15 spec (datasets + charts + layout)
+  build_cockpit.py       the engine: create datasets/charts, render-verify each chart
+  build_value_sla.py     build dash15 (datasets+charts+dashboard+verify); `all` or `verify`
+  build_alerts.py        Phase-1 alerts (paused by default)
   deploy.sh / refresh.sh one-command deploy / pre-demo refresh
 superset/assets/         version-controlled native YAML (db password masked)
 docs/                    the 4 spec documents (brief, build pack, NiFi contract, handoff)
@@ -91,19 +96,21 @@ scripts/refresh.sh       # re-crisp the demo edge cases before a presentation
 
 Individual stages:
 ```bash
-.venv311/bin/python scripts/db.py run sql/00_schema.sql
-cd scripts && ../.venv311/bin/python build_cockpit.py all      # datasets+charts+verify
-../.venv311/bin/python build_dashboard.py                       # dashboard
-../.venv311/bin/python build_alerts.py [--activate]             # alerts (paused unless --activate)
-../.venv311/bin/python export_assets.py                         # refresh YAML bundle
+.venv311/bin/python scripts/db.py run sql/00_schema.sql        # schema
+.venv311/bin/python scripts/db.py run sql/01_seed.sql          # static ops signals
+cd scripts && ../.venv311/bin/python gen_shipment_world.py     # bulk txn world + rollup
+../.venv311/bin/python build_value_sla.py all                  # datasets+charts+dashboard+verify
+../.venv311/bin/python build_value_sla.py verify               # just re-render every chart
+../.venv311/bin/python build_alerts.py [--activate]            # alerts (paused unless --activate)
 ```
 
 ## Performance
 
 Aggregate-first: every Q2/Q3 chart reads `txn_rollup_hourly`; live/stuck reads
-`txn_current`; raw `txn_events` is partitioned and reached only by drill. Measured
-partner-filter aggregate: **~64 ms** at 300k rows (target < 2s; bump the seed's
-`generate_series` to 2–5M to load-test).
+filter `txn_events` directly (`WHERE NOT terminal` — current state *is* the latest
+row, there is no separate current table); raw `txn_events` is partitioned and
+reached only by drill. Measured partner-filter aggregate: **~64 ms** at 300k rows
+(target < 2s; bump `gen_shipment_world.py`'s order count to load-test).
 
 ## Demo freshness
 

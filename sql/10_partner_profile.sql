@@ -32,7 +32,7 @@ INSERT INTO public.ref_partner_profile (partner, tier, onboarding_status, region
   ('Flextronics', 'Standard',  'Onboarding', 'APAC');
 
 DROP VIEW IF EXISTS public.vw_partner_360 CASCADE;
-CREATE VIEW public.vw_partner_360 AS
+CREATE OR REPLACE VIEW public.vw_partner_360 AS
 WITH cur AS (
   SELECT environment, partner,
          COUNT(*)                                                   AS refs,

@@ -16,14 +16,14 @@ DROP VIEW IF EXISTS public.vw_feed_daily             CASCADE;
 DROP VIEW IF EXISTS public.vw_anomaly_asof             CASCADE;
 
 -- asof anchor (last complete day) -------------------------------------------
-CREATE VIEW public.vw_anomaly_asof AS
+CREATE OR REPLACE VIEW public.vw_anomaly_asof AS
 SELECT (SELECT max(date_trunc('day',bucket))::date
           FROM public.txn_rollup_hourly
          WHERE bucket < date_trunc('day',(SELECT max(bucket) FROM public.txn_rollup_hourly))
        ) AS asof_day;
 
 -- per partner.feed daily volume (+ error/breach context) --------------------
-CREATE VIEW public.vw_feed_daily AS
+CREATE OR REPLACE VIEW public.vw_feed_daily AS
 SELECT environment, partner, doc_type,
        date_trunc('day',bucket)::date AS day,
        SUM(txn_count)                          AS txns,
@@ -36,7 +36,7 @@ GROUP BY 1,2,3,4;
 -- NOTE: a silent feed has NO rows on its quiet days (absence, not a zero row),
 -- so we divide by a FIXED window length (21 / 7 days), not COUNT(*) of present
 -- rows -- otherwise an averaged-over-present-days mean would hide the silence.
-CREATE VIEW public.vw_feed_anomaly AS
+CREATE OR REPLACE VIEW public.vw_feed_anomaly AS
 WITH a AS (SELECT asof_day FROM public.vw_anomaly_asof),
 base AS (
   SELECT environment, partner, doc_type,
@@ -78,7 +78,7 @@ LEFT JOIN seen s USING (environment, partner, doc_type)
 WHERE b.base_mean >= 3;   -- ignore negligible feeds
 
 -- partner-level rollup of feed anomalies (one row per partner) --------------
-CREATE VIEW public.vw_partner_anomaly AS
+CREATE OR REPLACE VIEW public.vw_partner_anomaly AS
 SELECT
   environment, partner,
   COUNT(*)                                          AS feeds,

@@ -19,7 +19,7 @@
 -- ===========================================================================
 DROP VIEW IF EXISTS public.vw_sla_pairs CASCADE;
 
-CREATE VIEW public.vw_sla_pairs AS
+CREATE OR REPLACE VIEW public.vw_sla_pairs AS
 WITH o AS (
     SELECT interchange_id                                   AS shipment_id,
            mode() WITHIN GROUP (ORDER BY partner)           AS partner,

@@ -147,32 +147,11 @@ CREATE TABLE IF NOT EXISTS ops_pipeline_health (
 );
 
 -- ----------------------------------------------------------------------------
--- CONFIG TABLES  (SLA rules, resolution KB, deploys, penalties)
+-- REFERENCE TABLE  (partner penalty — value-at-risk weighting)
+-- The cockpit-era config tables (sla_rules, diagnostic_rules, deploys) were
+-- dropped: SLA is expressed directly on txn_events / vw_sla_pairs, reason codes
+-- live in txn_events.reason_category, and deploy correlation is out of scope.
 -- ----------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS sla_rules (
-  rule_id           int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  name              text,
-  environment       text,
-  partner           text,                    -- null = all partners
-  trigger_doc_type  text,
-  trigger_direction text,
-  response_doc_type text,
-  response_direction text,
-  correlation_key   text DEFAULT 'business_ref',
-  threshold_minutes int
-);
-CREATE TABLE IF NOT EXISTS diagnostic_rules (
-  rule_id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  partner         text,                       -- null = all; per-partner override wins
-  reason_category text,
-  error_code      text,
-  likely_cause    text,
-  suggested_action text,
-  runbook_url     text
-);
-CREATE TABLE IF NOT EXISTS deploys (
-  deployed_at timestamptz, component text, note text
-);
 CREATE TABLE IF NOT EXISTS ref_partner_penalty (
   partner text, doc_type text, penalty_usd numeric
 );
