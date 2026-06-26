@@ -2,6 +2,27 @@
 
 Authoritative build doc. Work the phases in order; each is self-contained (schema dependency → datasets → charts → alerts → acceptance). Supersedes the Q1+Q2 pack.
 
+> **⚠️ Implementation note (read first).** This is the *original* build pack. The
+> shipped system diverged from several DDL/SQL blocks below — the **repo is now
+> the source of truth** (`sql/*.sql` + `scripts/*.py`). Key deltas, which win
+> wherever this doc disagrees:
+>
+> - **No `txn_current` table** (and no `txn_current_history`). NiFi writes the
+>   append-only `txn_events` stream *only*; the latest row per `business_ref`
+>   **is** the current state. Replace the `txn_current` CREATE/upsert (§0.1–0.2)
+>   and every `FROM txn_current` query with `txn_events` + `WHERE terminal=false`
+>   (or the `vw_shipment*` rollup views).
+> - **Dropped tables:** `sla_rules`, `diagnostic_rules`, `deploys`,
+>   `doc_type_catalog`. Response SLA is the `vw_sla_pairs` view over `txn_events`
+>   (204→990 / 204→214 / 204→210); exception reasons are `txn_events.reason_category`
+>   (seeded by `sql/13_exception_reason_backfill.sql`); the resolution-KB and
+>   deploy-correlation charts are out of scope.
+> - **Actual build path:** `sql/00_schema.sql` → `sql/01_seed.sql` (static ops
+>   signals) → `scripts/gen_shipment_world.py` (bulk txn world + rollup) →
+>   derived views (`sql/09/10/14/16`) → `scripts/build_value_sla.py all`. The
+>   one-command runner is `scripts/deploy.sh`. The dashboard is **"Integration
+>   Command Center · Logistics"** (dash 15).
+
 **Stack:** Neon Postgres · NiFi (producer) · Preset/Superset 4.x–5.x with `DRILL_TO_DETAIL`, `DRILL_BY`, `DASHBOARD_CROSS_FILTERS`, `ALERTS_REPORTS` on.
 **Perf target:** every panel < 2s at 5M+ txns/month. Aggregate-first, raw drill-only. See §Performance.
 

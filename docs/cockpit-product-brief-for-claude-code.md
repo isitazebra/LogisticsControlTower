@@ -3,6 +3,32 @@
 
 ---
 
+> **⚠️ Implementation note (read first).** This is the *original* design brief. The
+> shipped product is the **"Integration Command Center · Logistics"** dashboard
+> (Superset dash 15), built by `scripts/build_value_sla.py` over a single data
+> world in `public.txn_events`. Several design-time constructs below were
+> collapsed or dropped during implementation — wherever this doc says otherwise,
+> the **current** model wins:
+>
+> - **No `txn_current` table.** NiFi writes the append-only `txn_events` stream
+>   *only* (one row per `business_ref`); the latest row **is** the current state.
+>   "Open / current" is the filter `WHERE terminal=false`; per-shipment rollups
+>   are the `vw_shipment*` views. Read every `txn_current` reference below as
+>   "the latest `txn_events` row / a filter on `txn_events`."
+> - **Dropped config tables:** `sla_rules`, `diagnostic_rules`, `deploys`,
+>   `doc_type_catalog` were not built. Response SLA is expressed directly on
+>   `txn_events` + the `vw_sla_pairs` view (204→990 / 204→214 / 204→210);
+>   exception reasons live in `txn_events.reason_category`; the resolution-KB and
+>   deploy-correlation features (Q11 extras) are out of scope.
+> - **Seed/build path:** the bulk transaction world comes from
+>   `scripts/gen_shipment_world.py`; static ops signals from `sql/01_seed.sql`;
+>   the dashboard from `scripts/build_value_sla.py` (not the design-time
+>   `build_cockpit.py` / `build_dashboard.py` split named below).
+>
+> The authoritative, current source of truth is the repo (`sql/` + `scripts/`).
+
+---
+
 ## 1. The story — why this exists
 
 An enterprise B2B integration platform moves **millions of EDI + API transactions** for a multi-LOB logistics business (brokerage, managed transportation, global freight forwarding, last/middle mile). Today's operational visibility is **error-record-centric**: it shows what *failed*, but it is blind to two failure modes that cause the worst incidents —
@@ -35,17 +61,17 @@ Priority: **P0** = build in the 2-day window; **P1** = next; **P2** = later. Acc
 
 | ID | Pri | Question | Must show | Acceptance criteria | Powered by |
 |---|---|---|---|---|---|
-| **Q1** | P0 | Did it even arrive, and is anything stuck? | Channel liveness; missing expected feeds; listed-not-fetched; stuck/aging; **hung pipeline** (running but consuming nothing); MQ/queue depth; cert expiry; **sweep integrity** | A silent "feed expected but absent" appears within its grace window; a pipeline with queue depth > 0 and consume-rate 0 is flagged as hung; if a monitor itself stops running, the UI says so (no false "all clear") | ops tables + `txn_current` |
+| **Q1** | P0 | Did it even arrive, and is anything stuck? | Channel liveness; missing expected feeds; listed-not-fetched; stuck/aging; **hung pipeline** (running but consuming nothing); MQ/queue depth; cert expiry; **sweep integrity** | A silent "feed expected but absent" appears within its grace window; a pipeline with queue depth > 0 and consume-rate 0 is flagged as hung; if a monitor itself stops running, the UI says so (no false "all clear") | ops tables + `txn_events` (`WHERE terminal=false`) |
 | **Q3** | P0 | What's broken right now? | Exception queue distinguishing **failed vs rejected vs duplicate**, with reason category, partner, value, age | Rejected and failed are separate, filterable states; duplicates are counted but not shown as failures; each row has a reason_category | `txn_rollup_hourly` + drill to `txn_events` |
 | **Q2** | P0 | Is everything flowing? (overall summary) | Headline volumetrics; **EDI vs API split** (primary); **volume by message type** (the volumetric grid: type × protocol × direction, count, %, failed, rejected, trend); volume over time stacked by protocol; top partners; auto-processed % | Every chart reads a rollup (sub-second at millions of rows); EDI/API split is a first-class dimension; the message-type grid shows per-type volume + fail/reject; filters re-scope all charts | `txn_rollup_hourly` |
-| **Q4** | P1 | Where is this file / transaction? | **File explorer** (incoming & outgoing, parent grain) → drill to its child transactions; transaction lookup by business_ref → status + step history + **replay status**; files-missing-transactions reconciliation; files rejected at receipt | An incoming file appears the instant it lands (before parse), even if malformed; selecting a file shows its child transactions; a file declaring 200 txns with 187 children flags 13 missing; a transaction links back to its parent file; replay status visible | `txn_files` + `txn_current` + `txn_events` |
-| **Q8** | P1 | Can I fix it and prove it was fixed? | Replay/reprocess visibility: replayed badge, timestamp, count; link out to NiFi for the action | A replayed message is visibly marked as replayed (closes a known gap); the "fix" action deep-links to NiFi (Superset is read-only) | `txn_current` replay fields |
+| **Q4** | P1 | Where is this file / transaction? | **File explorer** (incoming & outgoing, parent grain) → drill to its child transactions; transaction lookup by business_ref → status + step history + **replay status**; files-missing-transactions reconciliation; files rejected at receipt | An incoming file appears the instant it lands (before parse), even if malformed; selecting a file shows its child transactions; a file declaring 200 txns with 187 children flags 13 missing; a transaction links back to its parent file; replay status visible | `txn_files` + `txn_events` |
+| **Q8** | P1 | Can I fix it and prove it was fixed? | Replay/reprocess visibility: replayed badge, timestamp, count; link out to NiFi for the action | A replayed message is visibly marked as replayed (closes a known gap); the "fix" action deep-links to NiFi (Superset is read-only) | `txn_events` replay fields (`replayed`, `replayed_at`, `replay_count`) |
 | **Q5** | P1 | Did the partner acknowledge? | FA tracking: late / rejected / missing 997s & CONTRLs | A missing ack past its window is listed; a rejected ack is distinguished from a missing one | `txn_events` ack linkage |
-| **Q6** | P2 | Are we hitting SLA per partner? | Partner scorecard: %met/%missed, completion-time stats, financial impact | Sortable per-partner SLA; drill to that partner's history | rollup + SLA config |
+| **Q6** | P2 | Are we hitting SLA per partner? | Partner scorecard: %met/%missed, completion-time stats, financial impact | Sortable per-partner SLA; drill to that partner's history | rollup + `vw_partner_360` |
 | **Q7** | P2 | Which partners/flows are worst? | Volume + error/reject leaders, change vs prior period | Top-N partners by volume and by exceptions, period-over-period | rollup |
 | **Q9** | P2 | How much volume flowed? | Usage/billing view: counts by partner, doc type, channel | Monthly totals exportable | rollup |
-| **Q10** | P1 | Are we hitting response SLAs? | Paired trigger→response compliance (e.g. 990 within X min of 204; 997 within 15 min); compliance % per rule; **at-risk worklist** (clock running, not yet breached) | A 204 with no 990 past threshold is "missed"; one approaching threshold is "at_risk" and alerts before breach; compliance % sliceable per rule/partner | `sla_rules` + `txn_events` |
-| **Q11** | P2 | What's the root cause, and how do I fix it? | Failure-signature clustering with onset; partner-vs-platform attribution; replay re-failures; deploy correlation; **resolution KB** (likely cause + suggested action + runbook per exception) | Many incidents cluster into N signatures with onset; each exception shows a KB suggested action; a re-failed replay is flagged | `txn_events` + `diagnostic_rules` + `deploys` |
+| **Q10** | P1 | Are we hitting response SLAs? | Paired trigger→response compliance (e.g. 990 within X min of 204; 997 within 15 min); compliance % per rule; **at-risk worklist** (clock running, not yet breached) | A 204 with no 990 past threshold is "missed"; one approaching threshold is "at_risk" and alerts before breach; compliance % sliceable per rule/partner | `vw_sla_pairs` + `txn_events` |
+| **Q11** | P2 | What's the root cause, and how do I fix it? | Failure-signature clustering with onset; partner-vs-platform attribution; replay re-failures; deploy correlation; **resolution KB** (likely cause + suggested action + runbook per exception) | Many incidents cluster into N signatures with onset; each exception shows a KB suggested action; a re-failed replay is flagged | `txn_events` (`reason_category`) |
 
 **Cross-cutting requirement:** every view supports an `environment` filter (**prod / UAT**) — the same liveness/stuck checks must run against UAT pipelines, which go dark frequently.
 
