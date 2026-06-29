@@ -123,17 +123,25 @@ def native_filters(sc, rollup_ds, chart_ids):
             "cascadeParentIds": [], "scope": {"rootPath": ["ROOT_ID"], "excluded": []},
             "type": "NATIVE_FILTER", "chartsInScope": all_charts,
         })
-    # Task 5 — chart-scoped REQUIRED drill-down so "Shipment message set" stays
-    # EMPTY until a shipment_id is chosen. enableEmptyFilter=True makes it
-    # required (no value -> the chart asks for a selection instead of dumping all
-    # 414k rows). Scoped to ONLY that one chart via chartsInScope + scope.excluded.
-    f = getattr(V, "SHIP_DRILLDOWN_FILTER", None)
-    if f and f["slice"] in chart_ids:
+    # Chart-scoped REQUIRED drill-downs: a shipment_id filter that stays EMPTY
+    # until a row is selected, so the target detail charts ask for a selection
+    # instead of dumping all rows. enableEmptyFilter=True makes it required;
+    # scope.excluded + chartsInScope confine it to ONLY its target charts.
+    # DRILLDOWN_FILTERS (list, each with `slices`) is the general contract; the
+    # single SHIP_DRILLDOWN_FILTER (`slice`) is the back-compat fallback.
+    drills = getattr(V, "DRILLDOWN_FILTERS", None)
+    if not drills:
+        one = getattr(V, "SHIP_DRILLDOWN_FILTER", None)
+        drills = [one] if one else []
+    for i, f in enumerate(drills):
+        slices = f.get("slices") or ([f["slice"]] if f.get("slice") else [])
+        targets = [chart_ids[s] for s in slices if s in chart_ids]
+        if not targets:
+            continue
         detail_ds = get_dataset_id(sc, f["dataset"])
-        target_cid = chart_ids[f["slice"]]
-        others = [c for c in all_charts if c != target_cid]
+        others = [c for c in all_charts if c not in targets]
         cfgs.append({
-            "id": "NATIVE_FILTER-ship-drilldown", "name": f["name"],
+            "id": f"NATIVE_FILTER-drilldown-{i}", "name": f["name"],
             "filterType": "filter_select",
             "targets": [{"column": {"name": f["column"]}, "datasetId": detail_ds}],
             "controlValues": {"multiSelect": False,
@@ -142,7 +150,7 @@ def native_filters(sc, rollup_ds, chart_ids):
                               "inverseSelection": False},
             "defaultDataMask": {"filterState": {}},
             "cascadeParentIds": [], "scope": {"rootPath": ["ROOT_ID"], "excluded": others},
-            "type": "NATIVE_FILTER", "chartsInScope": [target_cid],
+            "type": "NATIVE_FILTER", "chartsInScope": targets,
         })
     return cfgs
 

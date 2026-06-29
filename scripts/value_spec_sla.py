@@ -79,6 +79,13 @@ CHARTS = [
          order=[("trigger_at", False)]),
 ]
 
+# The redesigned Transaction view (interchange-grain master-detail) introduces
+# net-new charts that no other dashboard owns. The legacy build_value.py that
+# once ensured value_spec.CHARTS is gone, so this build must CREATE them. Pull
+# them straight from value_spec by tab so the two stay in sync, and append to the
+# ensured set (ensure_charts iterates this CHARTS list).
+CHARTS = CHARTS + [c for c in V.NEW_CHARTS if c["tab"] == V.T_TXN]
+
 # --- layout: clone value_spec, then append the pair section to the SLA tab ----
 _PAIR_ROWS = [
     ("Pair SLA · Overall compliance %", 3, KH, "Pair compliance %"),
@@ -108,3 +115,4 @@ for tab_title, rows in V.LAYOUT:
 # inherited verbatim by the builder
 NATIVE_FILTERS = V.NATIVE_FILTERS
 SHIP_DRILLDOWN_FILTER = getattr(V, "SHIP_DRILLDOWN_FILTER", None)
+DRILLDOWN_FILTERS = getattr(V, "DRILLDOWN_FILTERS", None)

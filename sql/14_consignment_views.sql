@@ -49,6 +49,26 @@ SELECT
     count(*) FILTER (WHERE status IN ('failed','rejected')) AS exception_cnt,
     count(*) FILTER (WHERE status = 'duplicate')            AS duplicate_cnt,
     count(*) FILTER (WHERE status = 'ok')                   AS ok_cnt,
+    -- Per-leg signal (Transaction view, reference shape): one transaction has an
+    -- inbound side (received by the platform) and an outbound side (emitted).
+    -- Counts + the worst-of status per leg (failed > rejected > duplicate > ok)
+    -- + last activity per leg, so the master grid shows both legs on one row.
+    count(*) FILTER (WHERE direction = 'in')                AS inbound_count,
+    count(*) FILTER (WHERE direction = 'out')               AS outbound_count,
+    CASE max(CASE status WHEN 'failed' THEN 4 WHEN 'rejected' THEN 3
+                         WHEN 'duplicate' THEN 2 WHEN 'ok' THEN 1 ELSE 0 END)
+              FILTER (WHERE direction = 'in')
+         WHEN 4 THEN 'failed' WHEN 3 THEN 'rejected'
+         WHEN 2 THEN 'duplicate' WHEN 1 THEN 'ok' ELSE NULL
+    END                                                     AS inbound_status,
+    CASE max(CASE status WHEN 'failed' THEN 4 WHEN 'rejected' THEN 3
+                         WHEN 'duplicate' THEN 2 WHEN 'ok' THEN 1 ELSE 0 END)
+              FILTER (WHERE direction = 'out')
+         WHEN 4 THEN 'failed' WHEN 3 THEN 'rejected'
+         WHEN 2 THEN 'duplicate' WHEN 1 THEN 'ok' ELSE NULL
+    END                                                     AS outbound_status,
+    max(event_time) FILTER (WHERE direction = 'in')         AS last_in_ts,
+    max(event_time) FILTER (WHERE direction = 'out')        AS last_out_ts,
     sum(value_usd)                                          AS value_usd,
     (bool_or(doc_type = '210')
        AND count(*) FILTER (WHERE status IN ('failed','rejected')) = 0)
