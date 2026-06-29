@@ -88,12 +88,15 @@ GROUP BY interchange_id;
 -- Feeds BOTH the Shipment drill-down and the Transaction view, so the two tabs
 -- are a rollup / detail pair on one source.
 --
--- Routing + filename + payload are DERIVED here (no live writer yet; NiFi will
--- populate the equivalents later). The platform is the hub 'LCTHUB'; the partner
--- side uses a short alphanumeric code. Direction is platform-relative, so an
--- inbound message (partner -> platform) has sender=partner / receiver=hub and an
--- outbound message (platform -> partner) is the reverse. filename mirrors the
--- reference message-tracking shape: <doc_type>_<partnercode>_<ref>_<timestamp>.
+-- TRANSLATE-AND-FORWARD model: every message has TWO sides — an incoming file +
+-- payload (received) and an outgoing file + payload (emitted, translated). The
+-- EDI/X12 side always faces the PARTNER; the JSON side always faces the internal
+-- SYSTEM. Which is incoming vs outgoing flips with direction:
+--   direction='in'  (partner -> platform): incoming = EDI, outgoing = JSON
+--   direction='out' (platform -> partner): incoming = JSON, outgoing = EDI
+-- Files mirror the reference shape: EDI = <doc_type>_<partnercode>_<ref>_<ts>.edi,
+-- JSON = <syscode>_<doc_type>_<ref>_<ts>.json. payload bodies are populated by
+-- sql/06_payloads (no live writer yet; NiFi fills the equivalents later).
 CREATE OR REPLACE VIEW public.vw_shipment_detail AS
 SELECT
     interchange_id      AS shipment_id,
@@ -110,13 +113,20 @@ SELECT
     error_code,
     control_number,
     value_usd,
-    CASE WHEN direction = 'in' THEN pcode ELSE 'LCTHUB' END        AS sender_id,
-    CASE WHEN direction = 'in' THEN 'LCTHUB' ELSE pcode END        AS receiver_id,
-    doc_type || '_' || pcode || '_' || business_ref || '_'
-      || to_char(event_time, 'YYYYMMDDHH24MISSMS')                 AS filename,
-    payload
+    CASE WHEN direction = 'in' THEN edi_file ELSE json_file END        AS incoming_file,
+    CASE WHEN direction = 'in' THEN json_file ELSE edi_file END        AS outgoing_file,
+    CASE WHEN direction = 'in' THEN edi_payload ELSE json_payload END  AS incoming_payload,
+    CASE WHEN direction = 'in' THEN json_payload ELSE edi_payload END  AS outgoing_payload
 FROM (
     SELECT *,
-           left(upper(regexp_replace(partner, '[^A-Za-z0-9]', '', 'g')), 10) AS pcode
-    FROM public.txn_events
-) t;
+      doc_type || '_' || pcode   || '_' || business_ref || '_'
+        || to_char(event_time, 'YYYYMMDDHH24MISSMS') || '.edi'  AS edi_file,
+      syscode  || '_' || doc_type || '_' || business_ref || '_'
+        || to_char(event_time, 'YYYYMMDDHH24MISSMS') || '.json' AS json_file
+    FROM (
+        SELECT *,
+          left(upper(regexp_replace(partner, '[^A-Za-z0-9]', '', 'g')), 10)        AS pcode,
+          left(upper(regexp_replace(coalesce(lob,'INTSYS'), '[^A-Za-z0-9]', '', 'g')), 8) AS syscode
+        FROM public.txn_events
+    ) t
+) f;
