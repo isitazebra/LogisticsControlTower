@@ -460,7 +460,16 @@ SHIP_DRILLDOWN_FILTER = dict(
 DRILLDOWN_FILTERS = [
     dict(name="Shipment (drill-down)", column="shipment_id",
          dataset="vw_shipment_detail", slices=["Shipment message set"], required=True),
-    dict(name="Message (drill-down)", column="business_ref",
-         dataset="vw_shipment_detail",
-         slices=["Txn · Incoming payload", "Txn · Outgoing payload"], required=True),
+    # NOTE: the Transaction-view payload panels are no longer a required-dropdown
+    # drill — they load on row-click (cross-filter) from the master grid. See
+    # CROSS_FILTER_SOURCE below + build_value_sla.cross_filter_config().
 ]
+
+# Click-to-load: the master grid emits a cross-filter (on whatever cell is
+# clicked, e.g. business_ref) that is SCOPED to ONLY the two payload panels, so
+# clicking a message row lazily loads just its incoming/outgoing payload without
+# collapsing the KPIs / status-mix. build_value_sla emits the chart_configuration.
+CROSS_FILTER_SOURCE = dict(
+    source="Txn · Transactions",
+    targets=["Txn · Incoming payload", "Txn · Outgoing payload"],
+)

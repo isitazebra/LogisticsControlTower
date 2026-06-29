@@ -159,6 +159,26 @@ def native_filters(sc, rollup_ds, chart_ids):
     return cfgs
 
 
+def cross_filter_config(chart_ids):
+    """Scope the master grid's cross-filter to ONLY the payload panels, so a
+    row-click lazily loads that message's payloads without collapsing the rest of
+    the tab. Returns (chart_configuration, global_chart_configuration)."""
+    src = getattr(V, "CROSS_FILTER_SOURCE", None)
+    if not src:
+        return {}, {}
+    master = chart_ids.get(src["source"])
+    targets = [chart_ids[s] for s in src["targets"] if s in chart_ids]
+    all_ids = list(dict.fromkeys(chart_ids.values()))
+    glob = {"scope": {"rootPath": ["ROOT_ID"], "excluded": []}, "chartsInScope": all_ids}
+    if not (master and targets):
+        return {}, glob
+    others = [c for c in all_ids if c not in targets]
+    cc = {str(master): {"id": master, "crossFilters": {
+        "scope": {"rootPath": ["ROOT_ID"], "excluded": others},
+        "chartsInScope": targets}}}
+    return cc, glob
+
+
 def link_append(sc, did, chart_ids):
     """Add `did` to each chart's dashboards list (preserve existing links)."""
     base = str(sc.baseurl).rstrip("/")
@@ -197,9 +217,11 @@ def main():
     print("== dashboard ==")
     rollup_ds = get_dataset_id(sc, "vw_rollup")
     position = build_position(chart_ids)
+    chart_cfg, global_cfg = cross_filter_config(chart_ids)
     metadata = {
         "native_filter_configuration": native_filters(sc, rollup_ds, chart_ids),
         "cross_filters_enabled": True, "refresh_frequency": 60,
+        "chart_configuration": chart_cfg, "global_chart_configuration": global_cfg,
         "color_scheme": "supersetColors", "label_colors": STATUS_COLORS,
         "shared_label_colors": {}, "color_scheme_domain": [],
     }
