@@ -87,6 +87,13 @@ GROUP BY interchange_id;
 -- Message-level detail (the SAME rows the rollup consolidates) --------------
 -- Feeds BOTH the Shipment drill-down and the Transaction view, so the two tabs
 -- are a rollup / detail pair on one source.
+--
+-- Routing + filename + payload are DERIVED here (no live writer yet; NiFi will
+-- populate the equivalents later). The platform is the hub 'LCTHUB'; the partner
+-- side uses a short alphanumeric code. Direction is platform-relative, so an
+-- inbound message (partner -> platform) has sender=partner / receiver=hub and an
+-- outbound message (platform -> partner) is the reverse. filename mirrors the
+-- reference message-tracking shape: <doc_type>_<partnercode>_<ref>_<timestamp>.
 CREATE OR REPLACE VIEW public.vw_shipment_detail AS
 SELECT
     interchange_id      AS shipment_id,
@@ -102,5 +109,14 @@ SELECT
     reason_category,
     error_code,
     control_number,
-    value_usd
-FROM public.txn_events;
+    value_usd,
+    CASE WHEN direction = 'in' THEN pcode ELSE 'LCTHUB' END        AS sender_id,
+    CASE WHEN direction = 'in' THEN 'LCTHUB' ELSE pcode END        AS receiver_id,
+    doc_type || '_' || pcode || '_' || business_ref || '_'
+      || to_char(event_time, 'YYYYMMDDHH24MISSMS')                 AS filename,
+    payload
+FROM (
+    SELECT *,
+           left(upper(regexp_replace(partner, '[^A-Za-z0-9]', '', 'g')), 10) AS pcode
+    FROM public.txn_events
+) t;

@@ -222,19 +222,26 @@ NEW_CHARTS = [
          col_fmt={"value_usd": {"d3NumberFormat": "$,.2f"}},
          heat=[{"column": "exception_cnt", "operator": ">", "targetValue": 0,
                 "colorScheme": "#e04355"}]),
-    # Detail panels — EMPTY until a transaction is selected (TXN_DRILL, scoped to
-    # ONLY these two charts). Inbound = received; Outbound = emitted. Same columns
-    # so the two legs read as one transaction's two sides.
+    # Detail panels — EMPTY until a transaction is selected (TXN drill, scoped to
+    # ONLY these charts). Inbound = received; Outbound = emitted. Columns follow
+    # the reference message-tracking shape: routing (sender -> receiver), doc type,
+    # status, control #, and the platform filename.
     dict(slice="Txn · Inbound (received)", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
-         cols=["event_time", "business_ref", "doc_type", "status",
-               "reason_category", "error_code", "control_number"],
+         cols=["event_time", "sender_id", "receiver_id", "doc_type", "status",
+               "control_number", "filename"],
          filters=[("direction", "==", "in")],
          order=[("event_time", False)], row_limit=100),
     dict(slice="Txn · Outbound (sent)", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
-         cols=["event_time", "business_ref", "doc_type", "status",
-               "reason_category", "error_code", "control_number"],
+         cols=["event_time", "sender_id", "receiver_id", "doc_type", "status",
+               "control_number", "filename"],
          filters=[("direction", "==", "out")],
          order=[("event_time", False)], row_limit=100),
+    # Raw payload panel — the rawest information: the X12/EDI envelope per message
+    # for the selected transaction (mirrors the reference inbound/outbound payload
+    # cards). Same TXN drill, so it fills with that transaction's message bodies.
+    dict(slice="Txn · Payloads", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
+         cols=["direction", "doc_type", "business_ref", "control_number", "payload"],
+         order=[("direction", True), ("doc_type", True)], row_limit=50),
 
     # ===== SLA view — on-time delivery vs. breaches (single data world) =====
     # Order grain on public.vw_shipment for the headline + worklist; message grain
@@ -350,6 +357,8 @@ LAYOUT = [
         # Drill-gated detail: pick a transaction above to populate its two legs.
         ("Txn · Inbound (received)", 6, TH, "Inbound — received"),
         ("Txn · Outbound (sent)", 6, TH, "Outbound — sent"),
+        # Raw EDI envelope per message for the selected transaction.
+        ("Txn · Payloads", 12, TH, "Message payloads (raw EDI)"),
     ]),
     (T_ISSUE, [
         ("Failed (period)", 4, KH), ("Rejected (period)", 4, KH), ("Duplicates suppressed", 4, KH),
@@ -454,5 +463,6 @@ DRILLDOWN_FILTERS = [
          dataset="vw_shipment_detail", slices=["Shipment message set"], required=True),
     dict(name="Transaction (drill-down)", column="shipment_id",
          dataset="vw_shipment_detail",
-         slices=["Txn · Inbound (received)", "Txn · Outbound (sent)"], required=True),
+         slices=["Txn · Inbound (received)", "Txn · Outbound (sent)", "Txn · Payloads"],
+         required=True),
 ]
