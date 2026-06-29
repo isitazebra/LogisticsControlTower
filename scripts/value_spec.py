@@ -111,22 +111,12 @@ NEW_CHARTS = [
     #   Order = 204, Order confirmation = 990, Order updates = 214, Invoice = 210.
     # Each KPI uses a unique "Home · " internal name + sliceNameOverride so the
     # build never hijacks identically-named charts on dashboards 10/12/13.
-    # Row 1 KPIs: Total messages / Success / Exceptions (failed+rejected).
+    # Row 1 KPI: Total messages. The status-aligned headline (Processed / Stuck /
+    # Failed) lives further down on vw_shipment_detail; the old success/auto-%/
+    # exceptions binary tiles were retired (charts deleted) when Home adopted the
+    # processing_status lifecycle.
     dict(slice="Total messages", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", metric=("vol", "SUM(txn_count)"), subheader="messages processed"),
-    dict(slice="Success", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="processed clean",
-         metric=("ok", "SUM(txn_count)-SUM(failed_count)-SUM(rejected_count)")),
-    # Unique internal name: a plain "Auto-processed %" chart (id=92) is shared by
-    # dashboards 10/13, so keep this Home copy separate and display via override.
-    dict(slice="Home · Auto-processed %", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", number_format=".1f", subheader="straight-through",
-         metric=("auto", "100.0*(1 - SUM(failed_count+rejected_count)::numeric/NULLIF(SUM(txn_count),0))")),
-    # "Exceptions" collides with mp_demo chart id=348 (dash 12) — keep a unique
-    # internal name and display "Exceptions" via sliceNameOverride in LAYOUT.
-    dict(slice="Home · Exceptions", tab=T_HOME, dataset="vw_rollup", **KPI,
-         kind="bignum", subheader="failed + rejected",
-         metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
     # Row 2 KPIs: the order lifecycle — order, confirmation, updates, invoice.
     dict(slice="Home · Order", tab=T_HOME, dataset="vw_rollup", **KPI,
          kind="bignum", subheader="orders (204)",
