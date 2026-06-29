@@ -201,19 +201,23 @@ NEW_CHARTS = [
     # two tabs are detail vs rollup (not two copies of the same grain). Unique
     # "Txn · " internal names + sliceNameOverride keep dashboards 10/12/13 untouched.
     #
-    # KPI strip — message population + the in/out split + exceptions (all message
-    # grain, on vw_shipment_detail so they reconcile with the grid below).
+    # KPI strip — status-focused: total, the happy end-state, the in-flight watch
+    # list (Stuck), and Failed. All message grain on vw_shipment_detail so they
+    # reconcile with the grid + status-mix below.
     dict(slice="Txn · In scope", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
          kind="bignum", metric=("msgs", "COUNT(*)"), subheader="messages in scope"),
     dict(slice="Txn · Inbound msgs", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
-         kind="bignum", subheader="received (in)",
-         metric=("inb", "COUNT(*) FILTER (WHERE direction='in')")),
+         kind="bignum", subheader="processed (acknowledged)",
+         metric=("done", "COUNT(*) FILTER (WHERE processing_status='Processed')")),
     dict(slice="Txn · Outbound msgs", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
-         kind="bignum", subheader="emitted (out)",
-         metric=("outb", "COUNT(*) FILTER (WHERE direction='out')")),
+         kind="bignum", subheader="in-flight past SLA",
+         metric=("stuck", "COUNT(*) FILTER (WHERE is_stuck)")),
     dict(slice="Txn · Exceptions", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
-         kind="bignum", subheader="failed / rejected",
-         metric=("exc", "COUNT(*) FILTER (WHERE status IN ('failed','rejected'))")),
+         kind="bignum", subheader="terminal failures",
+         metric=("fail", "COUNT(*) FILTER (WHERE processing_status='Failed')")),
+    # Status mix — every status at a glance (colored via label_colors).
+    dict(slice="Txn · Status mix", tab=T_TXN, dataset="vw_shipment_detail",
+         kind="bar", dim="processing_status", metric=("msgs", "COUNT(*)"), row_limit=10),
     # Master grid — ONE ROW PER MESSAGE (translate-and-forward). Reference
     # message-tracking columns: when, the grouping shipment + message ref, type,
     # direction, partner, status, control #, and BOTH the incoming and outgoing
@@ -222,7 +226,8 @@ NEW_CHARTS = [
     dict(slice="Txn · Transactions", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
          row_limit=200,
          cols=["event_time", "shipment_id", "business_ref", "doc_type", "direction",
-               "partner", "status", "control_number", "incoming_file", "outgoing_file"],
+               "partner", "processing_status", "reason_category", "control_number",
+               "incoming_file", "outgoing_file"],
          order=[("event_time", False)]),
     # Raw payload panels — the rawest information, for the SELECTED message (MSG
     # drill: a REQUIRED business_ref filter, empty until a message is chosen).
@@ -340,11 +345,13 @@ LAYOUT = [
         ("Shipment message set", 12, TH),
     ]),
     (T_TXN, [   # Per-message grid (public.vw_shipment_detail) + payload drill
-        # KPI strip: message scale + in/out split + exceptions.
+        # KPI strip: message scale + status-focused (Processed / Stuck / Failed).
         ("Txn · In scope", 3, KH, "Messages"),
-        ("Txn · Inbound msgs", 3, KH, "Inbound"),
-        ("Txn · Outbound msgs", 3, KH, "Outbound"),
-        ("Txn · Exceptions", 3, KH, "Exceptions"),
+        ("Txn · Inbound msgs", 3, KH, "Processed"),
+        ("Txn · Outbound msgs", 3, KH, "Stuck"),
+        ("Txn · Exceptions", 3, KH, "Failed"),
+        # Status mix across the async lifecycle.
+        ("Txn · Status mix", 12, CH, "Status mix"),
         # Master grid — one row per message (reference Details shape).
         ("Txn · Transactions", 12, BH, "Messages"),
         # Drill-gated: pick a message's business_ref above -> its two payloads.

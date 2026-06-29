@@ -113,6 +113,25 @@ SELECT
     error_code,
     control_number,
     value_usd,
+    -- processing_status: the async NiFi lifecycle NiFi will emit live. Derived
+    -- here for the demo (no live writer yet) from the analytics `status` + the
+    -- `terminal` flag, so the heavily-wired rollup/SLA layer keeps using `status`
+    -- untouched. Happy path: Received -> Validated -> Processing -> Processed;
+    -- Failed folds failed/rejected/duplicate (reason_category keeps the detail).
+    -- In-flight (ok + not terminal) is split deterministically across the three
+    -- non-terminal states by a hash of business_ref.
+    CASE
+        WHEN status IN ('failed','rejected','duplicate') THEN 'Failed'
+        WHEN terminal THEN 'Processed'
+        WHEN abs(hashtext(business_ref)) % 10 < 2 THEN 'Received'
+        WHEN abs(hashtext(business_ref)) % 10 < 5 THEN 'Validated'
+        ELSE 'Processing'
+    END                                                               AS processing_status,
+    -- Stuck = in-flight (non-terminal, not errored) AND past its SLA. A DERIVED
+    -- condition on top of status+time, never a status itself.
+    (NOT terminal
+       AND status NOT IN ('failed','rejected','duplicate')
+       AND sla_due_at < now())                                        AS is_stuck,
     CASE WHEN direction = 'in' THEN edi_file ELSE json_file END        AS incoming_file,
     CASE WHEN direction = 'in' THEN json_file ELSE edi_file END        AS outgoing_file,
     CASE WHEN direction = 'in' THEN edi_payload ELSE json_payload END  AS incoming_payload,
