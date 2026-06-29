@@ -60,16 +60,20 @@ REASONS = [
     "envelope_error", "invalid_doc_type", "system_error",
 ]
 
-START = dt.datetime(2026, 4, 25, tzinfo=dt.timezone.utc)
-END = dt.datetime(2026, 6, 23, 6, tzinfo=dt.timezone.utc)
+# Time is now()-relative so the world is always FRESH (no decay): the newest
+# messages happen "now", in-flight orders sit in the recent window with their SLA
+# still ahead (on-time) or just elapsed (stuck). Closed orders span the prior ~8
+# weeks. START stays inside the existing monthly partitions.
+NOW = dt.datetime.now(dt.timezone.utc)
+END = NOW
+START = NOW - dt.timedelta(days=58)
 SPAN = (END - START).total_seconds()
 
 N_ORDERS = 60000
 P_EXCEPTION = 0.09       # order carries one failed/rejected message (also breaches SLA)
-P_BREACHED_OPEN = 0.07   # healthy order, no invoice, last update overdue -> SLA breach
-P_HEALTHY_OPEN = 0.08    # in progress, no invoice, within SLA (does NOT breach)
+P_BREACHED_OPEN = 0.07   # in-flight order whose last update is overdue -> Stuck
+P_HEALTHY_OPEN = 0.08    # in-flight order, last update within SLA -> on-time in-flight
 P_DUP_214 = 0.01         # a 214 update lands as a duplicate
-NOW = dt.datetime(2026, 6, 24, tzinfo=dt.timezone.utc)  # matches dashboard "today"
 
 COLS = [
     "event_time", "interchange_id", "business_ref", "environment", "lob", "partner",
@@ -114,6 +118,16 @@ def build_rows():
             off += random.random() * 24 * 3600
             msgs.append(("210", off, "in"))
 
+        # Anchor OPEN orders to the recent window so their last (in-flight)
+        # message is current: healthy-open lands within ~8h (SLA still ahead ->
+        # on-time in-flight); breached-open landed 8-56h ago (SLA elapsed ->
+        # Stuck). Closed orders keep their historical t0.
+        if is_open:
+            last_off = msgs[-1][1]
+            recent = random.random() * 8 * 3600 if healthy_open \
+                else (8 + random.random() * 48) * 3600
+            t0 = NOW - dt.timedelta(seconds=last_off + recent)
+
         exc_idx = random.randrange(len(msgs)) if has_exc else -1
         last_idx = len(msgs) - 1
 
@@ -131,15 +145,16 @@ def build_rows():
 
             terminal = status in ("ok", "duplicate")      # failed/rejected stay open -> breach
             sla_due = et + dt.timedelta(hours=random.choice([4, 8, 24]))
-            # SLA breach engineering, independent of exceptions:
+            # Open orders: the LAST message is the in-flight one. Both stay
+            # non-terminal (in-flight); the SLA decides on-time vs Stuck:
+            #   breached -> SLA already elapsed (et 8-56h ago + a few h) -> Stuck
+            #   healthy  -> SLA still ahead (12-48h out) -> on-time in-flight
             if breached_open and j == last_idx:
-                # healthy order whose last update blew its window and never closed
                 terminal = False
-                sla_due = et + dt.timedelta(hours=2)      # historical et -> sla_due < NOW
+                sla_due = et + dt.timedelta(hours=random.choice([2, 4, 6]))
             elif healthy_open and j == last_idx:
-                # in progress but on track: closed-for-now and within SLA
-                terminal = True
-                sla_due = NOW + dt.timedelta(days=2)
+                terminal = False
+                sla_due = NOW + dt.timedelta(hours=random.choice([12, 24, 48]))
 
             is_order = doc == "204"
             rows.append((

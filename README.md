@@ -114,7 +114,11 @@ reached only by drill. Measured partner-filter aggregate: **~64 ms** at 300k row
 
 ## Demo freshness
 
-The seed stamps absolute `now()` timestamps, so "fresh" signals decay over time.
+`gen_shipment_world.py` stamps `txn_events` **`now()`-relative** at seed time: the
+newest messages land "now", in-flight orders sit in the recent window with their
+SLA either still ahead (on-time in-flight) or just elapsed (Stuck). Re-run the
+seeder to refresh — over a day or two the on-time in-flight items naturally decay
+to Stuck as their SLA window passes.
 `refresh_demo_ops()` (in `sql/03_refresh_ops.sql`) re-stamps the small ops tables:
 broken signals stay broken (van-liveness silent, Werner/Kroger feeds missing,
 walgreens-tl hung), healthy ones get a long horizon so one run stays crisp ~24h.

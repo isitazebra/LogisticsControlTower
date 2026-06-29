@@ -33,7 +33,8 @@ STATUS_COLORS = {
     "edi": "#3b82f6", "api": "#8b5cf6",
     # processing_status lifecycle (Transaction view): early -> done -> error.
     "Received": "#adb5bd", "Validated": "#4dabf7", "Processing": "#f59f00",
-    "Processed": "#2f9e44", "Failed": "#e04355",
+    "Processed": "#2f9e44", "Failed": "#e04355", "Rejected": "#f76707",
+    "Duplicate": "#868e96",
     "Silent": "#e04355", "Severe drop": "#f59f00", "Watch": "#fcc419", "Normal": "#2f9e44",
 }
 

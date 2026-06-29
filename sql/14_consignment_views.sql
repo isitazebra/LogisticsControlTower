@@ -117,11 +117,14 @@ SELECT
     -- here for the demo (no live writer yet) from the analytics `status` + the
     -- `terminal` flag, so the heavily-wired rollup/SLA layer keeps using `status`
     -- untouched. Happy path: Received -> Validated -> Processing -> Processed;
-    -- Failed folds failed/rejected/duplicate (reason_category keeps the detail).
-    -- In-flight (ok + not terminal) is split deterministically across the three
-    -- non-terminal states by a hash of business_ref.
+    -- the terminal error/dedup outcomes (Failed / Rejected / Duplicate) keep
+    -- their own identity (reason_category gives the detail). In-flight (ok + not
+    -- terminal) is split deterministically across the three non-terminal states
+    -- by a hash of business_ref.
     CASE
-        WHEN status IN ('failed','rejected','duplicate') THEN 'Failed'
+        WHEN status = 'failed'    THEN 'Failed'
+        WHEN status = 'rejected'  THEN 'Rejected'
+        WHEN status = 'duplicate' THEN 'Duplicate'
         WHEN terminal THEN 'Processed'
         WHEN abs(hashtext(business_ref)) % 10 < 2 THEN 'Received'
         WHEN abs(hashtext(business_ref)) % 10 < 5 THEN 'Validated'
