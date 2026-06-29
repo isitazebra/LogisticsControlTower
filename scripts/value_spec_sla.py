@@ -79,12 +79,13 @@ CHARTS = [
          order=[("trigger_at", False)]),
 ]
 
-# The redesigned Transaction view (interchange-grain master-detail) introduces
-# net-new charts that no other dashboard owns. The legacy build_value.py that
-# once ensured value_spec.CHARTS is gone, so this build must CREATE them. Pull
-# them straight from value_spec by tab so the two stay in sync, and append to the
-# ensured set (ensure_charts iterates this CHARTS list).
-CHARTS = CHARTS + [c for c in V.NEW_CHARTS if c["tab"] == V.T_TXN]
+# Net-new charts that no other dashboard owns must be CREATED here (the legacy
+# build_value.py that once ensured value_spec.CHARTS is gone). The Transaction
+# view (all T_TXN) and the status-aligned Home additions are pulled straight from
+# value_spec so the two stay in sync, then appended to the ensured set.
+_ENSURE_NEW = {"Home · Processed", "Home · Stuck", "Home · Failed", "Home · Status mix"}
+CHARTS = CHARTS + [c for c in V.NEW_CHARTS
+                   if c["tab"] == V.T_TXN or c["slice"] in _ENSURE_NEW]
 
 # --- layout: clone value_spec, then append the pair section to the SLA tab ----
 _PAIR_ROWS = [
@@ -105,9 +106,17 @@ _PAIR_ROWS = [
 # defensive no-op so any stray re-introduction never lands on dash 15.
 STALE_SLICES = {"Partner SLA scorecard", "% Met by partner"}
 
+# Tab order: Transaction view sits 2nd, right after Home (the rest keep their
+# value_spec order). Any tab not listed falls back to its original position.
+TAB_ORDER = [V.T_HOME, V.T_TXN, V.T_SHIP, V.T_ISSUE, V.T_SLA,
+             V.T_CHAN, V.T_ANOM, V.T_EDI, V.T_API, V.T_PART]
+_by_tab = {t: r for t, r in V.LAYOUT}
+_ordered = [t for t in TAB_ORDER if t in _by_tab] + \
+           [t for t, _ in V.LAYOUT if t not in TAB_ORDER]
+
 LAYOUT = []
-for tab_title, rows in V.LAYOUT:
-    rows = [e for e in rows if e[0] not in STALE_SLICES]
+for tab_title in _ordered:
+    rows = [e for e in _by_tab[tab_title] if e[0] not in STALE_SLICES]
     if tab_title == T_SLA:
         rows = list(rows) + _PAIR_ROWS
     LAYOUT.append((tab_title, rows))

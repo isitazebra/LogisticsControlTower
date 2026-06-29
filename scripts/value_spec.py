@@ -152,6 +152,20 @@ NEW_CHARTS = [
     dict(slice="Exceptions by partner", tab=T_HOME, dataset="vw_rollup",
          kind="bar", dim="partner", row_limit=15,
          metric=("exc", "SUM(failed_count)+SUM(rejected_count)")),
+    # Status-aligned headline (mirrors the Transaction view lifecycle): the async
+    # end-state, the stuck watch list, and failures, plus the full status mix.
+    # Message grain on vw_shipment_detail so they reconcile with that tab.
+    dict(slice="Home · Processed", tab=T_HOME, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="acknowledged (done)",
+         metric=("done", "COUNT(*) FILTER (WHERE processing_status='Processed')")),
+    dict(slice="Home · Stuck", tab=T_HOME, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="in-flight past SLA",
+         metric=("stuck", "COUNT(*) FILTER (WHERE is_stuck)")),
+    dict(slice="Home · Failed", tab=T_HOME, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="terminal failures",
+         metric=("fail", "COUNT(*) FILTER (WHERE processing_status='Failed')")),
+    dict(slice="Home · Status mix", tab=T_HOME, dataset="vw_shipment_detail",
+         kind="bar", dim="processing_status", metric=("msgs", "COUNT(*)"), row_limit=10),
 
     # ===== Shipment view — single-world rollup of public.txn_events =====
     # Sourced on public.vw_shipment (sql/14) = a per-ORDER ROLLUP of the very
@@ -317,15 +331,18 @@ KH, CH, TH, BH = 30, 50, 60, 56   # KPI / chart / tall-table / table heights
 
 LAYOUT = [
     (T_HOME, [
-        # Row 1: headline health.
-        ("Total messages", 3, KH), ("Success", 3, KH),
-        ("Home · Auto-processed %", 3, KH, "Auto-processed %"),
-        ("Home · Exceptions", 3, KH, "Exceptions"),
+        # Row 1: status-aligned headline (matches the Transaction view lifecycle).
+        ("Total messages", 3, KH),
+        ("Home · Processed", 3, KH, "Processed"),
+        ("Home · Stuck", 3, KH, "Stuck"),
+        ("Home · Failed", 3, KH, "Failed"),
         # Row 2: the order lifecycle (204 -> 990 -> 214 -> 210).
         ("Home · Order", 3, KH, "Order"),
         ("Home · Order confirmation", 3, KH, "Order confirmation"),
         ("Home · Order updates", 3, KH, "Order updates"),
         ("Home · Invoice", 3, KH, "Invoice"),
+        # Status mix across the async lifecycle (same language as Transaction view).
+        ("Home · Status mix", 12, CH, "Status mix"),
         # Volume: wide trend + protocol split pie.
         ("Message volume trend", 8, CH), ("EDI vs API split", 4, CH),
         # Exceptions: wide trend + reason pie.
