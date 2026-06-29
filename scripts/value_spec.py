@@ -192,56 +192,44 @@ NEW_CHARTS = [
                "event_time", "status", "reason_category", "error_code", "control_number"],
          order=[("event_time", False)]),
 
-    # ===== Transaction view — MASTER-DETAIL at interchange grain (reference shape) =====
-    # The reference "Details" grid is ONE ROW PER TRANSACTION (interchange): each
-    # transaction has an inbound side (received by the platform) and an outbound
-    # side (emitted). Our interchange_id == that transaction; vw_shipment rolls the
-    # messages up to it (sql/14, with per-leg inbound_/outbound_ columns). Click a
-    # transaction -> the two drill-gated detail panels show its inbound + outbound
-    # messages (TXN_DRILL below: a REQUIRED shipment_id filter, empty until chosen).
-    # Unique "Txn · " internal names + sliceNameOverride keep dashboards 10/12/13's
-    # shared LOB charts untouched.
+    # ===== Transaction view — PER-MESSAGE grid (reference "Details" shape) =====
+    # The reference Details table is ONE ROW PER MESSAGE (a transaction set):
+    # ediservice_messageid is the row key, shipment_number just groups messages.
+    # Our equivalent is vw_shipment_detail (one row per business_ref message;
+    # interchange_id/shipment_id is the group). This tab IS that flat message grid
+    # + a payload drill; the interchange ROLLUP lives on the Shipment view, so the
+    # two tabs are detail vs rollup (not two copies of the same grain). Unique
+    # "Txn · " internal names + sliceNameOverride keep dashboards 10/12/13 untouched.
     #
-    # KPI strip — scale of the transaction population + both legs + exceptions.
-    dict(slice="Txn · In scope", tab=T_TXN, dataset="vw_shipment", **KPI,
-         kind="bignum", metric=("txns", "COUNT(*)"), subheader="transactions (interchanges)"),
-    dict(slice="Txn · Inbound msgs", tab=T_TXN, dataset="vw_shipment", **KPI,
-         kind="bignum", metric=("inb", "SUM(inbound_count)"), subheader="received messages"),
-    dict(slice="Txn · Outbound msgs", tab=T_TXN, dataset="vw_shipment", **KPI,
-         kind="bignum", metric=("outb", "SUM(outbound_count)"), subheader="emitted messages"),
-    dict(slice="Txn · Exceptions", tab=T_TXN, dataset="vw_shipment", **KPI,
-         kind="bignum", metric=("exc", "SUM(exception_cnt)"), subheader="failed / rejected"),
-    # Master grid — one row per transaction, both legs side by side. Exceptions
-    # float to top; $ formatted; rows with exceptions tinted red.
-    dict(slice="Txn · Transactions", tab=T_TXN, dataset="vw_shipment", kind="raw",
+    # KPI strip — message population + the in/out split + exceptions (all message
+    # grain, on vw_shipment_detail so they reconcile with the grid below).
+    dict(slice="Txn · In scope", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", metric=("msgs", "COUNT(*)"), subheader="messages in scope"),
+    dict(slice="Txn · Inbound msgs", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="received (in)",
+         metric=("inb", "COUNT(*) FILTER (WHERE direction='in')")),
+    dict(slice="Txn · Outbound msgs", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="emitted (out)",
+         metric=("outb", "COUNT(*) FILTER (WHERE direction='out')")),
+    dict(slice="Txn · Exceptions", tab=T_TXN, dataset="vw_shipment_detail", **KPI,
+         kind="bignum", subheader="failed / rejected",
+         metric=("exc", "COUNT(*) FILTER (WHERE status IN ('failed','rejected'))")),
+    # Master grid — ONE ROW PER MESSAGE, reference message-tracking columns:
+    # when, the grouping shipment + message ref, type, direction, routing
+    # (sender -> receiver), status, control #, and the platform filename. Newest
+    # first. business_ref is shown so a row can be picked for the payload drill.
+    dict(slice="Txn · Transactions", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
          row_limit=200,
-         cols=["shipment_id", "partner", "protocol", "total_messages",
-               "inbound_count", "inbound_status", "outbound_count", "outbound_status",
-               "exception_cnt", "value_usd", "last_msg_ts"],
-         order=[("exception_cnt", False), ("last_msg_ts", False)],
-         col_fmt={"value_usd": {"d3NumberFormat": "$,.2f"}},
-         heat=[{"column": "exception_cnt", "operator": ">", "targetValue": 0,
-                "colorScheme": "#e04355"}]),
-    # Detail panels — EMPTY until a transaction is selected (TXN drill, scoped to
-    # ONLY these charts). Inbound = received; Outbound = emitted. Columns follow
-    # the reference message-tracking shape: routing (sender -> receiver), doc type,
-    # status, control #, and the platform filename.
-    dict(slice="Txn · Inbound (received)", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
-         cols=["event_time", "sender_id", "receiver_id", "doc_type", "status",
-               "control_number", "filename"],
-         filters=[("direction", "==", "in")],
-         order=[("event_time", False)], row_limit=100),
-    dict(slice="Txn · Outbound (sent)", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
-         cols=["event_time", "sender_id", "receiver_id", "doc_type", "status",
-               "control_number", "filename"],
-         filters=[("direction", "==", "out")],
-         order=[("event_time", False)], row_limit=100),
-    # Raw payload panel — the rawest information: the X12/EDI envelope per message
-    # for the selected transaction (mirrors the reference inbound/outbound payload
-    # cards). Same TXN drill, so it fills with that transaction's message bodies.
+         cols=["event_time", "shipment_id", "business_ref", "doc_type", "direction",
+               "sender_id", "receiver_id", "status", "control_number", "filename"],
+         order=[("event_time", False)]),
+    # Raw payload panel — the rawest information: the X12/EDI envelope for the
+    # SELECTED message (MSG drill: a REQUIRED business_ref filter, empty until a
+    # message is chosen). Mirrors the reference inbound/outbound payload cards.
     dict(slice="Txn · Payloads", tab=T_TXN, dataset="vw_shipment_detail", kind="raw",
-         cols=["direction", "doc_type", "business_ref", "control_number", "payload"],
-         order=[("direction", True), ("doc_type", True)], row_limit=50),
+         cols=["business_ref", "doc_type", "direction", "sender_id", "receiver_id",
+               "control_number", "filename", "payload"],
+         order=[("event_time", False)], row_limit=5),
 
     # ===== SLA view — on-time delivery vs. breaches (single data world) =====
     # Order grain on public.vw_shipment for the headline + worklist; message grain
@@ -346,19 +334,16 @@ LAYOUT = [
         ("Shipment worklist", 12, BH),
         ("Shipment message set", 12, TH),
     ]),
-    (T_TXN, [   # Master-detail at interchange grain (public.vw_shipment + drill to vw_shipment_detail)
-        # KPI strip: transaction scale + both legs + exceptions.
-        ("Txn · In scope", 3, KH, "Transactions"),
+    (T_TXN, [   # Per-message grid (public.vw_shipment_detail) + payload drill
+        # KPI strip: message scale + in/out split + exceptions.
+        ("Txn · In scope", 3, KH, "Messages"),
         ("Txn · Inbound msgs", 3, KH, "Inbound"),
         ("Txn · Outbound msgs", 3, KH, "Outbound"),
         ("Txn · Exceptions", 3, KH, "Exceptions"),
-        # Master grid — one row per transaction (both legs on the row).
-        ("Txn · Transactions", 12, BH, "Transactions"),
-        # Drill-gated detail: pick a transaction above to populate its two legs.
-        ("Txn · Inbound (received)", 6, TH, "Inbound — received"),
-        ("Txn · Outbound (sent)", 6, TH, "Outbound — sent"),
-        # Raw EDI envelope per message for the selected transaction.
-        ("Txn · Payloads", 12, TH, "Message payloads (raw EDI)"),
+        # Master grid — one row per message (reference Details shape).
+        ("Txn · Transactions", 12, BH, "Messages"),
+        # Drill-gated: pick a message's business_ref above to see its raw EDI.
+        ("Txn · Payloads", 12, TH, "Message payload (raw EDI)"),
     ]),
     (T_ISSUE, [
         ("Failed (period)", 4, KH), ("Rejected (period)", 4, KH), ("Duplicates suppressed", 4, KH),
@@ -425,6 +410,7 @@ NATIVE_FILTERS = [
     ("Protocol", "protocol"),
     ("Channel", "channel"),
     ("Doc type", "doc_type"),
+    ("Direction", "direction"),
 ]
 
 # Task 5 — drill-down "Shipment message set": EMPTY until a shipment is chosen.
@@ -461,8 +447,7 @@ SHIP_DRILLDOWN_FILTER = dict(
 DRILLDOWN_FILTERS = [
     dict(name="Shipment (drill-down)", column="shipment_id",
          dataset="vw_shipment_detail", slices=["Shipment message set"], required=True),
-    dict(name="Transaction (drill-down)", column="shipment_id",
+    dict(name="Message (drill-down)", column="business_ref",
          dataset="vw_shipment_detail",
-         slices=["Txn · Inbound (received)", "Txn · Outbound (sent)", "Txn · Payloads"],
-         required=True),
+         slices=["Txn · Payloads"], required=True),
 ]
